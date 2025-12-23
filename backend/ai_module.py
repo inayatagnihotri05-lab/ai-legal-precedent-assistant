@@ -66,8 +66,22 @@ def analyze_case(case_data):
     )
 
     return {
-        "issues": issues,
-        "context": context,
-        "example_precedents": precedents,
-        "note": note
-    }
+    "issues": issues,
+    "context": context,
+    "example_precedents": precedents,
+
+    "advisory_opinion": (
+        "Based on the facts provided, the suspension appears to raise concerns "
+        "regarding procedural fairness and principles of natural justice. "
+        "In cases involving public universities, disciplinary actions are "
+        "expected to follow a fair hearing process, including giving the "
+        "affected student an opportunity to explain their actions. "
+        "A suspension imposed without such an opportunity may be challenged "
+        "as arbitrary and disproportionate. "
+        "The affected individual may consider seeking internal review, "
+        "approaching the university grievance mechanism, or consulting a "
+        "qualified legal professional for appropriate remedies."
+    ),
+
+    "note": note
+}
