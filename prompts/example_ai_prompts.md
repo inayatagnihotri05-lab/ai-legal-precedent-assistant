@@ -34,6 +34,33 @@ Disclaimer Enforcement:
 - If the disclaimer is missing, the response will be rejected.
 - The disclaimer should appear exactly as written, after all other sections.
 
+  JSON Output Rules:
+- Output MUST be in valid JSON format
+- Include all 7 sections as fields
+- Field names:
+  "case_overview"
+  "legal_issues"
+  "legal_provisions"
+  "judicial_precedents"
+  "judicial_approach_summary"
+  "general_legal_options"
+  "disclaimer"
+- Values should match the content from each section
+- Do NOT add extra text outside JSON
+- Do NOT remove sections
+- Example:
+
+{
+  "case_overview": "Brief neutral summary of the case facts.",
+  "legal_issues": ["Issue 1", "Issue 2"],
+  "legal_provisions": [{"name": "Article 21", "description": "Protects life and personal liberty"}],
+  "judicial_precedents": [{"case_name": "Maneka Gandhi v. Union of India", "court": "Supreme Court", "year": 1978, "legal_principle": "Expanded Article 21 interpretation"}],
+  "judicial_approach_summary": "How courts have generally approached similar issues",
+  "general_legal_options": ["Courts have recognized that individuals may explore judicial review."],
+  "disclaimer": "This analysis is for educational purposes only and does not constitute legal advice."
+}
+
+
 Use simple, student-friendly language.
 Language Rules:
 - Avoid Latin terms and complex legal jargon
