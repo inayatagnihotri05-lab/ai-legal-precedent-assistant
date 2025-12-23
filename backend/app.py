@@ -1,6 +1,7 @@
 import json
 from case_intake import extract_case_issues, generate_case_context
 from precedent_search import search_precedents
+from ai_module import analyze_case  # 🔹 Import AI placeholder
 
 # 🔹 Available cases
 CASE_FILES = {
@@ -74,3 +75,18 @@ if __name__ == "__main__":
         print(f"Relevance: {p['relevance']}\n")
 
     print("Note:", case["notes"])
+
+    # 🔹 Optional AI-based advisory (placeholder)
+    ai_advisory = analyze_case(case)
+
+    print("\n--- OPTIONAL AI ADVISORY OUTPUT ---")
+    print("Identified Issues:", ", ".join(ai_advisory["issues"]))
+    print("Case Context:")
+    print("  Dispute Value:", ai_advisory["context"]["dispute_value"])
+    print("  Applicable Law:", ", ".join(ai_advisory["context"]["applicable_law"]))
+    print("Example Precedents:")
+    for p in ai_advisory["example_precedents"]:
+        print(f"  Case Name: {p['case_name']} ({p['year']})")
+        print(f"  Summary: {p['summary']}")
+        print(f"  Relevance: {p['relevance']}\n")
+    print("Note:", ai_advisory["note"])
