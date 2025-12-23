@@ -2,6 +2,12 @@ import json
 from case_intake import extract_case_issues, generate_case_context
 from precedent_search import search_precedents
 
+# 🔹 Available cases
+CASE_FILES = {
+    "1": ("Tenancy Dispute", "data/sample_small_case.json"),
+    "2": ("Consumer Complaint", "data/sample_consumer_case.json"),
+    "3": ("Contract Dispute", "data/sample_contract_case.json")
+}
 
 def load_case(file_path):
     """
@@ -11,10 +17,24 @@ def load_case(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
         return json.load(file)
 
+def select_case():
+    """
+    Allows the user to choose which sample case to run.
+    """
+    print("\nSelect a case to run:")
+    for key, (title, _) in CASE_FILES.items():
+        print(f"{key}: {title}")
+    choice = input("\nEnter case number: ").strip()
+    if choice in CASE_FILES:
+        return CASE_FILES[choice][1]
+    else:
+        print("Invalid choice, defaulting to Tenancy Dispute.")
+        return CASE_FILES["1"][1]
 
 if __name__ == "__main__":
-    # 🔹 Load case
-    case = load_case("data/sample_small_case.json")
+    # 🔹 Select case dynamically
+    case_file = select_case()
+    case = load_case(case_file)
 
     # 🔹 Print case summary
     print("\n--- CASE SUMMARY (NON-BINDING) ---\n")
