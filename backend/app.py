@@ -1,4 +1,6 @@
 import json
+from case_intake import extract_case_issues, generate_case_context
+
 
 def load_case(file_path):
     """
@@ -24,5 +26,19 @@ if __name__ == "__main__":
     print("\nRelief Sought:")
     for relief in case["relief_sought"]:
         print("-", relief)
+
+    # 🔹 Case Intake (Rule-Based)
+    issues = extract_case_issues(case)
+    context = generate_case_context(case)
+
+    print("\n--- IDENTIFIED LEGAL ISSUES (RULE-BASED) ---")
+    for issue in issues:
+        print("-", issue)
+
+    print("\n--- CASE CONTEXT ---")
+    print("Dispute Value:", context["dispute_value"])
+    print("Applicable Law:")
+    for law in context["applicable_law"]:
+        print("-", law)
 
     print("\nNote:", case["notes"])
