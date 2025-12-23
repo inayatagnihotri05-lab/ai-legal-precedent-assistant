@@ -22,6 +22,12 @@ STRICT FORMAT (do not omit any section):
 7. Disclaimer  
 
 Use simple, student-friendly language.
+Language Rules:
+- Avoid Latin terms and complex legal jargon
+- If a legal term is necessary, explain it in one simple sentence
+- Use short paragraphs and bullet points where possible
+- Write as if explaining to a senior school student, still professionsal
+
 
 User Input:
 [PASTE CASE FACTS HERE]
