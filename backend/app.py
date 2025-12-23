@@ -1,5 +1,6 @@
 import json
 from case_intake import extract_case_issues, generate_case_context
+from precedent_search import search_precedents
 
 
 def load_case(file_path):
@@ -12,8 +13,10 @@ def load_case(file_path):
 
 
 if __name__ == "__main__":
+    # 🔹 Load case
     case = load_case("data/sample_small_case.json")
 
+    # 🔹 Print case summary
     print("\n--- CASE SUMMARY (NON-BINDING) ---\n")
     print("Case Title:", case["case_title"])
     print("Jurisdiction:", case["jurisdiction"])
@@ -41,4 +44,13 @@ if __name__ == "__main__":
     for law in context["applicable_law"]:
         print("-", law)
 
-    print("\nNote:", case["notes"])
+    # 🔹 Precedent Retrieval (Placeholder)
+    precedents = search_precedents(issues, context)
+
+    print("\n--- EXAMPLE RELEVANT PRECEDENTS ---")
+    for p in precedents:
+        print(f"Case Name: {p['case_name']} ({p['year']})")
+        print(f"Summary: {p['summary']}")
+        print(f"Relevance: {p['relevance']}\n")
+
+    print("Note:", case["notes"])
