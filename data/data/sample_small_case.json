@@ -1,0 +1,25 @@
+{
+  "case_title": "Non-payment of Rent – Small Tenancy Dispute",
+  "jurisdiction": "Local Civil Court",
+  "case_type": "Small cause civil dispute",
+  "parties": {
+    "plaintiff": "Landlord",
+    "defendant": "Tenant"
+  },
+  "facts_of_the_case": [
+    "The defendant has been residing in the plaintiff's property under a monthly tenancy agreement.",
+    "The agreed monthly rent is INR 8,000.",
+    "The defendant has failed to pay rent for a period of three consecutive months.",
+    "The defendant claims financial hardship as the reason for non-payment."
+  ],
+  "relief_sought": [
+    "Recovery of pending rent",
+    "Eviction of tenant"
+  ],
+  "applicable_law": [
+    "Transfer of Property Act, 1882",
+    "Relevant local rent control provisions"
+  ],
+  "dispute_value": "Low",
+  "notes": "This case is intended for research and decision-support demonstration only."
+}
