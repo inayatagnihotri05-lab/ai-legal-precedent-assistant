@@ -1,0 +1,23 @@
+{
+  "case_title": "Defective Product – Consumer Complaint",
+  "jurisdiction": "Local Consumer Court",
+  "case_type": "Small civil dispute",
+  "parties": {
+    "plaintiff": "Customer",
+    "defendant": "Retailer"
+  },
+  "facts_of_the_case": [
+    "The plaintiff purchased an electronic device from the defendant.",
+    "The device stopped working within one week.",
+    "The defendant refuses to replace or refund the device."
+  ],
+  "relief_sought": [
+    "Replacement of defective device",
+    "Refund of purchase price"
+  ],
+  "applicable_law": [
+    "Consumer Protection Act, 2019"
+  ],
+  "dispute_value": "Low",
+  "notes": "This case is intended for research and demonstration only."
+}
