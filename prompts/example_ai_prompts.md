@@ -1,3 +1,31 @@
+## Final Output-Enforced Legal Analysis Prompt
+
+IMPORTANT — FORMAT CONTROL RULES:
+Your response will be rejected if:
+- Any section is missing
+- The order of sections is changed
+- Legal advice or instructions are given
+- The disclaimer is missing
+
+Follow the structure exactly as specified.
+
+Prepare a structured legal analysis based on the input provided.
+
+STRICT FORMAT (do not omit any section):
+
+1. Case Overview  
+2. Identified Legal Issues  
+3. Relevant Legal Provisions  
+4. Key Judicial Precedents  
+5. How Courts Have Approached Similar Situations  
+6. General Legal Options Recognized by Law  
+7. Disclaimer  
+
+Use simple, student-friendly language.
+
+User Input:
+[PASTE CASE FACTS HERE]
+
 # Example AI Prompts for Legal Precedent Analysis
 
 These prompts are **for planning future AI integration**.
