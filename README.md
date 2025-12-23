@@ -26,3 +26,22 @@ All outputs are advisory and non-binding.
 
 Final judicial discretion always remains with human judges.
 
+## Court Presentation Guide
+
+This section outlines how to present the AI-Assisted Legal Precedent Analysis prototype in a court or professional setting.
+
+---
+
+### 1. Overview
+- The system demonstrates **structured legal research and issue analysis**.  
+- It is **rule-based and advisory**; all outputs are **non-binding**.  
+- Designed for **small, low-stakes disputes** only.
+
+---
+
+### 2. Running the Demo
+1. Open a terminal in the repository root.  
+2. Run the interactive app:
+
+```bash
+python backend/app.py
