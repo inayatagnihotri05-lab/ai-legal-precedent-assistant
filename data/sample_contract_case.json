@@ -1,0 +1,23 @@
+{
+  "case_title": "Breach of Small Service Contract",
+  "jurisdiction": "Local Civil Court",
+  "case_type": "Small civil dispute",
+  "parties": {
+    "plaintiff": "Client",
+    "defendant": "Service Provider"
+  },
+  "facts_of_the_case": [
+    "The defendant agreed to provide a service under a written contract.",
+    "The service was delayed by 3 months without explanation.",
+    "The plaintiff suffered minor financial loss due to the delay."
+  ],
+  "relief_sought": [
+    "Compensation for delay",
+    "Enforcement of contract terms"
+  ],
+  "applicable_law": [
+    "Indian Contract Act, 1872"
+  ],
+  "dispute_value": "Low",
+  "notes": "This case is intended for research and demonstration only."
+}
