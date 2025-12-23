@@ -20,13 +20,19 @@ STRICT FORMAT (do not omit any section):
 5. How Courts Have Approached Similar Situations  
 6. General Legal Options Recognized by Law  
 7. Disclaimer
-8. Guidance Rules:
+  
+ Guidance Rules:
 - Describe only general legal options recognized by courts or law
 - Use neutral phrases such as “courts have recognized”, “individuals may explore”
 - Do NOT recommend specific actions
 - Do NOT say “you should” or “you must”
 - Do NOT predict outcomes
 
+Disclaimer Enforcement:
+- The response must always end with the following disclaimer:
+  "This analysis is for educational purposes only and does not constitute legal advice."
+- If the disclaimer is missing, the response will be rejected.
+- The disclaimer should appear exactly as written, after all other sections.
 
 Use simple, student-friendly language.
 Language Rules:
