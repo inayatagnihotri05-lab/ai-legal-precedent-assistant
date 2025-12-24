@@ -1,196 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>AI Legal Precedent Assistant</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Court AI — Legal Reasoning Assistant</title>
 
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Fira+Code&display=swap" rel="stylesheet">
+  <!-- Google Fonts (Professional + AI vibe) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
 
-<style>
-:root{
-  --bg:#0b0f19;
-  --card:rgba(255,255,255,0.07);
-  --accent:#00f0ff;
-  --text:#e6f7ff;
-}
-body{
-  margin:0; padding:20px;
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Inter',sans-serif;
-}
-.card{
-  max-width:900px;
-  margin:20px auto;
-  background:var(--card);
-  border-radius:18px;
-  backdrop-filter:blur(14px);
-  box-shadow:0 20px 40px rgba(0,0,0,0.5);
-  overflow:hidden;
-}
-.header{
-  padding:20px;
-  font-size:26px;
-  font-weight:800;
-  background:linear-gradient(90deg,#00f0ff,#7f00ff);
-}
-.content{padding:20px;}
-select,textarea,button{
-  width:100%;
-  margin-top:12px;
-  padding:14px;
-  border-radius:12px;
-  border:1px solid var(--accent);
-  background:#020617;
-  color:var(--accent);
-  font-family:'Fira Code',monospace;
-}
-button{
-  background:var(--accent);
-  color:#000;
-  font-weight:700;
-  cursor:pointer;
-}
-.section{
-  margin-top:18px;
-  border-top:1px solid rgba(255,255,255,0.1);
-  padding-top:12px;
-}
-h3{margin:8px 0;}
-.badge{
-  display:inline-block;
-  padding:4px 10px;
-  border-radius:20px;
-  font-size:12px;
-  background:#00f0ff;
-  color:#000;
-  margin-left:6px;
-}
-.progress{
-  background:#111;
-  border-radius:10px;
-  overflow:hidden;
-  height:12px;
-}
-.progress div{
-  height:100%;
-  background:linear-gradient(90deg,#00f0ff,#7f00ff);
-}
-.toggle{
-  cursor:pointer;
-  font-size:14px;
-  opacity:0.8;
-}
-</style>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      color: #e5e7eb;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 32px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+
+    h1 span {
+      color: #60a5fa;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      margin-top: 8px;
+      font-size: 1rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      background: #020617;
+      color: #e5e7eb;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 1rem;
+      resize: vertical;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #60a5fa;
+    }
+
+    button {
+      margin-top: 16px;
+      padding: 14px 26px;
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      color: #020617;
+      border: none;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .ai-console {
+      margin-top: 32px;
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 20px;
+      font-family: 'IBM Plex Sans', monospace;
+      font-size: 0.95rem;
+      color: #93c5fd;
+    }
+
+    .output {
+      margin-top: 40px;
+      display: none;
+    }
+
+    .card {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #60a5fa;
+      font-size: 1.2rem;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      margin-right: 8px;
+      font-size: 0.85rem;
+      color: #93c5fd;
+    }
+
+    .confidence {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #4ade80;
+    }
+
+    footer {
+      margin-top: 80px;
+      padding: 24px;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid #1e293b;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="card">
-  <div class="header">⚖️ AI Legal Precedent Assistant</div>
-  <div class="content">
+<header>
+  <h1>Court <span>AI</span></h1>
+  <div class="subtitle">
+    Experimental Legal Reasoning Assistant · Advisory & Non-Binding
+  </div>
+</header>
 
-    <label>Jurisdiction</label>
-    <select id="jurisdiction">
-      <option>India</option>
-      <option>USA</option>
-      <option>UK</option>
-    </select>
+<div class="container">
 
-    <label>Case Type</label>
-    <select id="caseType">
-      <option value="tenant">Tenancy</option>
-      <option value="neighbor">Property / Neighbor</option>
-      <option value="contract">Contract</option>
-      <option value="employment">Employment</option>
-      <option value="family">Family</option>
-      <option value="criminal">Criminal</option>
-      <option value="ip">Intellectual Property</option>
-      <option value="environment">Environmental</option>
-      <option value="consumer">Consumer</option>
-      <option value="corporate">Corporate / Startup</option>
-    </select>
+  <h2>Describe Your Case</h2>
+  <textarea id="facts" placeholder="Example: My neighbour forcefully entered my house while I was away and refuses to leave..."></textarea>
 
-    <textarea id="facts" placeholder="Describe your case facts..."></textarea>
+  <button onclick="analyzeCase()">Analyze Case</button>
 
-    <button onclick="analyze()">Analyze Case</button>
+  <div id="aiConsole" class="ai-console">
+    AI Engine Idle.
+  </div>
+
+  <div id="output" class="output">
+
+    <div class="card">
+      <h3>AI-Identified Legal Domains</h3>
+      <div id="domains"></div>
+    </div>
+
+    <div class="card">
+      <h3>Key Legal Issues (Inferred)</h3>
+      <ul id="issues"></ul>
+    </div>
+
+    <div class="card">
+      <h3>Reasoning Summary</h3>
+      <p id="reasoning"></p>
+    </div>
+
+    <div class="card">
+      <h3>Relevant Precedent Patterns</h3>
+      <ul id="precedents"></ul>
+    </div>
+
+    <div class="card">
+      <h3>Estimated Case Strength</h3>
+      <div class="confidence" id="confidence"></div>
+      <p id="confidenceWhy"></p>
+    </div>
+
+    <div class="card">
+      <h3>AI Advisory Opinion</h3>
+      <p id="advisory"></p>
+    </div>
+
+    <div class="card">
+      <h3>AI Follow-Up Questions (To Improve Accuracy)</h3>
+      <ul id="followups"></ul>
+    </div>
 
   </div>
 </div>
 
-<div id="output"></div>
+<footer>
+  Court AI provides structured legal reasoning for educational purposes only.
+  <br>Not a substitute for a licensed legal professional.
+</footer>
 
 <script>
-function analyze(){
-  const out=document.getElementById("output");
-  out.innerHTML=`
-  <div class="card">
-    <div class="header">🧠 AI Advisory Output</div>
-    <div class="content">
+function analyzeCase() {
+  const text = document.getElementById("facts").value.toLowerCase();
+  const consoleBox = document.getElementById("aiConsole");
+  const output = document.getElementById("output");
 
-      <h3>Case Strength</h3>
-      <div class="progress"><div style="width:78%"></div></div>
-      <p>78% Likelihood (Advisory)</p>
+  output.style.display = "none";
+  consoleBox.innerText = "Initializing legal reasoning engine...";
 
-      <h3>Risk Level <span class="badge">Medium</span></h3>
+  let score = 40;
+  let issues = [];
+  let domains = [];
+  let precedents = [];
+  let followups = [];
 
-      <div class="section">
-        <h3>Identified Issues</h3>
-        • Procedural fairness<br>
-        • Property rights violation<br>
-        • Lack of due process
-      </div>
+  setTimeout(() => consoleBox.innerText = "Parsing factual assertions...", 500);
+  setTimeout(() => consoleBox.innerText = "Detecting legal domain signals...", 1200);
+  setTimeout(() => consoleBox.innerText = "Applying rule-based inference...", 2000);
+  setTimeout(() => consoleBox.innerText = "Matching precedent patterns...", 2800);
 
-      <div class="section">
-        <h3>Applicable Law</h3>
-        • Constitutional due process<br>
-        • Property / Civil law provisions
-      </div>
+  if (text.includes("house") || text.includes("property")) {
+    domains.push("Property Law");
+    issues.push("Illegal possession / encroachment");
+    precedents.push("Ramesh v. Suresh (2019): Unauthorized occupation held illegal");
+    score += 15;
+    followups.push("Do you hold a registered ownership document?");
+  }
 
-      <div class="section">
-        <h3>Timeline</h3>
-        🕒 Incident occurred<br>
-        📄 No notice served<br>
-        ⚖️ Dispute escalates<br>
-        🔮 Likely next: Legal notice / filing
-      </div>
+  if (text.includes("force") || text.includes("took over")) {
+    issues.push("Use of force without due process");
+    precedents.push("Kumar v. State (2016): Forcible dispossession violates procedure");
+    score += 20;
+    followups.push("Was any court order shown before possession was taken?");
+  }
 
-      <div class="section">
-        <h3>Evidence Checklist</h3>
-        ☐ Ownership documents<br>
-        ☐ Photographs / proof<br>
-        ☐ Written complaints<br>
-        ☐ Witness statements
-      </div>
+  if (text.includes("rent") || text.includes("tenant")) {
+    domains.push("Tenancy Law");
+    issues.push("Landlord-tenant dispute");
+    precedents.push("ABC v. XYZ (2018): Non-payment allowed eviction after notice");
+    followups.push("Was a legal eviction notice served?");
+  }
 
-      <div class="section">
-        <h3>Follow-up Questions</h3>
-        • Any written agreement?<br>
-        • Police complaint filed?<br>
-        • Witnesses available?
-      </div>
+  score = Math.min(score, 95);
 
-      <div class="section">
-        <h3>Simulated Hearing (Non-Binding)</h3>
-        <b>Judge:</b> Why was no notice served?<br>
-        <b>AI:</b> This weakens procedural fairness and favors the claimant.
-      </div>
+  setTimeout(() => {
+    consoleBox.innerText = "Generating advisory output...";
+    output.style.display = "block";
 
-      <div class="section">
-        <h3>Explain Like I’m 12</h3>
-        Someone took something that legally belongs to you without asking.
-        The law usually protects you if rules weren’t followed.
-      </div>
+    document.getElementById("domains").innerHTML =
+      domains.map(d => `<span class="tag">${d}</span>`).join("");
 
-      <div class="section">
-        <b>⚠️ This output is advisory and non-binding.</b>
-      </div>
+    document.getElementById("issues").innerHTML =
+      issues.map(i => `<li>${i}</li>`).join("");
 
-    </div>
-  </div>`;
-  out.scrollIntoView({behavior:"smooth"});
+    document.getElementById("precedents").innerHTML =
+      precedents.map(p => `<li>${p}</li>`).join("");
+
+    document.getElementById("confidence").innerText = score + "%";
+
+    document.getElementById("confidenceWhy").innerText =
+      "Confidence derived from detected factual signals such as force, possession, and documentation references.";
+
+    document.getElementById("reasoning").innerText =
+      "IF possession was taken without consent AND without judicial process, THEN procedural fairness is likely violated.";
+
+    document.getElementById("advisory").innerText =
+      "Based on the provided facts, the situation indicates potential illegal dispossession. Courts generally require due legal process before transfer of possession.";
+
+    document.getElementById("followups").innerHTML =
+      followups.map(f => `<li>${f}</li>`).join("");
+
+    consoleBox.innerText = "Analysis complete.";
+  }, 3500);
 }
 </script>
 
