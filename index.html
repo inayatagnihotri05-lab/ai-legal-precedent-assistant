@@ -17,6 +17,7 @@
       padding: 24px;
       border-radius: 12px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
     }
     textarea {
       width: 100%;
@@ -39,6 +40,10 @@
     button:hover {
       background: #1d4ed8;
     }
+    .loading {
+      font-style: italic;
+      color: #555;
+    }
   </style>
 </head>
 <body>
@@ -48,37 +53,40 @@
     <p>Enter your case facts below (advisory, non-binding).</p>
 
     <textarea id="caseInput" placeholder="Describe the legal issue here..."></textarea>
-
     <button onclick="analyzeCase()">Analyze Case</button>
   </div>
 
   <div id="output"></div>
 
-<script>
-function analyzeCase() {
-    const caseFacts = document.getElementById('caseInput').value;
-    if (!caseFacts) {
-        alert("Please enter case facts!");
-        return;
-    }
+  <script>
+  function analyzeCase() {
+      const caseFacts = document.getElementById('caseInput').value;
+      if (!caseFacts) {
+          alert("Please enter case facts!");
+          return;
+      }
 
-    const outputDiv = document.getElementById('output');
-    outputDiv.innerHTML = `
-        <div class="card">
-            <h3>AI Advisory Output</h3>
-            <p><strong>Issues:</strong> Non-payment of rent, Eviction of tenant</p>
-            <p><strong>Context:</strong> Dispute Value: Low, Applicable Law: Transfer of Property Act, 1882, Local Rent Control</p>
-            <p><strong>Example Precedents:</strong></p>
-            <ul>
-                <li>ABC vs XYZ (2018): Tenant failed to pay rent for 2 months; court ruled in favor of landlord — High</li>
-            </ul>
-            <p><strong>Advisory Opinion:</strong> Suspension appears procedurally unfair. Non-binding advisory only.</p>
-            <p><em>This output is advisory and non-binding.</em></p>
-        </div>
-    `;
-}
-</script>
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = `<p class="loading">Analyzing AI advisory...</p>`;
 
+      // Simulate a "loading" delay
+      setTimeout(() => {
+          outputDiv.innerHTML = `
+              <div class="card">
+                  <h3>AI Advisory Output</h3>
+                  <p><strong>Issues:</strong> Non-payment of rent, Eviction of tenant</p>
+                  <p><strong>Context:</strong> Dispute Value: Low, Applicable Law: Transfer of Property Act, 1882, Local Rent Control</p>
+                  <p><strong>Example Precedents:</strong></p>
+                  <ul>
+                      <li>ABC vs XYZ (2018): Tenant failed to pay rent for 2 months; court ruled in favor of landlord — High</li>
+                  </ul>
+                  <p><strong>Advisory Opinion:</strong> Suspension appears procedurally unfair. Non-binding advisory only.</p>
+                  <p><em>This output is advisory and non-binding.</em></p>
+              </div>
+          `;
+      }, 1000); // 1 second delay
+  }
+  </script>
 
 </body>
 </html>
