@@ -1,36 +1,69 @@
 async function analyzeCase() {
   const caseText = document.getElementById("caseInput").value;
-  const outputDiv = document.getElementById("output");
+  const output = document.getElementById("output");
+  const button = document.getElementById("analyzeBtn");
 
-  outputDiv.innerText = "Analyzing case...";
+  output.innerHTML = `<div class="card loader">⏳ Analyzing case…</div>`;
+  button.disabled = true;
 
   try {
     const response = await fetch("http://localhost:5000/analyze", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ case: caseText })
     });
 
+    if (!response.ok) {
+      throw new Error("Backend error");
+    }
+
     const data = await response.json();
 
-    let result = "";
-    result += "⚖️ ISSUES:\n" + data.issues.join("\n") + "\n\n";
-    result += "📚 CONTEXT:\n";
-    result += "Dispute Value: " + data.context.dispute_value + "\n";
-    result += "Applicable Law:\n- " + data.context.applicable_law.join("\n- ") + "\n\n";
+    output.innerHTML = `
+      <div class="card">
+        <div class="section-title">⚖️ Legal Issues</div>
+        <pre>${data.issues.join("\n")}</pre>
+      </div>
 
-    result += "📜 PRECEDENTS:\n";
-    data.example_precedents.forEach(p => {
-      result += `${p.case_name} (${p.year})\n${p.summary}\nRelevance: ${p.relevance}\n\n`;
-    });
+      <div class="card">
+        <div class="section-title">📚 Context</div>
+        <pre>
+Dispute Value: ${data.context.dispute_value}
 
-    result += "🧠 ADVISORY OPINION:\n" + data.advisory_opinion + "\n\n";
-    result += "⚠️ NOTE:\n" + data.note;
+Applicable Law:
+- ${data.context.applicable_law.join("\n- ")}
+        </pre>
+      </div>
 
-    outputDiv.innerText = result;
+      <div class="card">
+        <div class="section-title">📜 Relevant Precedents</div>
+        <pre>
+${data.example_precedents.map(p =>
+`${p.case_name} (${p.year})
+${p.summary}
+Relevance: ${p.relevance}\n`
+).join("\n")}
+        </pre>
+      </div>
+
+      <div class="card">
+        <div class="section-title">🧠 Advisory Opinion</div>
+        <pre>${data.advisory_opinion}</pre>
+      </div>
+
+      <div class="card">
+        <div class="section-title">⚠️ Disclaimer</div>
+        <pre>${data.note}</pre>
+      </div>
+    `;
   } catch (err) {
-    outputDiv.innerText = "Error connecting to backend.";
+    output.innerHTML = `
+      <div class="card error">
+        ❌ Unable to connect to backend.<br />
+        Make sure the server is running.
+      </div>
+    `;
+  } finally {
+    button.disabled = false;
   }
 }
