@@ -13,10 +13,26 @@ CASE_FILES = {
 def load_case(file_path):
     """
     Loads a structured small-case file.
-    This function performs NO legal reasoning.
+    Falls back to a default demo case if file is missing.
     """
-    with open(file_path, "r", encoding="utf-8") as file:
-        return json.load(file)
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        # 🔹 Default fallback case (demo-safe)
+        return {
+            "case_title": "Student Suspension Case",
+            "jurisdiction": "Public University",
+            "case_type": "Disciplinary Action",
+            "facts_of_the_case": [
+                "A student was suspended from a public university without being given a chance to explain his actions."
+            ],
+            "relief_sought": [
+                "Reinstatement",
+                "Opportunity to be heard"
+            ],
+            "notes": "Auto-loaded fallback case for demo purposes. Non-binding."
+        }
 
 def select_case():
     """
