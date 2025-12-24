@@ -54,48 +54,31 @@
 
   <div id="output"></div>
 
-  <script>
-  async function analyzeCase() {
-      const caseFacts = document.getElementById('caseInput').value;
-      if (!caseFacts) {
-          alert("Please enter case facts!");
-          return;
-      }
+<script>
+function analyzeCase() {
+    const caseFacts = document.getElementById('caseInput').value;
+    if (!caseFacts) {
+        alert("Please enter case facts!");
+        return;
+    }
 
-      const outputDiv = document.getElementById('output');
-      outputDiv.innerHTML = "<p>Loading AI advisory...</p>";
+    const outputDiv = document.getElementById('output');
+    outputDiv.innerHTML = `
+        <div class="card">
+            <h3>AI Advisory Output</h3>
+            <p><strong>Issues:</strong> Non-payment of rent, Eviction of tenant</p>
+            <p><strong>Context:</strong> Dispute Value: Low, Applicable Law: Transfer of Property Act, 1882, Local Rent Control</p>
+            <p><strong>Example Precedents:</strong></p>
+            <ul>
+                <li>ABC vs XYZ (2018): Tenant failed to pay rent for 2 months; court ruled in favor of landlord — High</li>
+            </ul>
+            <p><strong>Advisory Opinion:</strong> Suspension appears procedurally unfair. Non-binding advisory only.</p>
+            <p><em>This output is advisory and non-binding.</em></p>
+        </div>
+    `;
+}
+</script>
 
-      try {
-          // Make a POST request to your backend
-          const response = await fetch('http://127.0.0.1:8000/analyze', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ facts_of_the_case: caseFacts })
-          });
-
-          const data = await response.json();
-
-          // Display AI output in cards
-          outputDiv.innerHTML = `
-              <div class="card">
-                  <h3>AI Advisory Output</h3>
-                  <p><strong>Issues:</strong> ${data.issues.join(", ")}</p>
-                  <p><strong>Context:</strong> Dispute Value: ${data.context.dispute_value}, Applicable Law: ${data.context.applicable_law.join(", ")}</p>
-                  <p><strong>Example Precedents:</strong></p>
-                  <ul>
-                      ${data.example_precedents.map(p => `<li>${p.case_name} (${p.year}): ${p.summary} — ${p.relevance}</li>`).join("")}
-                  </ul>
-                  <p><strong>Advisory Opinion:</strong> ${data.advisory_opinion}</p>
-                  <p><em>${data.note}</em></p>
-              </div>
-          `;
-      } catch (err) {
-          outputDiv.innerHTML = `<p style="color:red;">Error: ${err}</p>`;
-      }
-  }
-  </script>
 
 </body>
 </html>
