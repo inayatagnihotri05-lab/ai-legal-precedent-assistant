@@ -1,47 +1,89 @@
-# AI-Assisted Legal Precedent Analysis & Hearing Simulation
+⚖️ AI Legal Precedent Assistant (Court AI – Advisory)
+📌 What This Project Does
 
-This repository contains a research and civic-technology prototype designed to
-assist legal research and structured legal reasoning in small, low-stakes disputes.
+The AI Legal Precedent Assistant is an educational, non-binding legal analysis system designed to simulate how courts and legal professionals reason through cases.
+It identifies legal issues, relevant laws, illustrative precedents, and provides advisory opinions — without replacing lawyers or courts.
 
-## Purpose
-The system assists users by:
-- Analysing facts of a case
-- Identifying relevant judicial precedents
-- Structuring legal issues and arguments
-- Simulating a non-binding hearing framework
+🧠 Example Case (Demo)
 
-## Scope and Limitations
-This system:
-- Does NOT issue judgments
-- Does NOT replace courts or judges
-- Does NOT provide legal advice
-- Does NOT generate enforceable orders
+Input Case (User-Provided):
 
-All outputs are advisory and non-binding.
+A student was suspended from a public university without being given a chance to explain his actions.
 
-## Intended Use
-- Legal research assistance
-- Court preparation support
-- Legal aid and educational purposes
+⚖️ AI Advisory Output (Non-Binding)
+🔹 Identified Legal Issues
 
-Final judicial discretion always remains with human judges.
+Violation of principles of natural justice (right to be heard)
 
-## Court Presentation Guide
+Procedural unfairness in disciplinary action
 
-This section outlines how to present the AI-Assisted Legal Precedent Analysis prototype in a court or professional setting.
+Arbitrary state action by a public authority
 
----
+Potential infringement of constitutional rights
 
-### 1. Overview
-- The system demonstrates **structured legal research and issue analysis**.  
-- It is **rule-based and advisory**; all outputs are **non-binding**.  
-- Designed for **small, low-stakes disputes** only.
+🔹 Applicable Legal Context
 
----
+Nature of Dispute: Non-monetary (educational rights)
 
-### 2. Running the Demo
-1. Open a terminal in the repository root.  
-2. Run the interactive app:
+Institution Type: Public University (State Authority)
 
-```bash
-python backend/app.py
+Relevant Law:
+
+Principles of Natural Justice
+
+Article 14 – Right to Equality
+
+Article 21 – Right to Life and Personal Liberty
+
+🔹 Illustrative Judicial Precedents
+
+Maneka Gandhi v. Union of India (1978)
+The Supreme Court held that any action by the State affecting rights must follow a fair, just, and reasonable procedure.
+
+A.K. Kraipak v. Union of India (1969)
+Administrative actions must comply with principles of natural justice, even when statutes are silent.
+
+🧠 Advisory Opinion
+
+Based on the facts provided, the suspension raises serious concerns regarding procedural fairness and the right to be heard. Public universities, being state authorities, are expected to follow principles of natural justice before imposing disciplinary penalties. A suspension imposed without offering an opportunity to explain may be legally challengeable as arbitrary. The affected individual may consider seeking internal review, approaching the university grievance mechanism, or consulting a qualified legal professional.
+
+✅ Case Strengths
+
+The institution involved is a public authority subject to constitutional safeguards.
+
+Lack of a hearing strongly indicates violation of natural justice.
+
+Established Supreme Court precedents support fair procedure.
+
+⚠️ Potential Weaknesses / Risks
+
+The university may justify suspension citing urgency or safety.
+
+Internal regulations may permit temporary suspension.
+
+Limited facts may not reflect the full disciplinary context.
+
+🧭 Suggested Next Steps (Advisory)
+
+Request written reasons for the suspension.
+
+Use internal grievance or appeal mechanisms.
+
+Preserve all notices and communication.
+
+Seek professional legal advice if required.
+
+⚠️ Disclaimer
+
+This project provides educational, non-binding legal analysis only.
+It does not constitute legal advice, judicial determination, or a substitute for professional consultation.
+
+🚀 Future Scope
+
+Web-based interface for case input
+
+AI-powered precedent retrieval
+
+Jurisdiction-specific legal reasoning
+
+Structured legal risk assessment
