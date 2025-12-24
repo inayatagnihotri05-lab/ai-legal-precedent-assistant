@@ -2,281 +2,165 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Court AI — Legal Reasoning Assistant</title>
+  <title>Court AI — Neutral Legal Reasoner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Google Fonts (Professional + AI vibe) -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Prettier, professional font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
   <style>
     body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: radial-gradient(circle at top, #0f172a, #020617);
-      color: #e5e7eb;
-      min-height: 100vh;
+      font-family: Inter, system-ui, sans-serif;
+      background: radial-gradient(circle at top, #eef2ff, #f8fafc);
+      padding: 48px 16px;
+      color: #0f172a;
     }
 
-    header {
-      padding: 32px;
-      border-bottom: 1px solid #1e293b;
+    .card {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 36px;
+      border-radius: 18px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.08);
     }
 
     h1 {
-      margin: 0;
-      font-size: 2.6rem;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-    }
-
-    h1 span {
-      color: #60a5fa;
+      font-family: "Playfair Display", serif;
+      font-size: 34px;
+      margin-bottom: 6px;
     }
 
     .subtitle {
-      color: #94a3b8;
-      margin-top: 8px;
-      font-size: 1rem;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 40px 24px;
+      color: #475569;
+      margin-bottom: 28px;
     }
 
     textarea {
       width: 100%;
-      min-height: 140px;
-      background: #020617;
-      color: #e5e7eb;
-      border: 1px solid #1e293b;
-      border-radius: 12px;
-      padding: 16px;
-      font-size: 1rem;
-      resize: vertical;
-      font-family: 'IBM Plex Sans', sans-serif;
-    }
-
-    textarea:focus {
-      outline: none;
-      border-color: #60a5fa;
+      height: 130px;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      font-size: 15px;
+      resize: none;
     }
 
     button {
-      margin-top: 16px;
+      margin-top: 18px;
       padding: 14px 26px;
-      background: linear-gradient(135deg, #3b82f6, #60a5fa);
-      color: #020617;
       border: none;
-      border-radius: 999px;
-      font-size: 1rem;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: white;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
     }
 
     button:hover {
-      opacity: 0.9;
-    }
-
-    .ai-console {
-      margin-top: 32px;
-      background: #020617;
-      border: 1px solid #1e293b;
-      border-radius: 14px;
-      padding: 20px;
-      font-family: 'IBM Plex Sans', monospace;
-      font-size: 0.95rem;
-      color: #93c5fd;
+      opacity: 0.95;
     }
 
     .output {
       margin-top: 40px;
-      display: none;
     }
 
-    .card {
-      background: #020617;
-      border: 1px solid #1e293b;
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 24px;
+    .section {
+      margin-bottom: 26px;
+      padding: 18px 20px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border-left: 6px solid;
     }
 
-    .card h3 {
+    .plaintiff { border-color: #2563eb; }
+    .defendant { border-color: #dc2626; }
+    .leaning { border-color: #16a34a; }
+    .weakness { border-color: #f59e0b; }
+    .story { border-color: #0f172a; background: #f1f5f9; }
+
+    .section h3 {
       margin-top: 0;
-      color: #60a5fa;
-      font-size: 1.2rem;
+      font-size: 17px;
     }
 
-    .tag {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: #0f172a;
-      border: 1px solid #1e293b;
-      margin-right: 8px;
-      font-size: 0.85rem;
-      color: #93c5fd;
-    }
-
-    .confidence {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #4ade80;
-    }
-
-    footer {
-      margin-top: 80px;
-      padding: 24px;
-      text-align: center;
+    .disclaimer {
+      font-size: 13px;
       color: #64748b;
-      font-size: 0.85rem;
-      border-top: 1px solid #1e293b;
+      margin-top: 30px;
+      text-align: center;
     }
   </style>
 </head>
 
 <body>
+  <div class="card">
+    <h1>Court AI</h1>
+    <p class="subtitle">Neutral Legal Reasoner · Advisory & Non-Binding</p>
 
-<header>
-  <h1>Court <span>AI</span></h1>
-  <div class="subtitle">
-    Experimental Legal Reasoning Assistant · Advisory & Non-Binding
-  </div>
-</header>
+    <textarea id="facts" placeholder="Describe the case facts clearly..."></textarea>
+    <button onclick="analyzeCase()">Analyze Case</button>
 
-<div class="container">
+    <div id="output" class="output"></div>
 
-  <h2>Describe Your Case</h2>
-  <textarea id="facts" placeholder="Example: My neighbour forcefully entered my house while I was away and refuses to leave..."></textarea>
-
-  <button onclick="analyzeCase()">Analyze Case</button>
-
-  <div id="aiConsole" class="ai-console">
-    AI Engine Idle.
+    <p class="disclaimer">
+      This tool provides a simulated, non-binding legal analysis for educational purposes only.
+    </p>
   </div>
 
-  <div id="output" class="output">
+  <script>
+    function analyzeCase() {
+      const text = document.getElementById("facts").value.trim();
+      if (!text) return;
 
-    <div class="card">
-      <h3>AI-Identified Legal Domains</h3>
-      <div id="domains"></div>
-    </div>
+      document.getElementById("output").innerHTML = `
+        <div class="section plaintiff">
+          <h3>🟦 Arguments for Plaintiff</h3>
+          <p>
+            The plaintiff may argue that possession of the property was taken without lawful authority
+            or due process. In the absence of a valid agreement, court order, or statutory backing,
+            such occupation constitutes unlawful dispossession under property law principles.
+          </p>
+        </div>
 
-    <div class="card">
-      <h3>Key Legal Issues (Inferred)</h3>
-      <ul id="issues"></ul>
-    </div>
+        <div class="section defendant">
+          <h3>🟥 Arguments for Defendant</h3>
+          <p>
+            The defendant may contend that possession was not illegal, citing implied consent,
+            prior understanding, or long-standing use of the premises. The defendant may also argue
+            that the dispute is civil in nature and lacks immediate grounds for summary eviction.
+          </p>
+        </div>
 
-    <div class="card">
-      <h3>Reasoning Summary</h3>
-      <p id="reasoning"></p>
-    </div>
+        <div class="section leaning">
+          <h3>⚖️ Likely Court Leaning</h3>
+          <p>
+            Courts generally disfavor self-help remedies in property disputes. If the plaintiff
+            establishes ownership and lack of consent, the court may lean toward restoring possession,
+            subject to evidence and procedural compliance.
+          </p>
+        </div>
 
-    <div class="card">
-      <h3>Relevant Precedent Patterns</h3>
-      <ul id="precedents"></ul>
-    </div>
+        <div class="section weakness">
+          <h3>❓ Weakest Point in Each Side</h3>
+          <p>
+            <strong>Plaintiff:</strong> Failure to show clear documentary proof of ownership or possession.<br>
+            <strong>Defendant:</strong> Inability to demonstrate legal authority or written agreement.
+          </p>
+        </div>
 
-    <div class="card">
-      <h3>Estimated Case Strength</h3>
-      <div class="confidence" id="confidence"></div>
-      <p id="confidenceWhy"></p>
-    </div>
-
-    <div class="card">
-      <h3>AI Advisory Opinion</h3>
-      <p id="advisory"></p>
-    </div>
-
-    <div class="card">
-      <h3>AI Follow-Up Questions (To Improve Accuracy)</h3>
-      <ul id="followups"></ul>
-    </div>
-
-  </div>
-</div>
-
-<footer>
-  Court AI provides structured legal reasoning for educational purposes only.
-  <br>Not a substitute for a licensed legal professional.
-</footer>
-
-<script>
-function analyzeCase() {
-  const text = document.getElementById("facts").value.toLowerCase();
-  const consoleBox = document.getElementById("aiConsole");
-  const output = document.getElementById("output");
-
-  output.style.display = "none";
-  consoleBox.innerText = "Initializing legal reasoning engine...";
-
-  let score = 40;
-  let issues = [];
-  let domains = [];
-  let precedents = [];
-  let followups = [];
-
-  setTimeout(() => consoleBox.innerText = "Parsing factual assertions...", 500);
-  setTimeout(() => consoleBox.innerText = "Detecting legal domain signals...", 1200);
-  setTimeout(() => consoleBox.innerText = "Applying rule-based inference...", 2000);
-  setTimeout(() => consoleBox.innerText = "Matching precedent patterns...", 2800);
-
-  if (text.includes("house") || text.includes("property")) {
-    domains.push("Property Law");
-    issues.push("Illegal possession / encroachment");
-    precedents.push("Ramesh v. Suresh (2019): Unauthorized occupation held illegal");
-    score += 15;
-    followups.push("Do you hold a registered ownership document?");
-  }
-
-  if (text.includes("force") || text.includes("took over")) {
-    issues.push("Use of force without due process");
-    precedents.push("Kumar v. State (2016): Forcible dispossession violates procedure");
-    score += 20;
-    followups.push("Was any court order shown before possession was taken?");
-  }
-
-  if (text.includes("rent") || text.includes("tenant")) {
-    domains.push("Tenancy Law");
-    issues.push("Landlord-tenant dispute");
-    precedents.push("ABC v. XYZ (2018): Non-payment allowed eviction after notice");
-    followups.push("Was a legal eviction notice served?");
-  }
-
-  score = Math.min(score, 95);
-
-  setTimeout(() => {
-    consoleBox.innerText = "Generating advisory output...";
-    output.style.display = "block";
-
-    document.getElementById("domains").innerHTML =
-      domains.map(d => `<span class="tag">${d}</span>`).join("");
-
-    document.getElementById("issues").innerHTML =
-      issues.map(i => `<li>${i}</li>`).join("");
-
-    document.getElementById("precedents").innerHTML =
-      precedents.map(p => `<li>${p}</li>`).join("");
-
-    document.getElementById("confidence").innerText = score + "%";
-
-    document.getElementById("confidenceWhy").innerText =
-      "Confidence derived from detected factual signals such as force, possession, and documentation references.";
-
-    document.getElementById("reasoning").innerText =
-      "IF possession was taken without consent AND without judicial process, THEN procedural fairness is likely violated.";
-
-    document.getElementById("advisory").innerText =
-      "Based on the provided facts, the situation indicates potential illegal dispossession. Courts generally require due legal process before transfer of possession.";
-
-    document.getElementById("followups").innerHTML =
-      followups.map(f => `<li>${f}</li>`).join("");
-
-    consoleBox.innerText = "Analysis complete.";
-  }, 3500);
-}
-</script>
-
+        <div class="section story">
+          <h3>📜 Judicial Narrative (Simulated)</h3>
+          <p>
+            The facts, as presented, suggest that the defendant assumed possession of the property
+            during a period when the plaintiff was not in active occupation. Such assumption of
+            possession, if unsupported by legal authority or consent, is prima facie unlawful.
+            The matter, however, remains subject to evidentiary scrutiny and due adjudication.
+          </p>
+        </div>
+      `;
+    }
+  </script>
 </body>
 </html>
