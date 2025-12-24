@@ -1,7 +1,32 @@
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+
 import json
 from case_intake import extract_case_issues, generate_case_context
 from precedent_search import search_precedents
 from ai_module import analyze_case  # 🔹 Import AI placeholder
+app = FastAPI()
+
+# Allow your frontend (GitHub Pages) to talk to backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or your frontend URL
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+@app.post("/analyze")
+async def analyze(request: Request):
+    data = await request.json()  # Get JSON from frontend
+    case_data = {
+        "facts_of_the_case": data.get("facts_of_the_case", []),
+        "case_title": "User Input Case",
+        "jurisdiction": "N/A",
+        "case_type": "User Input"
+    }
+    result = analyze_case(case_data)  # Call your AI logic
+    return result  # Send JSON back
+
 
 # 🔹 Available cases
 CASE_FILES = {
@@ -106,3 +131,5 @@ if __name__ == "__main__":
         print(f"  Summary: {p['summary']}")
         print(f"  Relevance: {p['relevance']}\n")
     print("Note:", ai_advisory["note"])
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
