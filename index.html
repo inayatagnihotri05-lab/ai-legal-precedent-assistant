@@ -6,119 +6,128 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --bg: #f5f7fa;
-    --text: #111;
-  }
-  body.dark {
-    --bg: #1f2937;
-    --text: #f9fafb;
+    --bg: #0f1115;
+    --text: #e0f7fa;
+    --accent: #00f0ff;
+    --low: #22c55e;
+    --medium: #f59e0b;
+    --high: #2563eb;
   }
   body {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Inter', sans-serif;
     background: var(--bg);
     color: var(--text);
-    padding: 40px 20px;
+    margin:0; padding:20px;
     transition: background 0.3s, color 0.3s;
   }
+  body.light {
+    --bg: #f5f7fa;
+    --text: #111;
+    --accent: #2563eb;
+  }
 
-  textarea, select, button {
+  /* Terminal-style input */
+  textarea, select {
     width: 100%;
     padding: 14px;
     border-radius: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--accent);
     margin-top: 12px;
     font-size: 16px;
+    font-family: 'Fira Code', monospace;
+    background: rgba(0,0,0,0.6);
+    color: var(--accent);
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    transition: 0.3s;
   }
-  textarea { height: 140px; resize: vertical; }
+  textarea:focus, select:focus { outline: none; border-color: #00fff0; }
+
   button {
     margin-top: 16px;
+    padding: 14px;
     border: none;
-    background: #2563eb;
-    color: white;
+    background: var(--accent);
+    color: #111;
     font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-    border-radius: 10px;
     font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
   }
-  button:hover { background: #1d4ed8; }
-  #darkToggle { background: #4b5563; margin-top: 8px; }
+  button:hover { box-shadow: 0 0 12px var(--accent); }
 
+  /* Card styles with glassmorphism */
   .card {
-    max-width: 720px;
-    margin: 24px auto;
-    background: white;
+    max-width: 750px;
+    margin: 20px auto;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
     border-radius: 16px;
-    box-shadow: 0 14px 32px rgba(0,0,0,0.12);
-    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 0;
     animation: fadeIn 0.5s ease forwards;
   }
-  body.dark .card { background: #111827; color: #f9fafb; }
-
   .card-header {
-    padding: 14px 20px;
-    color: white;
+    padding: 16px 24px;
     font-weight: 700;
     font-size: 18px;
+    color: #fff;
+    background: linear-gradient(90deg,#00f0ff,#7f00ff);
+    text-shadow: 0 0 6px rgba(0,240,255,0.7);
     border-radius: 16px 16px 0 0;
   }
-  .card-header.tenant { background: linear-gradient(90deg,#2563eb,#3b82f6); }
-  .card-header.neighbor { background: linear-gradient(90deg,#16a34a,#4ade80); }
-  .card-header.contract { background: linear-gradient(90deg,#eab308,#facc15); }
-  .card-header.employment { background: linear-gradient(90deg,#db2777,#f472b6); }
-  .card-header.family { background: linear-gradient(90deg,#f97316,#fb923c); }
 
-  .section { border-top: 1px solid #ddd; padding: 14px 20px; }
-  body.dark .section { border-color: #374151; }
-  .section-header { cursor: pointer; font-weight: 600; font-size: 16px; margin-bottom: 6px; }
-  .section-content { display: none; padding-left: 8px; }
-  .badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    color: white;
-    margin-left: 6px;
-    font-weight: 500;
+  .section {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 24px;
   }
-  .badge.high { background: #2563eb; }
-  .badge.medium { background: #f59e0b; }
+  .section-header {
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .section-content { display: none; padding-left:8px; }
+
+  .badge {
+    display:inline-block;
+    padding:2px 10px;
+    border-radius:12px;
+    font-size:12px;
+    font-weight:500;
+    color:#111;
+    margin-left:6px;
+    box-shadow:0 0 6px rgba(0,0,0,0.3);
+  }
+  .badge.high { background: var(--high); color:#fff; }
+  .badge.medium { background: var(--medium); color:#111; }
+  .badge.low { background: var(--low); color:#111; }
 
   .loading-card {
+    padding: 20px; text-align:center; font-style: italic;
+    color: #aaa;
     animation: pulse 1s infinite;
-    font-style: italic;
-    color: #555;
-    text-align: center;
-    padding: 20px;
-    font-family: 'Inter', sans-serif;
   }
 
   @keyframes pulse {
-    0% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.02); opacity: 1; }
-    100% { transform: scale(1); opacity: 0.7; }
+    0% { transform: scale(1); opacity:0.7;}
+    50% { transform: scale(1.02); opacity:1;}
+    100% { transform: scale(1); opacity:0.7;}
   }
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity:0; transform: translateY(10px);}
+    to { opacity:1; transform: translateY(0);}
   }
 
-  @media (max-width: 600px) {
-    body { padding: 20px; }
-    .card { padding: 0; }
-  }
 </style>
 </head>
 <body>
 
 <div class="card">
-  <div class="card-header tenant">AI Legal Precedent Assistant ⚖️</div>
+  <div class="card-header">AI Legal Precedent Assistant ⚖️</div>
   <div style="padding:20px;">
     <p>Enter your case facts below (advisory, non-binding).</p>
     <select id="caseSelect">
@@ -130,7 +139,7 @@
     </select>
     <textarea id="caseInput" placeholder="Describe the legal issue here..."></textarea>
     <button onclick="analyzeCase()">Analyze Case</button>
-    <button id="darkToggle" onclick="toggleDark()">Toggle Dark Mode 🌙</button>
+    <button onclick="toggleDark()">Toggle Dark Mode 🌙</button>
   </div>
 </div>
 
@@ -140,107 +149,110 @@
 const exampleCases = {
   tenant: {
     issues: ["Non-payment of rent", "Eviction of tenant"],
-    context: { dispute_value: "Low", applicable_law: ["Transfer of Property Act, 1882", "Local Rent Control"] },
+    context: { dispute_value:"Low", applicable_law:["Transfer of Property Act,1882","Local Rent Control"] },
     example_precedents: [
-      { case_name: "ABC vs XYZ", year: 2018, summary: "Tenant failed to pay rent for 2 months; court ruled in favor of landlord", relevance: "High" },
-      { case_name: "LMN vs PQR", year: 2021, summary: "Landlord tried illegal eviction; court protected tenant", relevance: "Medium" }
+      { case_name:"ABC vs XYZ", year:2018, summary:"Tenant failed to pay rent; landlord favored", relevance:"High"},
+      { case_name:"LMN vs PQR", year:2021, summary:"Illegal eviction attempt; tenant protected", relevance:"Medium"}
     ],
-    advisory_opinion: "Tenant eviction seems valid but ensure proper notice. Non-binding advisory only.",
-    note: "This output is advisory and non-binding."
+    advisory_opinion:"Eviction appears valid, ensure proper notice. Non-binding advisory only.",
+    note:"Advisory output is non-binding."
   },
   neighbor: {
-    issues: ["Property encroachment", "Illegal occupation"],
-    context: { dispute_value: "Medium", applicable_law: ["Civil Procedure Code", "Local Property Laws"] },
-    example_precedents: [
-      { case_name: "Neighbor vs Neighbor", year: 2020, summary: "Court resolved property encroachment by ordering eviction", relevance: "High" },
-      { case_name: "XY vs AB", year: 2019, summary: "Illegal fencing issue resolved in favor of original owner", relevance: "Medium" }
+    issues:["Property encroachment","Illegal occupation"],
+    context:{dispute_value:"Medium",applicable_law:["Civil Procedure Code","Local Property Laws"]},
+    example_precedents:[
+      { case_name:"Neighbor vs Neighbor", year:2020, summary:"Court ordered eviction for encroachment", relevance:"High"},
+      { case_name:"XY vs AB", year:2019, summary:"Illegal fencing resolved in favor of owner", relevance:"Medium"}
     ],
-    advisory_opinion: "Neighbor’s occupation appears illegal. Advise mediation or legal action. Non-binding advisory only.",
-    note: "This output is advisory and non-binding."
+    advisory_opinion:"Occupation appears illegal. Advise mediation or legal action. Non-binding advisory only.",
+    note:"Advisory output is non-binding."
   },
   contract: {
-    issues: ["Breach of contract", "Damages"],
-    context: { dispute_value: "High", applicable_law: ["Indian Contract Act, 1872"] },
-    example_precedents: [
-      { case_name: "Contractor vs Client", year: 2019, summary: "Court awarded damages due to breach of contract", relevance: "High" },
-      { case_name: "Business vs Supplier", year: 2022, summary: "Supplier failed delivery; damages awarded", relevance: "Medium" }
+    issues:["Breach of contract","Damages"],
+    context:{dispute_value:"High",applicable_law:["Indian Contract Act,1872"]},
+    example_precedents:[
+      { case_name:"Contractor vs Client", year:2019, summary:"Damages awarded due to breach", relevance:"High"},
+      { case_name:"Business vs Supplier", year:2022, summary:"Supplier failed delivery; damages awarded", relevance:"Medium"}
     ],
-    advisory_opinion: "Breach of contract is likely. Non-binding advisory only.",
-    note: "This output is advisory and non-binding."
+    advisory_opinion:"Breach likely; advise formal notice. Non-binding advisory only.",
+    note:"Advisory output is non-binding."
   },
   employment: {
-    issues: ["Unfair dismissal", "Workplace discrimination"],
-    context: { dispute_value: "Medium", applicable_law: ["Industrial Disputes Act, 1947", "Labour Laws"] },
-    example_precedents: [
-      { case_name: "Employee vs Company", year: 2021, summary: "Court reinstated unfairly terminated employee", relevance: "High" },
-      { case_name: "Staff vs Employer", year: 2019, summary: "Discrimination case settled in favor of employee", relevance: "Medium" }
+    issues:["Unfair dismissal","Workplace discrimination"],
+    context:{dispute_value:"Medium",applicable_law:["Industrial Disputes Act,1947","Labour Laws"]},
+    example_precedents:[
+      { case_name:"Employee vs Company", year:2021, summary:"Employee reinstated after unfair termination", relevance:"High"},
+      { case_name:"Staff vs Employer", year:2019, summary:"Discrimination settled in favor of employee", relevance:"Medium"}
     ],
-    advisory_opinion: "Employee may have a valid claim. Non-binding advisory only.",
-    note: "This output is advisory and non-binding."
+    advisory_opinion:"Employee may have a valid claim. Non-binding advisory only.",
+    note:"Advisory output is non-binding."
   },
   family: {
-    issues: ["Custody dispute", "Property division"],
-    context: { dispute_value: "High", applicable_law: ["Guardianship Act, 1890", "Hindu Succession Act, 1956"] },
-    example_precedents: [
-      { case_name: "Parent vs Parent", year: 2020, summary: "Court awarded custody to mother; property split equally", relevance: "High" },
-      { case_name: "Family vs Family", year: 2018, summary: "Property dispute resolved amicably in court", relevance: "Medium" }
+    issues:["Custody dispute","Property division"],
+    context:{dispute_value:"High",applicable_law:["Guardianship Act,1890","Hindu Succession Act,1956"]},
+    example_precedents:[
+      { case_name:"Parent vs Parent", year:2020, summary:"Custody awarded to mother; property split", relevance:"High"},
+      { case_name:"Family vs Family", year:2018, summary:"Property dispute resolved amicably", relevance:"Medium"}
     ],
-    advisory_opinion: "Custody and property claims may be valid. Non-binding advisory only.",
-    note: "This output is advisory and non-binding."
+    advisory_opinion:"Custody and property claims may be valid. Non-binding advisory only.",
+    note:"Advisory output is non-binding."
   }
 };
 
-function analyzeCase() {
-  const selectedCase = document.getElementById("caseSelect").value;
-  const caseFacts = document.getElementById("caseInput").value;
+function typeWriter(text, element, speed=20) {
+  let i=0;
+  element.innerHTML="";
+  function typing(){
+    if(i<text.length){element.innerHTML+=text.charAt(i);i++;setTimeout(typing,speed);}
+  }
+  typing();
+}
 
-  if (!caseFacts) { alert("Please enter case facts!"); return; }
-
-  const outputDiv = document.getElementById("output");
-  outputDiv.innerHTML = `<div class="card loading-card">Analyzing AI advisory...</div>`;
-
-  setTimeout(() => {
-    const data = exampleCases[selectedCase];
-    outputDiv.innerHTML = `
-      <div class="card ${selectedCase}">
-        <div class="card-header ${selectedCase}">AI Advisory Output ⚖️</div>
-
+function analyzeCase(){
+  const selected=document.getElementById("caseSelect").value;
+  const facts=document.getElementById("caseInput").value;
+  if(!facts){alert("Enter case facts!");return;}
+  const output=document.getElementById("output");
+  output.innerHTML=`<div class="card loading-card">AI analyzing...</div>`;
+  setTimeout(()=>{
+    const data=exampleCases[selected];
+    output.innerHTML=`
+      <div class="card">
+        <div class="card-header">AI Advisory Output ⚖️</div>
         <div class="section">
           <div class="section-header" onclick="toggleSection(this)">Issues 🏷️</div>
           <div class="section-content">${data.issues.join(", ")}</div>
         </div>
-
         <div class="section">
           <div class="section-header" onclick="toggleSection(this)">Context & Applicable Law 📄</div>
           <div class="section-content">Dispute Value: ${data.context.dispute_value}<br>Applicable Law: ${data.context.applicable_law.join(", ")}</div>
         </div>
-
         <div class="section">
           <div class="section-header" onclick="toggleSection(this)">Example Precedents 📚</div>
           <div class="section-content">
             <ul>
-              ${data.example_precedents.map(p => `<li>${p.case_name} (${p.year}): ${p.summary} <span class="badge ${p.relevance.toLowerCase()}">${p.relevance}</span></li>`).join("")}
+              ${data.example_precedents.map(p=>`<li>${p.case_name} (${p.year}): ${p.summary} <span class="badge ${p.relevance.toLowerCase()}">${p.relevance}</span></li>`).join("")}
             </ul>
           </div>
         </div>
-
         <div class="section">
           <div class="section-header" onclick="toggleSection(this)">Advisory Opinion 💡</div>
-          <div class="section-content">${data.advisory_opinion}<br><em>${data.note}</em></div>
+          <div class="section-content" id="advisoryText"></div>
         </div>
-      </div>
-    `;
-
-    outputDiv.scrollIntoView({ behavior: "smooth" });
-  }, 1200);
+      </div>`;
+    typeWriter(data.advisory_opinion+"\n"+data.note, document.getElementById("advisoryText"),20);
+    output.scrollIntoView({behavior:"smooth"});
+  },800);
 }
 
-function toggleSection(header) {
-  const content = header.nextElementSibling;
-  content.style.display = content.style.display === 'block' ? 'none' : 'block';
+function toggleSection(header){
+  const content=header.nextElementSibling;
+  content.style.display=content.style.display==="block"?"none":"block";
 }
 
-function toggleDark() { document.body.classList.toggle("dark"); }
+function toggleDark(){
+  document.body.classList.toggle("light");
+}
 </script>
 
 </body>
