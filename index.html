@@ -1,202 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>AI Legal Precedent Assistant</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code&display=swap" rel="stylesheet">
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Fira+Code&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --bg: #0f1115;
-  --text: #e0f7fa;
-  --accent: #00f0ff;
-  --low: #22c55e;
-  --medium: #f59e0b;
-  --high: #2563eb;
+:root{
+  --bg:#0b0f19;
+  --card:rgba(255,255,255,0.07);
+  --accent:#00f0ff;
+  --text:#e6f7ff;
 }
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg);
-  color: var(--text);
+body{
   margin:0; padding:20px;
-  transition: background 0.3s, color 0.3s;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
 }
-body.light {
-  --bg: #f5f7fa;
-  --text: #111;
-  --accent: #2563eb;
+.card{
+  max-width:900px;
+  margin:20px auto;
+  background:var(--card);
+  border-radius:18px;
+  backdrop-filter:blur(14px);
+  box-shadow:0 20px 40px rgba(0,0,0,0.5);
+  overflow:hidden;
 }
-
-textarea, select {
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px solid var(--accent);
-  margin-top: 12px;
-  font-size: 16px;
-  font-family: 'Fira Code', monospace;
-  background: rgba(0,0,0,0.6);
-  color: var(--accent);
-  box-sizing: border-box;
-  transition: 0.3s;
+.header{
+  padding:20px;
+  font-size:26px;
+  font-weight:800;
+  background:linear-gradient(90deg,#00f0ff,#7f00ff);
 }
-textarea:focus, select:focus { outline: none; border-color: #00fff0; }
-
-button {
-  margin-top: 16px;
-  padding: 14px;
-  border: none;
-  background: var(--accent);
-  color: #111;
-  font-size: 16px;
-  font-weight: 500;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-button:hover { box-shadow: 0 0 12px var(--accent); }
-
-.card {
-  max-width: 750px;
-  margin: 20px auto;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 0;
-  animation: fadeIn 0.5s ease forwards;
-}
-.card-header {
-  padding: 16px 24px;
-  font-weight: 700;
-  font-size: 20px;
-  color: #fff;
-  background: linear-gradient(90deg,#00f0ff,#7f00ff);
-  text-shadow: 0 0 6px rgba(0,240,255,0.7);
-  border-radius: 16px 16px 0 0;
-}
-
-.section {
-  border-top: 1px solid rgba(255,255,255,0.1);
-  padding: 12px 24px;
-}
-.section-header {
-  cursor: pointer;
-  font-weight: 600;
-  margin-bottom: 6px;
-  font-size: 16px;
-}
-.section-content { display: none; padding-left:8px; font-family: 'Fira Code', monospace; }
-
-.badge {
-  display:inline-block;
-  padding:2px 10px;
+.content{padding:20px;}
+select,textarea,button{
+  width:100%;
+  margin-top:12px;
+  padding:14px;
   border-radius:12px;
+  border:1px solid var(--accent);
+  background:#020617;
+  color:var(--accent);
+  font-family:'Fira Code',monospace;
+}
+button{
+  background:var(--accent);
+  color:#000;
+  font-weight:700;
+  cursor:pointer;
+}
+.section{
+  margin-top:18px;
+  border-top:1px solid rgba(255,255,255,0.1);
+  padding-top:12px;
+}
+h3{margin:8px 0;}
+.badge{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:20px;
   font-size:12px;
-  font-weight:500;
-  color:#111;
+  background:#00f0ff;
+  color:#000;
   margin-left:6px;
-  box-shadow:0 0 6px rgba(0,0,0,0.3);
 }
-.badge.high { background: var(--high); color:#fff; }
-.badge.medium { background: var(--medium); color:#111; }
-.badge.low { background: var(--low); color:#111; }
-
-.loading-card {
-  padding: 20px; text-align:center; font-style: italic;
-  color: #aaa;
-  animation: pulse 1s infinite;
+.progress{
+  background:#111;
+  border-radius:10px;
+  overflow:hidden;
+  height:12px;
 }
-
-@keyframes pulse {
-  0% { transform: scale(1); opacity:0.7;}
-  50% { transform: scale(1.02); opacity:1;}
-  100% { transform: scale(1); opacity:0.7;}
+.progress div{
+  height:100%;
+  background:linear-gradient(90deg,#00f0ff,#7f00ff);
 }
-@keyframes fadeIn {
-  from { opacity:0; transform: translateY(10px);}
-  to { opacity:1; transform: translateY(0);}
+.toggle{
+  cursor:pointer;
+  font-size:14px;
+  opacity:0.8;
 }
 </style>
 </head>
+
 <body>
 
 <div class="card">
-  <div class="card-header">AI Legal Precedent Assistant ⚖️</div>
-  <div style="padding:20px;">
-    <p>Enter your case facts below (advisory, non-binding).</p>
-    <select id="caseSelect">
-      <option value="tenant">🏠 Tenancy Dispute</option>
-      <option value="neighbor">🏡 Neighbor Dispute</option>
-      <option value="contract">📄 Contract Dispute</option>
-      <option value="employment">💼 Employment Dispute</option>
-      <option value="family">👨‍👩‍👧 Family / Custody Dispute</option>
-      <option value="criminal">🚨 Criminal Case</option>
-      <option value="intellectual_property">💡 Intellectual Property</option>
-      <option value="environmental">🌱 Environmental Case</option>
-      <option value="consumer">🛒 Consumer Protection</option>
-      <option value="corporate">🏢 Corporate / Startup Dispute</option>
+  <div class="header">⚖️ AI Legal Precedent Assistant</div>
+  <div class="content">
+
+    <label>Jurisdiction</label>
+    <select id="jurisdiction">
+      <option>India</option>
+      <option>USA</option>
+      <option>UK</option>
     </select>
-    <textarea id="caseInput" placeholder="Describe the legal issue here..."></textarea>
-    <button onclick="analyzeCase()">Analyze Case</button>
-    <button onclick="toggleDark()">Toggle Dark Mode 🌙</button>
+
+    <label>Case Type</label>
+    <select id="caseType">
+      <option value="tenant">Tenancy</option>
+      <option value="neighbor">Property / Neighbor</option>
+      <option value="contract">Contract</option>
+      <option value="employment">Employment</option>
+      <option value="family">Family</option>
+      <option value="criminal">Criminal</option>
+      <option value="ip">Intellectual Property</option>
+      <option value="environment">Environmental</option>
+      <option value="consumer">Consumer</option>
+      <option value="corporate">Corporate / Startup</option>
+    </select>
+
+    <textarea id="facts" placeholder="Describe your case facts..."></textarea>
+
+    <button onclick="analyze()">Analyze Case</button>
+
   </div>
 </div>
 
 <div id="output"></div>
 
 <script>
-// Expanded exampleCases object (all 10 types)
-const exampleCases = {
-  tenant:{issues:["Non-payment of rent","Eviction of tenant"],context:{dispute_value:"Low",applicable_law:["Transfer of Property Act,1882","Local Rent Control"]},example_precedents:[{case_name:"ABC vs XYZ",year:2018,summary:"Tenant failed to pay rent; landlord favored",relevance:"High"},{case_name:"LMN vs PQR",year:2021,summary:"Illegal eviction attempt; tenant protected",relevance:"Medium"}],advisory_opinion:"Eviction appears valid, ensure proper notice. Non-binding advisory only.",note:"Advisory output is non-binding."},
-  neighbor:{issues:["Property encroachment","Illegal occupation"],context:{dispute_value:"Medium",applicable_law:["Civil Procedure Code","Local Property Laws"]},example_precedents:[{case_name:"Neighbor vs Neighbor",year:2020,summary:"Court ordered eviction for encroachment",relevance:"High"},{case_name:"XY vs AB",year:2019,summary:"Illegal fencing resolved in favor of owner",relevance:"Medium"}],advisory_opinion:"Occupation appears illegal. Advise mediation or legal action. Non-binding advisory only.",note:"Advisory output is non-binding."},
-  contract:{issues:["Breach of contract","Damages"],context:{dispute_value:"High",applicable_law:["Indian Contract Act,1872"]},example_precedents:[{case_name:"Contractor vs Client",year:2019,summary:"Damages awarded due to breach",relevance:"High"},{case_name:"Business vs Supplier",year:2022,summary:"Supplier failed delivery; damages awarded",relevance:"Medium"}],advisory_opinion:"Breach likely; advise formal notice. Non-binding advisory only.",note:"Advisory output is non-binding."},
-  employment:{issues:["Unfair dismissal","Workplace discrimination"],context:{dispute_value:"Medium",applicable_law:["Industrial Disputes Act,1947","Labour Laws"]},example_precedents:[{case_name:"Employee vs Company",year:2021,summary:"Employee reinstated after unfair termination",relevance:"High"},{case_name:"Staff vs Employer",year:2019,summary:"Discrimination settled in favor of employee",relevance:"Medium"}],advisory_opinion:"Employee may have a valid claim. Non-binding advisory only.",note:"Advisory output is non-binding."},
-  family:{issues:["Custody dispute","Property division"],context:{dispute_value:"High",applicable_law:["Guardianship Act,1890","Hindu Succession Act,1956"]},example_precedents:[{case_name:"Parent vs Parent",year:2020,summary:"Custody awarded to mother; property split",relevance:"High"},{case_name:"Family vs Family",year:2018,summary:"Property dispute resolved amicably",relevance:"Medium"}],advisory_opinion:"Custody and property claims may be valid. Non-binding advisory only.",note:"Advisory output is non-binding."},
-  criminal:{issues:["Theft","Assault","Fraud"],context:{dispute_value:"High",applicable_law:["Indian Penal Code,1860"]},example_precedents:[{case_name:"State vs A",year:2021,summary:"Conviction for theft; sentence awarded",relevance:"High"},{case_name:"State vs B",year:2019,summary:"Fraud case dismissed due to lack of evidence",relevance:"Medium"}],advisory_opinion:"Strong evidence required; procedural compliance is crucial. Non-binding advisory only.",note:"Advisory output is non-binding."},
-  intellectual_property:{issues:["Trademark infringement","Copyright violation"],context:{dispute_value:"High",applicable_law:["Trade Marks Act,1999","Copyright Act,1957"]},example_precedents:[{case_name:"Brand X vs Brand Y",year:2020,summary:"Trademark infringement ruled in favor of plaintiff",relevance:"High"},{case_name:"Publisher vs Author",year:2018,summary:"Copyright dispute settled amicably",relevance:"Medium"}],advisory_opinion:"Infringement likely; advise cease & desist or court filing. Non-binding advisory only.",note:"Advisory output is non-binding."},
-  environmental:{issues:["Pollution violation","Land encroachment"],context:{dispute_value:"Medium",applicable_law:["Environment Protection Act,1986"]},example_precedents:[{case_name:"State vs Industry",year:2019,summary:"Pollution violation fined; corrective measures ordered",relevance:"High"},{case_name:"Local Authority vs Developer",year:2021,summary:"Land encroachment resolved via restitution",relevance:"Medium"}],advisory_opinion:"Regulatory compliance must be checked; fines may apply. Non-binding advisory only.",note:"Advisory output is non-binding."},
-  consumer:{issues:["Product defect","False advertising"],context:{dispute_value:"Low",applicable_law:["Consumer Protection Act,2019"]},example_precedents:[{case_name:"Customer vs Company",year:2020,summary:"Refund granted for defective product",relevance:"High"},{case_name:"Buyer vs Seller",year:2018,summary:"False advertising ruled in favor of consumer",relevance:"Medium"}],advisory_opinion:"Consumer likely entitled to refund/compensation. Non-binding advisory only.",note:"Advisory output is non-binding."},
-  corporate:{issues:["Shareholder dispute","Startup agreement conflict"],context:{dispute_value:"High",applicable_law:["Companies Act,2013","Contract Law"]},example_precedents:[{case_name:"Investor vs Startup",year:2021,summary:"Shareholder agreement enforced by court",relevance:"High"},{case_name:"CEO vs Board",year:2020,summary:"Startup conflict resolved amicably",relevance:"Medium"}],advisory_opinion:"Corporate governance and agreements should be reviewed; non-binding advisory only.",note:"Advisory output is non-binding."}
-};
+function analyze(){
+  const out=document.getElementById("output");
+  out.innerHTML=`
+  <div class="card">
+    <div class="header">🧠 AI Advisory Output</div>
+    <div class="content">
 
-function typeWriter(text, element, speed=20){
-  let i=0; element.innerHTML="";
-  function typing(){ if(i<text.length){element.innerHTML+=text.charAt(i); i++; setTimeout(typing,speed); } }
-  typing();
-}
+      <h3>Case Strength</h3>
+      <div class="progress"><div style="width:78%"></div></div>
+      <p>78% Likelihood (Advisory)</p>
 
-function analyzeCase(){
-  const selected=document.getElementById("caseSelect").value;
-  const facts=document.getElementById("caseInput").value;
-  if(!facts){alert("Enter case facts!"); return;}
-  const output=document.getElementById("output");
-  output.innerHTML=`<div class="card loading-card">AI analyzing...</div>`;
-  setTimeout(()=>{
-    const data=exampleCases[selected];
-    output.innerHTML=`
-      <div class="card">
-        <div class="card-header">AI Advisory Output ⚖️</div>
-        <div class="section"><div class="section-header" onclick="toggleSection(this)">Issues 🏷️</div><div class="section-content">${data.issues.join(", ")}</div></div>
-        <div class="section"><div class="section-header" onclick="toggleSection(this)">Context & Applicable Law 📄</div><div class="section-content">Dispute Value: ${data.context.dispute_value}<br>Applicable Law: ${data.context.applicable_law.join(", ")}</div></div>
-        <div class="section"><div class="section-header" onclick="toggleSection(this)">Example Precedents 📚</div><div class="section-content"><ul>${data.example_precedents.map(p=>`<li>${p.case_name} (${p.year}): ${p.summary} <span class="badge ${p.relevance.toLowerCase()}">${p.relevance}</span></li>`).join("")}</ul></div></div>
-        <div class="section"><div class="section-header" onclick="toggleSection(this)">Advisory Opinion 💡</div><div class="section-content" id="advisoryText"></div></div>
-      </div>`;
-    typeWriter(data.advisory_opinion+"\n"+data.note, document.getElementById("advisoryText"),20);
-    output.scrollIntoView({behavior:"smooth"});
-  },800);
-}
+      <h3>Risk Level <span class="badge">Medium</span></h3>
 
-function toggleSection(header){
-  const content=header.nextElementSibling;
-  content.style.display=content.style.display==="block"?"none":"block";
-}
+      <div class="section">
+        <h3>Identified Issues</h3>
+        • Procedural fairness<br>
+        • Property rights violation<br>
+        • Lack of due process
+      </div>
 
-function toggleDark(){
-  document.body.classList.toggle("light");
+      <div class="section">
+        <h3>Applicable Law</h3>
+        • Constitutional due process<br>
+        • Property / Civil law provisions
+      </div>
+
+      <div class="section">
+        <h3>Timeline</h3>
+        🕒 Incident occurred<br>
+        📄 No notice served<br>
+        ⚖️ Dispute escalates<br>
+        🔮 Likely next: Legal notice / filing
+      </div>
+
+      <div class="section">
+        <h3>Evidence Checklist</h3>
+        ☐ Ownership documents<br>
+        ☐ Photographs / proof<br>
+        ☐ Written complaints<br>
+        ☐ Witness statements
+      </div>
+
+      <div class="section">
+        <h3>Follow-up Questions</h3>
+        • Any written agreement?<br>
+        • Police complaint filed?<br>
+        • Witnesses available?
+      </div>
+
+      <div class="section">
+        <h3>Simulated Hearing (Non-Binding)</h3>
+        <b>Judge:</b> Why was no notice served?<br>
+        <b>AI:</b> This weakens procedural fairness and favors the claimant.
+      </div>
+
+      <div class="section">
+        <h3>Explain Like I’m 12</h3>
+        Someone took something that legally belongs to you without asking.
+        The law usually protects you if rules weren’t followed.
+      </div>
+
+      <div class="section">
+        <b>⚠️ This output is advisory and non-binding.</b>
+      </div>
+
+    </div>
+  </div>`;
+  out.scrollIntoView({behavior:"smooth"});
 }
 </script>
 
