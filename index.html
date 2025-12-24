@@ -47,10 +47,55 @@
     <h1>AI Legal Precedent Assistant</h1>
     <p>Enter your case facts below (advisory, non-binding).</p>
 
-    <textarea placeholder="Describe the legal issue here..."></textarea>
+    <textarea id="caseInput" placeholder="Describe the legal issue here..."></textarea>
 
-    <button>Analyze Case</button>
+    <button onclick="analyzeCase()">Analyze Case</button>
   </div>
+
+  <div id="output"></div>
+
+  <script>
+  async function analyzeCase() {
+      const caseFacts = document.getElementById('caseInput').value;
+      if (!caseFacts) {
+          alert("Please enter case facts!");
+          return;
+      }
+
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = "<p>Loading AI advisory...</p>";
+
+      try {
+          // Make a POST request to your backend
+          const response = await fetch('http://127.0.0.1:8000/analyze', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ facts_of_the_case: caseFacts })
+          });
+
+          const data = await response.json();
+
+          // Display AI output in cards
+          outputDiv.innerHTML = `
+              <div class="card">
+                  <h3>AI Advisory Output</h3>
+                  <p><strong>Issues:</strong> ${data.issues.join(", ")}</p>
+                  <p><strong>Context:</strong> Dispute Value: ${data.context.dispute_value}, Applicable Law: ${data.context.applicable_law.join(", ")}</p>
+                  <p><strong>Example Precedents:</strong></p>
+                  <ul>
+                      ${data.example_precedents.map(p => `<li>${p.case_name} (${p.year}): ${p.summary} — ${p.relevance}</li>`).join("")}
+                  </ul>
+                  <p><strong>Advisory Opinion:</strong> ${data.advisory_opinion}</p>
+                  <p><em>${data.note}</em></p>
+              </div>
+          `;
+      } catch (err) {
+          outputDiv.innerHTML = `<p style="color:red;">Error: ${err}</p>`;
+      }
+  }
+  </script>
 
 </body>
 </html>
