@@ -5,7 +5,7 @@
   <title>Court AI — Legal Reasoning Assistant</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Google Fonts -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
 
   <style>
@@ -18,48 +18,60 @@
     }
 
     .app {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: auto;
     }
 
     h1 {
-      font-size: 42px;
+      font-size: 46px;
       font-weight: 700;
       background: linear-gradient(90deg, #60a5fa, #22d3ee);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
+    h2 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    h3 {
+      margin-top: 26px;
+      color: #93c5fd;
+    }
+
     .subtitle {
       color: #94a3b8;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
+      max-width: 900px;
     }
 
     .card {
       background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
       border-radius: 18px;
-      padding: 28px;
-      margin-bottom: 32px;
-      box-shadow: 0 0 0 1px rgba(148,163,184,0.1),
-                  0 20px 40px rgba(0,0,0,0.4);
+      padding: 32px;
+      margin-bottom: 36px;
+      box-shadow:
+        0 0 0 1px rgba(148,163,184,0.12),
+        0 25px 45px rgba(0,0,0,0.45);
     }
 
     textarea {
       width: 100%;
-      height: 130px;
+      height: 140px;
       background: #020617;
       color: #e5e7eb;
       border: 1px solid #1e293b;
       border-radius: 12px;
-      padding: 14px;
+      padding: 16px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 14px;
     }
 
     button {
-      margin-top: 16px;
-      padding: 14px 26px;
+      margin-top: 18px;
+      padding: 14px 28px;
       border-radius: 10px;
       border: none;
       background: linear-gradient(90deg, #2563eb, #06b6d4);
@@ -69,17 +81,15 @@
       font-weight: 600;
     }
 
-    button:hover {
-      opacity: 0.9;
-    }
+    button:hover { opacity: 0.9; }
 
     .badge {
       display: inline-block;
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 600;
-      margin-bottom: 12px;
+      margin: 18px 0 10px;
     }
 
     .blue { background:#1e40af }
@@ -88,17 +98,9 @@
     .yellow { background:#78350f }
 
     ul {
-      margin-left: 20px;
+      margin-left: 22px;
+      line-height: 1.75;
       color: #cbd5f5;
-    }
-
-    select {
-      background: #020617;
-      color: #e5e7eb;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #1e293b;
-      margin-top: 12px;
     }
 
     footer {
@@ -115,49 +117,87 @@
 
   <h1>Court AI</h1>
   <p class="subtitle">
-    A legal reasoning assistant that simulates how courts think — not legal advice.
+    A legal reasoning assistant designed to simulate how courts think, question,
+    and evaluate disputes — not legal advice.
   </p>
+
+  <!-- PRIMARY LAWS HEADER -->
+  <div class="card">
+    <h2>Primary Laws by Jurisdiction</h2>
+    <p class="subtitle">
+      A structured, non-exhaustive reference of foundational statutes frequently
+      applied by courts.
+    </p>
+
+    <h3>🇮🇳 India — Core Statutes</h3>
+    <ul>
+      <li><strong>Constitution of India</strong></li>
+      <li>Indian Penal Code, 1860</li>
+      <li>Code of Criminal Procedure, 1973</li>
+      <li>Code of Civil Procedure, 1908</li>
+      <li>Indian Evidence Act, 1872</li>
+      <li>Indian Contract Act, 1872</li>
+      <li>Transfer of Property Act, 1882</li>
+      <li>Specific Relief Act, 1963</li>
+      <li>Consumer Protection Act, 2019</li>
+      <li>Companies Act, 2013</li>
+      <li>Information Technology Act, 2000</li>
+      <li>Negotiable Instruments Act, 1881</li>
+      <li>Arbitration and Conciliation Act, 1996</li>
+    </ul>
+
+    <h3>🇺🇸 United States — Federal Framework</h3>
+    <ul>
+      <li><strong>U.S. Constitution</strong></li>
+      <li>United States Code (USC)</li>
+      <li>Federal Rules of Civil Procedure</li>
+      <li>Federal Rules of Criminal Procedure</li>
+      <li>Uniform Commercial Code (UCC)</li>
+      <li>Administrative Procedure Act</li>
+      <li>Federal Trade Commission Act</li>
+      <li>Civil Rights Act, 1964</li>
+      <li>Americans with Disabilities Act (ADA)</li>
+      <li>Fair Housing Act</li>
+      <li>State Landlord–Tenant Acts</li>
+    </ul>
+
+    <h3>🇬🇧 United Kingdom — Parliamentary Acts</h3>
+    <ul>
+      <li><strong>Constitutional Reform Act 2005</strong></li>
+      <li>Law of Property Act 1925</li>
+      <li>Housing Act 1988</li>
+      <li>Protection from Eviction Act 1977</li>
+      <li>Consumer Rights Act 2015</li>
+      <li>Contracts (Rights of Third Parties) Act 1999</li>
+      <li>Human Rights Act 1998</li>
+      <li>Equality Act 2010</li>
+      <li>Civil Procedure Rules (CPR)</li>
+    </ul>
+  </div>
 
   <!-- CASE INPUT -->
   <div class="card">
-    <h3>Case Intake</h3>
+    <h2>Case Intake</h2>
     <p>Describe the facts of your dispute in plain language.</p>
     <textarea id="caseInput" placeholder="Example: My neighbour occupied my house while I was away and refuses to leave..."></textarea>
     <button onclick="analyze()">Analyze Case</button>
   </div>
 
-  <!-- AI OUTPUT -->
+  <!-- OUTPUT -->
   <div id="output"></div>
 
-  <!-- WHY WE BUILT THIS -->
+  <!-- WHY BUILT -->
   <div class="card">
-    <h3>Why We Built This</h3>
+    <h2>Why We Built This</h2>
     <p>
-      Courts do not decide cases based on emotion — they decide based on
-      facts, procedure, and applicable law.
+      Courts decide cases based on facts, procedure, and law — not emotion.
+      Court AI was built to help users understand that process.
     </p>
     <p>
-      Court AI was built to help users understand how judges reason,
-      what questions courts ask, and where cases succeed or fail.
+      This system mirrors judicial reasoning, highlights weaknesses,
+      and surfaces the questions courts actually ask.
     </p>
-    <p>
-      This system does <strong>not replace a lawyer</strong>. It mirrors
-      legal thinking to promote clarity, preparedness, and legal literacy.
-    </p>
-  </div>
-
-  <!-- LAWS LIBRARY -->
-  <div class="card">
-    <h3>Applicable Laws Library</h3>
-    <p>Commonly applied statutes across jurisdictions.</p>
-
-    <select id="lawCountry" onchange="renderLaws()">
-      <option value="india">India</option>
-      <option value="us">United States</option>
-      <option value="uk">United Kingdom</option>
-    </select>
-
-    <div id="lawsOutput" style="margin-top:24px;"></div>
+    <p><strong>It does not replace a lawyer.</strong></p>
   </div>
 
   <footer>
@@ -169,26 +209,23 @@
 <script>
 function analyze(){
   const text = document.getElementById("caseInput").value.toLowerCase();
-
   let leaning = "Insufficient facts to determine court leaning.";
-  let plaintiff = [];
-  let defendant = [];
-  let questions = [];
+  let plaintiff = [], defendant = [], questions = [];
 
   if(text.includes("neighbour") || text.includes("house")){
     leaning = "Court likely leans toward the lawful owner if possession was unauthorized.";
     plaintiff = [
-      "Ownership implies a legal right to possession.",
+      "Ownership carries a legal right to possession.",
       "Unauthorized occupation is prima facie unlawful."
     ];
     defendant = [
-      "Claim of consent or long-standing possession.",
-      "Possible adverse possession argument (if time threshold met)."
+      "Possible claim of consent or long-standing possession.",
+      "Adverse possession may be argued if statutory period is met."
     ];
     questions = [
       "Is there documentary proof of ownership?",
-      "Was any consent given to the neighbour?",
-      "How long has possession continued?"
+      "Was consent ever granted?",
+      "Duration of possession?"
     ];
   }
 
@@ -196,15 +233,15 @@ function analyze(){
     <div class="card">
       <span class="badge blue">Layered Legal Reasoning</span>
       <ul>
-        <li><strong>Extracted Issue:</strong> Unlawful possession / property dispute</li>
+        <li><strong>Extracted Issue:</strong> Property / possession dispute</li>
         <li><strong>Legal Question:</strong> Whether possession is lawful</li>
-        <li><strong>Risk:</strong> Depends on proof of title and duration</li>
+        <li><strong>Risk Assessment:</strong> Depends on evidence & duration</li>
       </ul>
 
-      <span class="badge green">Arguments for Plaintiff</span>
+      <span class="badge green">Arguments for Claimant</span>
       <ul>${plaintiff.map(p=>`<li>${p}</li>`).join("")}</ul>
 
-      <span class="badge red">Arguments for Defendant</span>
+      <span class="badge red">Arguments for Respondent</span>
       <ul>${defendant.map(d=>`<li>${d}</li>`).join("")}</ul>
 
       <span class="badge yellow">What the Court Will Ask</span>
@@ -214,33 +251,6 @@ function analyze(){
     </div>
   `;
 }
-
-const laws = {
-  india: {
-    "Property": ["Transfer of Property Act, 1882", "Specific Relief Act, 1963"],
-    "Procedure": ["Code of Civil Procedure, 1908"]
-  },
-  us: {
-    "Property": ["State Property Laws", "Unlawful Detainer Statutes"],
-    "Contracts": ["Uniform Commercial Code (UCC)"]
-  },
-  uk: {
-    "Property": ["Law of Property Act 1925"],
-    "Housing": ["Housing Act 1988"]
-  }
-};
-
-function renderLaws(){
-  const c = document.getElementById("lawCountry").value;
-  let html = "";
-  for(const cat in laws[c]){
-    html += `<strong>${cat}</strong><ul>`;
-    laws[c][cat].forEach(l=>html+=`<li>${l}</li>`);
-    html += "</ul>";
-  }
-  document.getElementById("lawsOutput").innerHTML = html;
-}
-renderLaws();
 </script>
 
 </body>
