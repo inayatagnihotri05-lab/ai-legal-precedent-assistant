@@ -12,11 +12,12 @@ body {
     margin: 0;
     background: #f0f4f8;
     display: flex;
+    scroll-behavior: smooth;
 }
 a { text-decoration: none; color: #2563eb; }
 h1,h2,h3 { margin: 0.5rem 0; }
-button { cursor: pointer; transition: background 0.3s; }
-button:hover { opacity: 0.9; }
+button { cursor: pointer; transition: all 0.3s ease; }
+button:hover { opacity: 0.9; transform: scale(1.03); }
 
 /* ===== Sidebar Navigation ===== */
 .sidebar {
@@ -26,31 +27,32 @@ button:hover { opacity: 0.9; }
     height: 100vh;
     position: fixed;
     padding: 2rem 1rem;
+    overflow-y: auto;
 }
-.sidebar h2 { font-size: 1.5rem; margin-bottom: 1rem; }
-.sidebar a { display: block; padding: 0.5rem 0; color: white; margin-bottom: 0.2rem; border-radius: 5px; }
-.sidebar a:hover { background: #334155; }
+.sidebar h2 { font-size: 1.8rem; margin-bottom: 2rem; }
+.sidebar a { display: block; padding: 0.75rem 0; color: white; margin-bottom: 0.2rem; border-radius: 5px; }
+.sidebar a:hover, .sidebar a.active { background: #334155; }
 
 /* ===== Main Content ===== */
 .main { margin-left: 270px; padding: 2rem; flex: 1; }
 
-/* ===== Cards ===== */
+/* ===== Cards / Sections ===== */
 .card {
     background: white;
-    border-radius: 12px;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    transition: transform 0.3s;
+    border-radius: 16px;
+    padding: 3rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.card:hover { transform: translateY(-5px); }
+.card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
 
 /* ===== Inputs ===== */
-textarea { width: 100%; height: 140px; padding: 1rem; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; margin-top: 1rem; }
-select, button { margin-top: 1rem; padding: 0.8rem 1.2rem; font-size: 1rem; border-radius: 8px; border: none; }
+textarea { width: 100%; height: 160px; padding: 1.2rem; border-radius: 12px; border: 1px solid #ccc; font-size: 1rem; margin-top: 1rem; }
+select, button { margin-top: 1rem; padding: 1rem 1.5rem; font-size: 1rem; border-radius: 12px; border: none; }
 
 /* ===== Output Badges ===== */
-.badge { display: inline-block; padding: 0.3rem 0.6rem; border-radius: 5px; font-weight: 600; margin-right: 0.5rem; font-size: 0.85rem; }
+.badge { display: inline-block; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; margin-right: 0.5rem; font-size: 0.95rem; }
 .plaintiff { background: #3b82f6; color: white; }
 .defendant { background: #ef4444; color: white; }
 .leaning { background: #facc15; color: black; }
@@ -58,24 +60,24 @@ select, button { margin-top: 1rem; padding: 0.8rem 1.2rem; font-size: 1rem; bord
 .confidence { background: #10b981; color: white; }
 
 /* ===== Collapsible Sections ===== */
-.collapsible { cursor: pointer; padding: 1rem; border-radius: 8px; background: #e2e8f0; margin-bottom: 1rem; }
-.content { display: none; padding: 1rem; background: #f8fafc; border-radius: 0 0 8px 8px; animation: fadeIn 0.5s ease forwards; }
-@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+.collapsible { cursor: pointer; padding: 1rem; border-radius: 12px; background: #e2e8f0; margin-bottom: 1rem; font-weight: 600; font-size: 1.1rem; }
+.content { display: none; padding: 1.5rem; background: #f8fafc; border-radius: 0 0 12px 12px; animation: fadeIn 0.5s ease forwards; }
+@keyframes fadeIn { from {opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
 
 /* ===== Chatbot ===== */
-.chatbot-icon { position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1000; }
-.chatbot-window { position: fixed; bottom: 5rem; right: 2rem; width: 350px; max-height: 500px; background: white; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; z-index: 1000; }
-.chatbot-header { background: #2563eb; color: white; padding: 1rem; font-weight: 600; }
+.chatbot-icon { position: fixed; bottom: 2rem; right: 2rem; width: 70px; height: 70px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 1000; }
+.chatbot-window { position: fixed; bottom: 5rem; right: 2rem; width: 400px; max-height: 600px; background: white; border-radius: 16px; box-shadow: 0 12px 30px rgba(0,0,0,0.25); display: none; flex-direction: column; overflow: hidden; z-index: 1000; }
+.chatbot-header { background: #2563eb; color: white; padding: 1rem; font-weight: 700; font-size: 1.2rem; }
 .chatbot-messages { padding: 1rem; flex-grow: 1; overflow-y: auto; background: #f1f5f9; }
 .chatbot-input { display: flex; border-top: 1px solid #ccc; }
-.chatbot-input input { flex: 1; padding: 0.7rem; border: none; font-size: 1rem; }
-.chatbot-input button { background: #2563eb; color: white; border: none; padding: 0 1rem; cursor: pointer; }
+.chatbot-input input { flex: 1; padding: 1rem; border: none; font-size: 1rem; }
+.chatbot-input button { background: #2563eb; color: white; border: none; padding: 0 1.2rem; cursor: pointer; }
 
 /* ===== Output Sections ===== */
-.output { margin-top: 1.5rem; padding: 1rem; background: #f1f5f9; border-radius: 10px; }
+.output { margin-top: 2rem; padding: 2rem; background: #f1f5f9; border-radius: 12px; font-size: 1rem; }
 
 /* ===== Laws Section ===== */
-.laws-section a { display: block; margin-bottom: 0.3rem; }
+.laws-section a { display: block; margin-bottom: 0.5rem; font-size: 1rem; }
 </style>
 </head>
 <body>
@@ -83,7 +85,7 @@ select, button { margin-top: 1rem; padding: 0.8rem 1.2rem; font-size: 1rem; bord
 <!-- Sidebar -->
 <div class="sidebar">
     <h2>Court AI</h2>
-    <a href="#case-intake">Case Intake</a>
+    <a href="#case-intake" class="active">Case Intake</a>
     <a href="#ai-analysis">AI Analysis</a>
     <a href="#laws">Precedents & Laws</a>
     <a href="#chatbot-section">Chatbot</a>
@@ -94,7 +96,7 @@ select, button { margin-top: 1rem; padding: 0.8rem 1.2rem; font-size: 1rem; bord
 
     <!-- Case Intake -->
     <div class="card" id="case-intake">
-        <h2>Case Intake</h2>
+        <h1>Case Intake</h1>
         <p>Describe your dispute in plain language:</p>
         <textarea id="caseFacts" placeholder="My neighbour occupied my house while I was away..."></textarea>
         <select id="caseType">
@@ -108,39 +110,38 @@ select, button { margin-top: 1rem; padding: 0.8rem 1.2rem; font-size: 1rem; bord
 
     <!-- AI Analysis -->
     <div class="card output" id="ai-analysis" style="display:none;">
-        <h2>AI Advisory Output</h2>
-        <div id="plaintiffOutput"></div>
-        <div id="defendantOutput"></div>
-        <div id="leaningOutput"></div>
-        <div id="weakPointsOutput"></div>
-        <div id="confidenceOutput"></div>
+        <h1>AI Advisory Output</h1>
+        <div id="plaintiffOutput" style="margin-top:1rem;"></div>
+        <div id="defendantOutput" style="margin-top:1rem;"></div>
+        <div id="leaningOutput" style="margin-top:1rem;"></div>
+        <div id="weakPointsOutput" style="margin-top:1rem;"></div>
+        <div id="confidenceOutput" style="margin-top:1rem;"></div>
     </div>
 
     <!-- Why We Built This -->
     <div class="card">
         <div class="collapsible">Why We Built This ⬇️</div>
         <div class="content">
-            <p>In India and many common law nations, hearings take months or years to resolve. Litigants spend huge sums on lawyers and court fees. Court AI helps users understand judicial reasoning, procedural gaps, and strengths/weaknesses — advisory only.</p>
-            <p>Example statistics: The average civil case duration in India is ~3.5 years (National Judicial Data Grid 2025).</p>
+            <p>In India and many common law nations, hearings often take months or years. Litigants spend huge sums on lawyers and court fees. Court AI helps users understand judicial reasoning, procedural gaps, and strengths/weaknesses — advisory only.</p>
+            <p>Example: The average civil case duration in India is ~3.5 years (National Judicial Data Grid 2025).</p>
         </div>
     </div>
 
     <!-- Laws by Jurisdiction -->
     <div class="card laws-section" id="laws">
-        <h2>Applicable Laws Library</h2>
-
-        <h3>🇮🇳 India — Core Statutes</h3>
+        <h1>Applicable Laws Library</h1>
+        <h2>🇮🇳 India — Core Statutes</h2>
         <a href="https://www.google.com/search?q=Constitution+of+India" target="_blank">Constitution of India</a>
         <a href="https://www.google.com/search?q=Indian+Penal+Code+1860" target="_blank">Indian Penal Code, 1860</a>
         <a href="https://www.google.com/search?q=Code+of+Civil+Procedure+1908" target="_blank">Code of Civil Procedure, 1908</a>
         <a href="https://www.google.com/search?q=Transfer+of+Property+Act+1882" target="_blank">Transfer of Property Act, 1882</a>
 
-        <h3>🇺🇸 United States — Federal Framework</h3>
+        <h2>🇺🇸 United States — Federal Framework</h2>
         <a href="https://www.google.com/search?q=US+Constitution" target="_blank">U.S. Constitution</a>
         <a href="https://www.google.com/search?q=United+States+Code" target="_blank">United States Code (USC)</a>
         <a href="https://www.google.com/search?q=Federal+Rules+of+Civil+Procedure" target="_blank">Federal Rules of Civil Procedure</a>
 
-        <h3>🇬🇧 United Kingdom — Parliamentary Acts</h3>
+        <h2>🇬🇧 United Kingdom — Parliamentary Acts</h2>
         <a href="https://www.google.com/search?q=Law+of+Property+Act+1925+UK" target="_blank">Law of Property Act 1925</a>
         <a href="https://www.google.com/search?q=Housing+Act+1988+UK" target="_blank">Housing Act 1988</a>
         <a href="https://www.google.com/search?q=Consumer+Rights+Act+2015+UK" target="_blank">Consumer Rights Act 2015</a>
@@ -148,8 +149,8 @@ select, button { margin-top: 1rem; padding: 0.8rem 1.2rem; font-size: 1rem; bord
 
     <!-- Chatbot Section -->
     <div class="card" id="chatbot-section">
-        <h2>Legal Chatbot</h2>
-        <div class="chatbot-messages" id="chatbotMessages" style="height:300px; overflow-y:auto; background:#f1f5f9; padding:1rem; border-radius:8px;"></div>
+        <h1>Legal Chatbot</h1>
+        <div class="chatbot-messages" id="chatbotMessages" style="height:350px; overflow-y:auto; background:#f1f5f9; padding:1rem; border-radius:12px;"></div>
         <div class="chatbot-input" style="margin-top:1rem;">
             <input type="text" id="chatbotInput" placeholder="Ask a legal question...">
             <button onclick="sendChat()">Send</button>
@@ -169,8 +170,7 @@ select, button { margin-top: 1rem; padding: 0.8rem 1.2rem; font-size: 1rem; bord
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 /* ===== Collapsible Sections ===== */
-const collapsibles = document.querySelectorAll(".collapsible");
-collapsibles.forEach(c => {
+document.querySelectorAll(".collapsible").forEach(c => {
     c.addEventListener("click", () => {
         const content = c.nextElementSibling;
         content.style.display = content.style.display === "block" ? "none" : "block";
@@ -202,7 +202,7 @@ function analyzeCase() {
 
 /* ===== Chatbot ===== */
 function toggleChatbot() {
-    alert("Dedicated chatbot section available above.");
+    alert("Use the dedicated chatbot section above.");
 }
 function sendChat() {
     const input = document.getElementById("chatbotInput");
