@@ -23,7 +23,7 @@
     }
 
     h1 {
-      font-size: 46px;
+      font-size: 48px;
       font-weight: 700;
       background: linear-gradient(90deg, #60a5fa, #22d3ee);
       -webkit-background-clip: text;
@@ -32,11 +32,11 @@
 
     h2 {
       font-size: 30px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     h3 {
-      margin-top: 26px;
+      margin-top: 28px;
       color: #93c5fd;
     }
 
@@ -44,6 +44,13 @@
       color: #94a3b8;
       margin-bottom: 36px;
       max-width: 900px;
+      line-height: 1.6;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #1e293b, transparent);
+      margin: 50px 0;
     }
 
     .card {
@@ -83,24 +90,26 @@
 
     button:hover { opacity: 0.9; }
 
-    .badge {
-      display: inline-block;
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      margin: 18px 0 10px;
-    }
-
-    .blue { background:#1e40af }
-    .green { background:#065f46 }
-    .red { background:#7f1d1d }
-    .yellow { background:#78350f }
-
     ul {
       margin-left: 22px;
-      line-height: 1.75;
+      line-height: 1.8;
       color: #cbd5f5;
+    }
+
+    /* LAW LINKS */
+    .law-list a {
+      color: #e5e7eb;
+      text-decoration: none;
+      padding: 6px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      transition: all 0.2s ease;
+    }
+
+    .law-list a:hover {
+      background: rgba(59,130,246,0.15);
+      color: #93c5fd;
+      text-decoration: underline;
     }
 
     footer {
@@ -121,70 +130,59 @@
     and evaluate disputes — not legal advice.
   </p>
 
-  <!-- PRIMARY LAWS HEADER -->
+  <div class="divider"></div>
+
+  <!-- PRIMARY LAWS -->
   <div class="card">
     <h2>Primary Laws by Jurisdiction</h2>
     <p class="subtitle">
-      A structured, non-exhaustive reference of foundational statutes frequently
-      applied by courts.
+      Click on any statute to explore authoritative sources, judgments,
+      and legal commentary via Google.
     </p>
 
     <h3>🇮🇳 India — Core Statutes</h3>
-    <ul>
-      <li><strong>Constitution of India</strong></li>
-      <li>Indian Penal Code, 1860</li>
-      <li>Code of Criminal Procedure, 1973</li>
-      <li>Code of Civil Procedure, 1908</li>
-      <li>Indian Evidence Act, 1872</li>
-      <li>Indian Contract Act, 1872</li>
-      <li>Transfer of Property Act, 1882</li>
-      <li>Specific Relief Act, 1963</li>
-      <li>Consumer Protection Act, 2019</li>
-      <li>Companies Act, 2013</li>
-      <li>Information Technology Act, 2000</li>
-      <li>Negotiable Instruments Act, 1881</li>
-      <li>Arbitration and Conciliation Act, 1996</li>
+    <ul class="law-list">
+      <li><a target="_blank" href="https://www.google.com/search?q=Constitution+of+India">Constitution of India</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Indian+Penal+Code+1860">Indian Penal Code, 1860</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Code+of+Criminal+Procedure+1973">Code of Criminal Procedure, 1973</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Code+of+Civil+Procedure+1908">Code of Civil Procedure, 1908</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Indian+Evidence+Act+1872">Indian Evidence Act, 1872</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Indian+Contract+Act+1872">Indian Contract Act, 1872</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Transfer+of+Property+Act+1882">Transfer of Property Act, 1882</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Specific+Relief+Act+1963">Specific Relief Act, 1963</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Consumer+Protection+Act+2019">Consumer Protection Act, 2019</a></li>
     </ul>
 
     <h3>🇺🇸 United States — Federal Framework</h3>
-    <ul>
-      <li><strong>U.S. Constitution</strong></li>
-      <li>United States Code (USC)</li>
-      <li>Federal Rules of Civil Procedure</li>
-      <li>Federal Rules of Criminal Procedure</li>
-      <li>Uniform Commercial Code (UCC)</li>
-      <li>Administrative Procedure Act</li>
-      <li>Federal Trade Commission Act</li>
-      <li>Civil Rights Act, 1964</li>
-      <li>Americans with Disabilities Act (ADA)</li>
-      <li>Fair Housing Act</li>
-      <li>State Landlord–Tenant Acts</li>
+    <ul class="law-list">
+      <li><a target="_blank" href="https://www.google.com/search?q=U.S.+Constitution">U.S. Constitution</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=United+States+Code">United States Code (USC)</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Federal+Rules+of+Civil+Procedure">Federal Rules of Civil Procedure</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Uniform+Commercial+Code">Uniform Commercial Code (UCC)</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Fair+Housing+Act">Fair Housing Act</a></li>
     </ul>
 
     <h3>🇬🇧 United Kingdom — Parliamentary Acts</h3>
-    <ul>
-      <li><strong>Constitutional Reform Act 2005</strong></li>
-      <li>Law of Property Act 1925</li>
-      <li>Housing Act 1988</li>
-      <li>Protection from Eviction Act 1977</li>
-      <li>Consumer Rights Act 2015</li>
-      <li>Contracts (Rights of Third Parties) Act 1999</li>
-      <li>Human Rights Act 1998</li>
-      <li>Equality Act 2010</li>
-      <li>Civil Procedure Rules (CPR)</li>
+    <ul class="law-list">
+      <li><a target="_blank" href="https://www.google.com/search?q=Law+of+Property+Act+1925">Law of Property Act 1925</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Housing+Act+1988">Housing Act 1988</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Consumer+Rights+Act+2015">Consumer Rights Act 2015</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Human+Rights+Act+1998">Human Rights Act 1998</a></li>
+      <li><a target="_blank" href="https://www.google.com/search?q=Civil+Procedure+Rules+UK">Civil Procedure Rules (CPR)</a></li>
     </ul>
   </div>
+
+  <div class="divider"></div>
 
   <!-- CASE INPUT -->
   <div class="card">
     <h2>Case Intake</h2>
     <p>Describe the facts of your dispute in plain language.</p>
-    <textarea id="caseInput" placeholder="Example: My neighbour occupied my house while I was away and refuses to leave..."></textarea>
-    <button onclick="analyze()">Analyze Case</button>
+    <textarea placeholder="Example: My neighbour occupied my house while I was away and refuses to leave..."></textarea>
+    <button>Analyze Case</button>
   </div>
 
-  <!-- OUTPUT -->
-  <div id="output"></div>
+  <div class="divider"></div>
 
   <!-- WHY BUILT -->
   <div class="card">
@@ -205,53 +203,5 @@
   </footer>
 
 </div>
-
-<script>
-function analyze(){
-  const text = document.getElementById("caseInput").value.toLowerCase();
-  let leaning = "Insufficient facts to determine court leaning.";
-  let plaintiff = [], defendant = [], questions = [];
-
-  if(text.includes("neighbour") || text.includes("house")){
-    leaning = "Court likely leans toward the lawful owner if possession was unauthorized.";
-    plaintiff = [
-      "Ownership carries a legal right to possession.",
-      "Unauthorized occupation is prima facie unlawful."
-    ];
-    defendant = [
-      "Possible claim of consent or long-standing possession.",
-      "Adverse possession may be argued if statutory period is met."
-    ];
-    questions = [
-      "Is there documentary proof of ownership?",
-      "Was consent ever granted?",
-      "Duration of possession?"
-    ];
-  }
-
-  document.getElementById("output").innerHTML = `
-    <div class="card">
-      <span class="badge blue">Layered Legal Reasoning</span>
-      <ul>
-        <li><strong>Extracted Issue:</strong> Property / possession dispute</li>
-        <li><strong>Legal Question:</strong> Whether possession is lawful</li>
-        <li><strong>Risk Assessment:</strong> Depends on evidence & duration</li>
-      </ul>
-
-      <span class="badge green">Arguments for Claimant</span>
-      <ul>${plaintiff.map(p=>`<li>${p}</li>`).join("")}</ul>
-
-      <span class="badge red">Arguments for Respondent</span>
-      <ul>${defendant.map(d=>`<li>${d}</li>`).join("")}</ul>
-
-      <span class="badge yellow">What the Court Will Ask</span>
-      <ul>${questions.map(q=>`<li>${q}</li>`).join("")}</ul>
-
-      <p><strong>Likely Court Leaning:</strong> ${leaning}</p>
-    </div>
-  `;
-}
-</script>
-
 </body>
 </html>
