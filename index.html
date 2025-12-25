@@ -1,218 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Court AI — Legal Reasoning Assistant</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Court AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<style>
-:root {
-  --bg: #0f1115;
-  --text: #e0f7fa;
-  --accent: #00f0ff;
-  --low: #22c55e;
-  --medium: #f59e0b;
-  --high: #2563eb;
-}
-body {
-  margin:0; padding:0; font-family:'Inter',sans-serif;
-  background: var(--bg); color: var(--text);
-}
-a {color: var(--accent); text-decoration:none;}
-a:hover {text-decoration:underline;}
-.card {
-  max-width: 900px; margin: 20px auto; padding:20px;
-  background: rgba(255,255,255,0.05); backdrop-filter: blur(12px);
-  border-radius: 16px; border:1px solid rgba(255,255,255,0.1);
-}
-.card-header {
-  font-weight:700; font-size:22px; margin-bottom:12px;
-  background: linear-gradient(90deg,#00f0ff,#7f00ff); padding:12px 20px; border-radius:12px; text-shadow:0 0 6px rgba(0,240,255,0.7);
-}
-textarea, select {
-  width:100%; padding:14px; margin-top:12px; border-radius:10px; border:1px solid var(--accent); font-family:'Fira Code', monospace; font-size:16px;
-  background: rgba(0,0,0,0.6); color: var(--accent); box-sizing:border-box;
-}
-button {
-  margin-top:16px; padding:14px; border:none; border-radius:10px;
-  background: var(--accent); color:#111; font-size:16px; cursor:pointer;
-  font-weight:500; transition:0.3s;
-}
-button:hover { box-shadow:0 0 12px var(--accent); }
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-.section {border-top:1px solid rgba(255,255,255,0.1); padding:12px 0;}
-.section-header {font-weight:600; cursor:pointer; margin-bottom:6px; font-size:16px;}
-.section-content {display:none; padding-left:8px; font-family:'Fira Code', monospace;}
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #020617;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #6366f1;
+      --plaintiff: #3b82f6;
+      --defendant: #ef4444;
+      --success: #22c55e;
+    }
 
-.badge {display:inline-block; padding:2px 10px; border-radius:12px; font-size:12px; font-weight:500; margin-left:6px;}
-.badge.high {background: var(--high); color:#fff;}
-.badge.medium {background: var(--medium); color:#111;}
-.badge.low {background: var(--low); color:#111;}
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #020617, #0f172a);
+      color: var(--text);
+      padding-bottom: 100px;
+    }
 
-.loading-card {padding:20px; text-align:center; font-style:italic; color:#aaa; animation:pulse 1s infinite;}
-@keyframes pulse {0%{transform:scale(1);opacity:0.7;}50%{transform:scale(1.02);opacity:1;}100%{transform:scale(1);opacity:0.7;}}
+    header {
+      padding: 50px 20px;
+      text-align: center;
+    }
 
-#chatbot-icon {position:fixed; bottom:24px; right:24px; background:var(--accent); width:60px;height:60px;border-radius:50%; display:flex; justify-content:center; align-items:center; cursor:pointer; box-shadow:0 0 12px rgba(0,0,0,0.3); font-size:28px; color:#111;}
-#chatbot-window {position:fixed; bottom:90px; right:24px; width:320px; max-height:500px; background: rgba(0,0,0,0.9); border-radius:12px; display:none; flex-direction:column; overflow:hidden; box-shadow:0 0 20px rgba(0,0,0,0.5);}
-#chatbot-window header {padding:10px; background:var(--accent); color:#111; font-weight:700;}
-#chatbot-window .messages {flex:1; overflow-y:auto; padding:10px; font-family:'Fira Code', monospace;}
-#chatbot-window textarea {width:100%; padding:10px; margin:0; border:none; border-top:1px solid rgba(255,255,255,0.2); border-radius:0; resize:none; background:#111; color:#fff;}
-#chatbot-window button {display:none;}
-</style>
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, #818cf8, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      color: var(--muted);
+      max-width: 720px;
+      margin: auto;
+      font-size: 1.1rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: rgba(2,6,23,0.85);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 32px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      animation: fadeUp 0.6s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    textarea, select {
+      width: 100%;
+      background: #020617;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 15px;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 18px;
+      padding: 14px 24px;
+      background: linear-gradient(to right, #6366f1, #22d3ee);
+      border: none;
+      border-radius: 12px;
+      color: #020617;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(99,102,241,0.4);
+    }
+
+    .section-title {
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #e5e7eb;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .plaintiff { background: rgba(59,130,246,0.15); color: var(--plaintiff); }
+    .defendant { background: rgba(239,68,68,0.15); color: var(--defendant); }
+    .neutral { background: rgba(34,197,94,0.15); color: var(--success); }
+
+    .law-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    .law {
+      padding: 14px;
+      border-radius: 10px;
+      background: #020617;
+      border: 1px solid rgba(255,255,255,0.08);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .law:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+    }
+
+    /* Chatbot */
+    .chatbot {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(to right, #6366f1, #22d3ee);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      cursor: pointer;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- Case Intake -->
-<div class="card">
-  <div class="card-header">Court AI — Legal Reasoning Assistant ⚖️</div>
-  <p>Enter your case facts below (advisory, non-binding). Example: “My neighbour occupied my house while I was away and refuses to leave...”</p>
-  <select id="caseSelect">
-    <option value="tenant">🏠 Tenancy Dispute</option>
-    <option value="neighbor">🏡 Neighbor Dispute</option>
-    <option value="contract">📄 Contract Dispute</option>
-    <option value="employment">💼 Employment Dispute</option>
-    <option value="family">👨‍👩‍👧 Family / Custody Dispute</option>
-    <option value="criminal">🚨 Criminal Case</option>
-    <option value="intellectual_property">💡 Intellectual Property</option>
-    <option value="environmental">🌱 Environmental Case</option>
-    <option value="consumer">🛒 Consumer Protection</option>
-    <option value="corporate">🏢 Corporate / Startup Dispute</option>
-  </select>
-  <textarea id="caseInput" placeholder="Describe your case facts..."></textarea>
-  <button onclick="analyzeCase()">Analyze Case</button>
-</div>
+<header>
+  <h1>Court AI</h1>
+  <p>A legal reasoning assistant designed to simulate how courts think, question, and evaluate disputes — not legal advice.</p>
+</header>
 
-<!-- Output -->
-<div id="output"></div>
+<div class="container">
 
-<!-- Why We Built This -->
-<div class="card">
-  <div class="card-header">Why We Built This</div>
-  <p>Courts decide cases based on facts, procedure, and law — not emotion. Court AI was built to help users understand judicial reasoning, highlight weaknesses, and surface the questions courts actually ask. This system does not replace a lawyer. All outputs are advisory and non-binding.</p>
-</div>
+  <!-- CASE INTAKE -->
+  <div class="card">
+    <div class="section-title">Case Intake</div>
+    <select id="jurisdiction">
+      <option>India</option>
+      <option>United States</option>
+      <option>United Kingdom</option>
+    </select>
 
-<!-- Primary Laws -->
-<div class="card">
-  <div class="card-header">Primary Laws by Jurisdiction</div>
-  <!-- India -->
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">🇮🇳 India</div>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://www.google.com/search?q=Constitution+of+India" target="_blank">Constitution of India</a></li>
-        <li><a href="https://www.google.com/search?q=Indian+Penal+Code+1860" target="_blank">Indian Penal Code, 1860</a></li>
-        <li><a href="https://www.google.com/search?q=Code+of+Criminal+Procedure+1973" target="_blank">Code of Criminal Procedure, 1973</a></li>
-        <li><a href="https://www.google.com/search?q=Code+of+Civil+Procedure+1908" target="_blank">Code of Civil Procedure, 1908</a></li>
-        <li><a href="https://www.google.com/search?q=Indian+Evidence+Act+1872" target="_blank">Indian Evidence Act, 1872</a></li>
-        <li><a href="https://www.google.com/search?q=Indian+Contract+Act+1872" target="_blank">Indian Contract Act, 1872</a></li>
-        <li><a href="https://www.google.com/search?q=Transfer+of+Property+Act+1882" target="_blank">Transfer of Property Act, 1882</a></li>
-        <li><a href="https://www.google.com/search?q=Specific+Relief+Act+1963" target="_blank">Specific Relief Act, 1963</a></li>
-        <li><a href="https://www.google.com/search?q=Consumer+Protection+Act+2019" target="_blank">Consumer Protection Act, 2019</a></li>
-        <li><a href="https://www.google.com/search?q=Companies+Act+2013" target="_blank">Companies Act, 2013</a></li>
-      </ul>
+    <textarea id="facts" placeholder="Example: My neighbour occupied my house while I was away and refuses to leave..."></textarea>
+
+    <button onclick="analyze()">Analyze Case</button>
+  </div>
+
+  <!-- AI OUTPUT -->
+  <div class="card" id="output" style="display:none;">
+    <div class="pill neutral">AI Confidence: <span id="confidence">78%</span></div>
+
+    <h3>🟦 Arguments for Plaintiff</h3>
+    <p id="plaintiffText"></p>
+
+    <h3>🟥 Arguments for Defendant</h3>
+    <p id="defendantText"></p>
+
+    <h3>⚖️ Likely Court Leaning</h3>
+    <p id="leaning"></p>
+
+    <h3>❗ Weakest Points</h3>
+    <p id="weakness"></p>
+  </div>
+
+  <!-- LAWS -->
+  <div class="card">
+    <div class="section-title">Primary Laws by Jurisdiction</div>
+    <div class="law-grid">
+      <div class="law" onclick="searchLaw('Transfer of Property Act 1882')">🇮🇳 Transfer of Property Act, 1882</div>
+      <div class="law" onclick="searchLaw('Indian Evidence Act 1872')">🇮🇳 Indian Evidence Act, 1872</div>
+      <div class="law" onclick="searchLaw('Federal Rules of Civil Procedure')">🇺🇸 Federal Rules of Civil Procedure</div>
+      <div class="law" onclick="searchLaw('Uniform Commercial Code')">🇺🇸 Uniform Commercial Code</div>
+      <div class="law" onclick="searchLaw('Law of Property Act 1925')">🇬🇧 Law of Property Act, 1925</div>
+      <div class="law" onclick="searchLaw('Housing Act 1988 UK')">🇬🇧 Housing Act, 1988</div>
     </div>
   </div>
-  <!-- US -->
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">🇺🇸 United States</div>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://www.google.com/search?q=US+Constitution" target="_blank">U.S. Constitution</a></li>
-        <li><a href="https://www.google.com/search?q=United+States+Code" target="_blank">United States Code (USC)</a></li>
-        <li><a href="https://www.google.com/search?q=Federal+Rules+of+Civil+Procedure" target="_blank">Federal Rules of Civil Procedure</a></li>
-        <li><a href="https://www.google.com/search?q=Federal+Rules+of+Criminal+Procedure" target="_blank">Federal Rules of Criminal Procedure</a></li>
-        <li><a href="https://www.google.com/search?q=Uniform+Commercial+Code" target="_blank">Uniform Commercial Code (UCC)</a></li>
-      </ul>
-    </div>
-  </div>
-  <!-- UK -->
-  <div class="section">
-    <div class="section-header" onclick="toggleSection(this)">🇬🇧 United Kingdom</div>
-    <div class="section-content">
-      <ul>
-        <li><a href="https://www.google.com/search?q=Constitutional+Reform+Act+2005" target="_blank">Constitutional Reform Act 2005</a></li>
-        <li><a href="https://www.google.com/search?q=Law+of+Property+Act+1925" target="_blank">Law of Property Act 1925</a></li>
-        <li><a href="https://www.google.com/search?q=Housing+Act+1988" target="_blank">Housing Act 1988</a></li>
-        <li><a href="https://www.google.com/search?q=Consumer+Rights+Act+2015" target="_blank">Consumer Rights Act 2015</a></li>
-      </ul>
-    </div>
-  </div>
+
 </div>
 
-<!-- Chatbot -->
-<div id="chatbot-icon">🤖</div>
-<div id="chatbot-window">
-  <header>Legal Chatbot</header>
-  <div class="messages" id="chatMessages"></div>
-  <textarea id="chatInput" placeholder="Ask your legal question..."></textarea>
-</div>
+<!-- CHATBOT -->
+<div class="chatbot" title="Legal Assistant">⚖️</div>
 
 <script>
-// Collapsibles
-function toggleSection(header){
-  const content=header.nextElementSibling;
-  content.style.display=content.style.display==="block"?"none":"block";
+function analyze() {
+  document.getElementById("output").style.display = "block";
+  document.getElementById("plaintiffText").innerText =
+    "Plaintiff asserts unlawful dispossession, lack of consent, and violation of property rights.";
+  document.getElementById("defendantText").innerText =
+    "Defendant may claim implied consent, adverse possession, or lack of clear title.";
+  document.getElementById("leaning").innerText =
+    "Courts are likely to lean toward the Plaintiff if possession was unauthorized.";
+  document.getElementById("weakness").innerText =
+    "Plaintiff: delay in action. Defendant: lack of legal title.";
 }
 
-// Typing effect
-function typeWriter(text, element, speed=20){
-  let i=0; element.innerHTML="";
-  function typing(){if(i<text.length){element.innerHTML+=text.charAt(i);i++;setTimeout(typing,speed);}}
-  typing();
+function searchLaw(law) {
+  window.open(`https://www.google.com/search?q=${encodeURIComponent(law)}`, "_blank");
 }
-
-// Chatbot toggle
-const chatbotIcon=document.getElementById("chatbot-icon");
-const chatbotWindow=document.getElementById("chatbot-window");
-chatbotIcon.addEventListener("click",()=>{chatbotWindow.style.display=chatbotWindow.style.display==="flex"?"none":"flex";});
-
-// Case Analysis
-async function analyzeCase(){
-  const facts=document.getElementById("caseInput").value;
-  const caseType=document.getElementById("caseSelect").value;
-  if(!facts){alert("Enter your case facts"); return;}
-  const output=document.getElementById("output");
-  output.innerHTML=`<div class="card loading-card">AI analyzing...</div>`;
-  try{
-    const res=await fetch("https://YOUR_BACKEND_URL/api/analyze",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({facts,caseType})
-    });
-    const data=await res.json();
-    if(data.error){output.innerHTML=`<div class="card">Error: ${data.error}</div>`; return;}
-    let html=`
-      <div class="card">
-        <div class="card-header">AI Advisory Output ⚖️</div>
-        <div class="section"><div class="section-header" onclick="toggleSection(this)">🟦 Arguments for Plaintiff</div><div class="section-content">${data.plaintiff.join("<br>")}</div></div>
-        <div class="section"><div class="section-header" onclick="toggleSection(this)">🟥 Arguments for Defendant</div><div class="section-content">${data.defendant.join("<br>")}</div></div>
-        <div class="section"><div class="section-header" onclick="toggleSection(this)">⚖️ Likely Court Leaning</div><div class="section-content"><span class="badge ${data.leaning==='Plaintiff'?'low':data.leaning==='Defendant'?'high':'medium'}">${data.leaning}</span></div></div>
-        <div class="section"><div class="section-header" onclick="toggleSection(this)">❓ Weakest Points in Each Side</div><div class="section-content">Plaintiff: ${data.weakPoints.plaintiff}<br>Defendant: ${data.weakPoints.defendant}</div></div>
-      </div>`;
-    output.innerHTML=html;
-  }catch(e){output.innerHTML=`<div class="card">Error analyzing case. Check backend.</div>`;}
-}
-
-// Chatbot
-const chatInput=document.getElementById("chatInput");
-const chatMessages=document.getElementById("chatMessages");
-chatInput.addEventListener("keypress", async function(e){
-  if(e.key==='Enter'){e.preventDefault(); const msg=chatInput.value.trim(); if(!msg) return;
-    chatMessages.innerHTML+=`<div>> ${msg}</div>`;
-    chatInput.value='';
-    try{
-      const res=await fetch("https://YOUR_BACKEND_URL/api/chat",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({message:msg})
-      });
-      const data=await res.json();
-      chatMessages.innerHTML+=`<div style="color:var(--accent)">${data.reply}</div>`;
-      chatMessages.scrollTop=chatMessages.scrollHeight;
-    }catch(e){chatMessages.innerHTML+=`<div style="color:red">Error contacting AI.</div>`;}
-  }
-});
 </script>
 
 </body>
