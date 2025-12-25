@@ -63,6 +63,7 @@ button:hover { box-shadow:0 0 12px var(--accent); }
 </head>
 <body>
 
+<!-- Case Intake -->
 <div class="card">
   <div class="card-header">Court AI — Legal Reasoning Assistant ⚖️</div>
   <p>Enter your case facts below (advisory, non-binding). Example: “My neighbour occupied my house while I was away and refuses to leave...”</p>
@@ -82,15 +83,19 @@ button:hover { box-shadow:0 0 12px var(--accent); }
   <button onclick="analyzeCase()">Analyze Case</button>
 </div>
 
+<!-- Output -->
 <div id="output"></div>
 
+<!-- Why We Built This -->
 <div class="card">
   <div class="card-header">Why We Built This</div>
   <p>Courts decide cases based on facts, procedure, and law — not emotion. Court AI was built to help users understand judicial reasoning, highlight weaknesses, and surface the questions courts actually ask. This system does not replace a lawyer. All outputs are advisory and non-binding.</p>
 </div>
 
+<!-- Primary Laws -->
 <div class="card">
   <div class="card-header">Primary Laws by Jurisdiction</div>
+  <!-- India -->
   <div class="section">
     <div class="section-header" onclick="toggleSection(this)">🇮🇳 India</div>
     <div class="section-content">
@@ -108,6 +113,7 @@ button:hover { box-shadow:0 0 12px var(--accent); }
       </ul>
     </div>
   </div>
+  <!-- US -->
   <div class="section">
     <div class="section-header" onclick="toggleSection(this)">🇺🇸 United States</div>
     <div class="section-content">
@@ -120,6 +126,7 @@ button:hover { box-shadow:0 0 12px var(--accent); }
       </ul>
     </div>
   </div>
+  <!-- UK -->
   <div class="section">
     <div class="section-header" onclick="toggleSection(this)">🇬🇧 United Kingdom</div>
     <div class="section-content">
@@ -133,6 +140,7 @@ button:hover { box-shadow:0 0 12px var(--accent); }
   </div>
 </div>
 
+<!-- Chatbot -->
 <div id="chatbot-icon">🤖</div>
 <div id="chatbot-window">
   <header>Legal Chatbot</header>
@@ -141,11 +149,18 @@ button:hover { box-shadow:0 0 12px var(--accent); }
 </div>
 
 <script>
-// Toggle collapsibles
-function toggleSection(header){const content=header.nextElementSibling;content.style.display=content.style.display==="block"?"none":"block";}
+// Collapsibles
+function toggleSection(header){
+  const content=header.nextElementSibling;
+  content.style.display=content.style.display==="block"?"none":"block";
+}
 
 // Typing effect
-function typeWriter(text, element, speed=20){let i=0;element.innerHTML="";function typing(){if(i<text.length){element.innerHTML+=text.charAt(i);i++;setTimeout(typing,speed);}}typing();}
+function typeWriter(text, element, speed=20){
+  let i=0; element.innerHTML="";
+  function typing(){if(i<text.length){element.innerHTML+=text.charAt(i);i++;setTimeout(typing,speed);}}
+  typing();
+}
 
 // Chatbot toggle
 const chatbotIcon=document.getElementById("chatbot-icon");
@@ -160,14 +175,19 @@ async function analyzeCase(){
   const output=document.getElementById("output");
   output.innerHTML=`<div class="card loading-card">AI analyzing...</div>`;
   try{
-    const res=await fetch("https://YOUR_BACKEND_URL/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({facts,caseType})});
+    const res=await fetch("https://YOUR_BACKEND_URL/api/analyze",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({facts,caseType})
+    });
     const data=await res.json();
+    if(data.error){output.innerHTML=`<div class="card">Error: ${data.error}</div>`; return;}
     let html=`
       <div class="card">
         <div class="card-header">AI Advisory Output ⚖️</div>
         <div class="section"><div class="section-header" onclick="toggleSection(this)">🟦 Arguments for Plaintiff</div><div class="section-content">${data.plaintiff.join("<br>")}</div></div>
         <div class="section"><div class="section-header" onclick="toggleSection(this)">🟥 Arguments for Defendant</div><div class="section-content">${data.defendant.join("<br>")}</div></div>
-        <div class="section"><div class="section-header" onclick="toggleSection(this)">⚖️ Likely Court Leaning</div><div class="section-content">${data.leaning}</div></div>
+        <div class="section"><div class="section-header" onclick="toggleSection(this)">⚖️ Likely Court Leaning</div><div class="section-content"><span class="badge ${data.leaning==='Plaintiff'?'low':data.leaning==='Defendant'?'high':'medium'}">${data.leaning}</span></div></div>
         <div class="section"><div class="section-header" onclick="toggleSection(this)">❓ Weakest Points in Each Side</div><div class="section-content">Plaintiff: ${data.weakPoints.plaintiff}<br>Defendant: ${data.weakPoints.defendant}</div></div>
       </div>`;
     output.innerHTML=html;
@@ -182,7 +202,11 @@ chatInput.addEventListener("keypress", async function(e){
     chatMessages.innerHTML+=`<div>> ${msg}</div>`;
     chatInput.value='';
     try{
-      const res=await fetch("https://YOUR_BACKEND_URL/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:msg})});
+      const res=await fetch("https://YOUR_BACKEND_URL/api/chat",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({message:msg})
+      });
       const data=await res.json();
       chatMessages.innerHTML+=`<div style="color:var(--accent)">${data.reply}</div>`;
       chatMessages.scrollTop=chatMessages.scrollHeight;
