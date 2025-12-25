@@ -5,43 +5,43 @@
   <title>Court AI — Judicial Reasoning Console</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Professional fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Crimson+Pro:wght@600&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
 
   <style>
     body {
       font-family: Inter, system-ui, sans-serif;
-      background: linear-gradient(180deg, #f8fafc, #eef2f7);
-      padding: 60px 16px;
+      background: linear-gradient(180deg, #f8fafc, #eef2ff);
+      padding: 64px 16px;
       color: #0f172a;
     }
 
     .container {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: auto;
-      background: white;
-      padding: 48px;
-      border-radius: 16px;
-      box-shadow: 0 30px 70px rgba(0,0,0,0.08);
+      background: #ffffff;
+      padding: 56px;
+      border-radius: 18px;
+      box-shadow: 0 40px 90px rgba(0,0,0,0.08);
     }
 
     h1 {
-      font-family: "Crimson Pro", serif;
+      font-family: "Libre Baskerville", serif;
       font-size: 34px;
       margin-bottom: 6px;
     }
 
     .subtitle {
       color: #475569;
+      margin-bottom: 40px;
       font-size: 15px;
-      margin-bottom: 36px;
     }
 
     textarea {
       width: 100%;
-      height: 150px;
+      height: 160px;
       padding: 16px;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid #cbd5e1;
       font-size: 15px;
       line-height: 1.6;
@@ -49,8 +49,8 @@
 
     button {
       margin-top: 22px;
-      padding: 14px 30px;
-      background: #020617;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, #1e293b, #020617);
       color: white;
       border: none;
       border-radius: 10px;
@@ -60,7 +60,7 @@
     }
 
     button:hover {
-      background: #0f172a;
+      opacity: 0.95;
     }
 
     .output {
@@ -69,30 +69,34 @@
 
     .section {
       margin-bottom: 36px;
+      padding: 26px;
+      border-radius: 14px;
+      border-left: 6px solid;
     }
+
+    .facts { background: #f0f9ff; border-color: #0284c7; }
+    .questions { background: #ecfeff; border-color: #0891b2; }
+    .interpret { background: #fefce8; border-color: #ca8a04; }
+    .risk { background: #fff1f2; border-color: #e11d48; }
+    .view { background: #ecfdf5; border-color: #16a34a; }
+    .court { background: #f8fafc; border-color: #020617; }
 
     .section h3 {
-      font-size: 16px;
-      margin-bottom: 10px;
-      text-transform: uppercase;
+      margin-top: 0;
+      font-size: 15px;
       letter-spacing: 0.04em;
-      color: #334155;
-      border-bottom: 1px solid #e5e7eb;
-      padding-bottom: 6px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
     }
 
-    .card {
-      background: #f8fafc;
-      padding: 22px;
-      border-radius: 12px;
-      border-left: 4px solid #020617;
+    .section p, .section li {
       font-size: 15px;
-      line-height: 1.7;
+      line-height: 1.65;
       color: #1e293b;
     }
 
-    .questions li {
-      margin-bottom: 10px;
+    ul {
+      padding-left: 20px;
     }
 
     .footer {
@@ -108,77 +112,90 @@
   <div class="container">
     <h1>Court AI</h1>
     <p class="subtitle">
-      Judicial Reasoning Console · Analytical · Non-Binding
+      Judicial Reasoning Console · Analytical · Advisory · Non-Binding
     </p>
 
-    <textarea id="facts" placeholder="Set out the material facts of the dispute in clear, neutral language..."></textarea>
+    <textarea id="facts" placeholder="Describe the material facts of the dispute in clear, neutral language..."></textarea>
     <button onclick="runAnalysis()">Generate Judicial Reasoning</button>
 
     <div id="output" class="output"></div>
 
     <div class="footer">
-      This system simulates legal reasoning for educational purposes only and does not provide legal advice.
+      This system simulates judicial reasoning for educational purposes only and does not constitute legal advice.
     </div>
   </div>
 
   <script>
     function runAnalysis() {
-      const facts = document.getElementById("facts").value.trim();
-      if (!facts) return;
+      const input = document.getElementById("facts").value.trim().toLowerCase();
+      if (!input) return;
+
+      const ownership = input.includes("my house") || input.includes("my property") || input.includes("owned");
+      const force = input.includes("took over") || input.includes("force") || input.includes("locked");
+      const tenant = input.includes("tenant") || input.includes("rent");
+      const police = input.includes("police") || input.includes("fir") || input.includes("complaint");
+      const duration = input.includes("years") || input.includes("months");
+
+      let facts = [
+        "The dispute concerns possession of immovable property between private parties."
+      ];
+
+      if (ownership) facts.push("The user asserts ownership or superior possessory rights.");
+      else facts.push("Ownership or prior possession is asserted but lacks detail.");
+
+      if (force) facts.push("Possession is alleged to have been assumed without consent.");
+      if (tenant) facts.push("The factual matrix suggests a possible tenancy or permissive occupation.");
+
+      let risks = [];
+      if (!police) risks.push("Absence of prompt legal or police action may be questioned.");
+      if (!duration) risks.push("Duration of possession is unclear, affecting limitation analysis.");
+      if (!ownership) risks.push("Lack of documentary proof of ownership weakens the claim.");
 
       document.getElementById("output").innerHTML = `
-        <div class="section">
+        <div class="section facts">
           <h3>Layer 1 · Extracted Material Facts</h3>
-          <div class="card">
-            The dispute concerns alleged assumption of possession of immovable property by the opposing party.
-            The user asserts absence of consent, judicial authorization, or formal agreement permitting such possession.
-          </div>
+          <p>${facts.join("<br>")}</p>
         </div>
 
-        <div class="section">
+        <div class="section questions">
           <h3>Layer 2 · Legal Questions Raised</h3>
-          <div class="card">
-            Whether possession was taken lawfully; whether consent—express or implied—existed; and whether the
-            plaintiff can demonstrate prior possession or ownership sufficient to seek relief.
-          </div>
+          <p>
+            Whether possession was taken lawfully; whether consent—express or implied—existed; and whether
+            the claimant can establish prior possession or ownership.
+          </p>
         </div>
 
-        <div class="section">
+        <div class="section interpret">
           <h3>Layer 3 · Competing Legal Interpretations</h3>
-          <div class="card">
-            <strong>Interpretation A:</strong> The act constitutes unlawful dispossession warranting civil remedies.<br>
-            <strong>Interpretation B:</strong> The matter reflects a factual dispute involving implied consent or
-            long-standing use, unsuitable for summary intervention.
-          </div>
+          <p>
+            <strong>Interpretation A:</strong> The act constitutes unlawful dispossession warranting civil relief.<br><br>
+            <strong>Interpretation B:</strong> The dispute reflects a consensual or long-standing arrangement,
+            limiting immediate remedies.
+          </p>
         </div>
 
-        <div class="section">
+        <div class="section risk">
           <h3>Layer 4 · Risk & Uncertainty Assessment</h3>
-          <div class="card">
-            The strength of the claim is contingent upon documentary evidence of possession and timing of objections.
-            Absence of records or delay in asserting rights introduces litigation risk.
-          </div>
+          <p>${risks.length ? risks.join("<br>") : "No immediate procedural risks identified."}</p>
         </div>
 
-        <div class="section">
-          <h3>Layer 5 · Provisional View (Non-Binding)</h3>
-          <div class="card">
-            Courts generally discourage self-help remedies. Subject to proof, restoration of possession may be
-            considered; however, factual ambiguities may necessitate full adjudication.
-          </div>
+        <div class="section view">
+          <h3>Layer 5 · Provisional Judicial View (Non-Binding)</h3>
+          <p>
+            Courts generally discourage self-help remedies. Subject to proof of ownership and lack of consent,
+            restoration of possession may be considered. Factual ambiguities may necessitate full adjudication.
+          </p>
         </div>
 
-        <div class="section">
+        <div class="section court">
           <h3>What the Court Is Likely to Ask</h3>
-          <div class="card">
-            <ul class="questions">
-              <li>Can you produce documentary proof of ownership or prior possession?</li>
-              <li>Was any oral or written consent ever given to the opposing party?</li>
-              <li>When did you first object to the alleged possession?</li>
-              <li>Why was no immediate legal or police action taken?</li>
-              <li>Is there evidence of uninterrupted use by the opposing party?</li>
-            </ul>
-          </div>
+          <ul>
+            <li>Can you produce documents evidencing ownership or prior possession?</li>
+            <li>When and how did the opposing party assume possession?</li>
+            <li>Was any consent, oral or written, ever granted?</li>
+            <li>Why was no immediate legal action taken?</li>
+            ${tenant ? "<li>Was any rent paid or notice issued?</li>" : ""}
+          </ul>
         </div>
       `;
     }
