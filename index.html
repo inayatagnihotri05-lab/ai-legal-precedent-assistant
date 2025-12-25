@@ -6,240 +6,197 @@
 <title>Court AI Legal Assistant</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-/* ===== Global Styles ===== */
-body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    background: #f0f4f8;
-    display: flex;
-    scroll-behavior: smooth;
-}
-a { text-decoration: none; color: #2563eb; }
-h1,h2,h3 { margin: 0.5rem 0; }
-button { cursor: pointer; transition: all 0.3s ease; }
-button:hover { opacity: 0.9; transform: scale(1.03); }
+body { font-family: 'Inter', sans-serif; margin:0; background:#f0f4f8; display:flex; scroll-behavior:smooth;}
+a {text-decoration:none;color:#2563eb;}
+h1,h2,h3{margin:0.5rem 0;}
+button{cursor:pointer;transition: all 0.3s ease;}
+button:hover{opacity:0.9; transform:scale(1.03);}
 
-/* ===== Sidebar Navigation ===== */
-.sidebar {
-    width: 250px;
-    background: #1e293b;
-    color: white;
-    height: 100vh;
-    position: fixed;
-    padding: 2rem 1rem;
-    overflow-y: auto;
-}
-.sidebar h2 { font-size: 1.8rem; margin-bottom: 2rem; }
-.sidebar a { display: block; padding: 0.75rem 0; color: white; margin-bottom: 0.2rem; border-radius: 5px; }
-.sidebar a:hover, .sidebar a.active { background: #334155; }
+/* Sidebar */
+.sidebar {width:260px;background:#1e293b;color:white;height:100vh;position:fixed;padding:2rem 1rem;overflow-y:auto;}
+.sidebar h2{font-size:1.8rem;margin-bottom:2rem;}
+.sidebar a{display:block;padding:0.75rem 0;color:white;margin-bottom:0.2rem;border-radius:5px;}
+.sidebar a:hover, .sidebar a.active{background:#334155;}
 
-/* ===== Main Content ===== */
-.main { margin-left: 270px; padding: 2rem; flex: 1; }
+/* Main */
+.main{margin-left:280px;padding:2rem;flex:1;}
 
-/* ===== Cards / Sections ===== */
-.card {
-    background: white;
-    border-radius: 16px;
-    padding: 3rem;
-    margin-bottom: 3rem;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+/* Cards */
+.card{background:white;border-radius:16px;padding:3rem;margin-bottom:3rem;box-shadow:0 12px 30px rgba(0,0,0,0.08);transition: transform 0.3s ease, box-shadow 0.3s ease;}
+.card:hover{transform:translateY(-5px);box-shadow:0 15px 35px rgba(0,0,0,0.12);}
 
-/* ===== Inputs ===== */
-textarea { width: 100%; height: 160px; padding: 1.2rem; border-radius: 12px; border: 1px solid #ccc; font-size: 1rem; margin-top: 1rem; }
-select, button { margin-top: 1rem; padding: 1rem 1.5rem; font-size: 1rem; border-radius: 12px; border: none; }
+/* Inputs */
+textarea{width:100%;height:160px;padding:1.2rem;border-radius:12px;border:1px solid #ccc;font-size:1rem;margin-top:1rem;}
+select, button{margin-top:1rem;padding:1rem 1.5rem;font-size:1rem;border-radius:12px;border:none;}
 
-/* ===== Output Badges ===== */
-.badge { display: inline-block; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; margin-right: 0.5rem; font-size: 0.95rem; }
-.plaintiff { background: #3b82f6; color: white; }
-.defendant { background: #ef4444; color: white; }
-.leaning { background: #facc15; color: black; }
-.weak-point { background: #a1a1aa; color: white; }
-.confidence { background: #10b981; color: white; }
+/* Badges */
+.badge{display:inline-block;padding:0.5rem 1rem;border-radius:8px;font-weight:600;margin-right:0.5rem;font-size:0.95rem;}
+.plaintiff{background:#3b82f6;color:white;}
+.defendant{background:#ef4444;color:white;}
+.leaning{background:#facc15;color:black;}
+.weak-point{background:#a1a1aa;color:white;}
+.confidence{background:#10b981;color:white;}
 
-/* ===== Collapsible Sections ===== */
-.collapsible { cursor: pointer; padding: 1rem; border-radius: 12px; background: #e2e8f0; margin-bottom: 1rem; font-weight: 600; font-size: 1.1rem; }
-.content { display: none; padding: 1.5rem; background: #f8fafc; border-radius: 0 0 12px 12px; animation: fadeIn 0.5s ease forwards; }
-@keyframes fadeIn { from {opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
+/* Collapsible */
+.collapsible{cursor:pointer;padding:1rem;border-radius:12px;background:#e2e8f0;margin-bottom:1rem;font-weight:600;font-size:1.1rem;}
+.content{display:none;padding:1.5rem;background:#f8fafc;border-radius:0 0 12px 12px;animation:fadeIn 0.5s ease forwards;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);}}
 
-/* ===== Chatbot ===== */
-.chatbot-icon { position: fixed; bottom: 2rem; right: 2rem; width: 70px; height: 70px; border-radius: 50%; background: #2563eb; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 1000; }
-.chatbot-window { position: fixed; bottom: 5rem; right: 2rem; width: 400px; max-height: 600px; background: white; border-radius: 16px; box-shadow: 0 12px 30px rgba(0,0,0,0.25); display: none; flex-direction: column; overflow: hidden; z-index: 1000; }
-.chatbot-header { background: #2563eb; color: white; padding: 1rem; font-weight: 700; font-size: 1.2rem; }
-.chatbot-messages { padding: 1rem; flex-grow: 1; overflow-y: auto; background: #f1f5f9; }
-.chatbot-input { display: flex; border-top: 1px solid #ccc; }
-.chatbot-input input { flex: 1; padding: 1rem; border: none; font-size: 1rem; }
-.chatbot-input button { background: #2563eb; color: white; border: none; padding: 0 1.2rem; cursor: pointer; }
+/* Chatbot */
+.chatbot-icon{position:fixed;bottom:2rem;right:2rem;width:70px;height:70px;border-radius:50%;background:#2563eb;color:white;display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.3);z-index:1000;}
+.chatbot-window{position:fixed;bottom:5rem;right:2rem;width:400px;max-height:600px;background:white;border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,0.25);display:none;flex-direction:column;overflow:hidden;z-index:1000;}
+.chatbot-header{background:#2563eb;color:white;padding:1rem;font-weight:700;font-size:1.2rem;}
+.chatbot-messages{padding:1rem;flex-grow:1;overflow-y:auto;background:#f1f5f9;}
+.chatbot-input{display:flex;border-top:1px solid #ccc;}
+.chatbot-input input{flex:1;padding:1rem;border:none;font-size:1rem;}
+.chatbot-input button{background:#2563eb;color:white;border:none;padding:0 1.2rem;cursor:pointer;}
 
-/* ===== Output Sections ===== */
-.output { margin-top: 2rem; padding: 2rem; background: #f1f5f9; border-radius: 12px; font-size: 1rem; }
+/* Output */
+.output{margin-top:2rem;padding:2rem;background:#f1f5f9;border-radius:12px;font-size:1rem;}
 
-/* ===== Laws Section ===== */
-.laws-section a { display: block; margin-bottom: 0.5rem; font-size: 1rem; }
+/* Laws Section */
+.laws-section a{display:block;margin-bottom:0.5rem;font-size:1rem;}
 </style>
 </head>
 <body>
 
 <!-- Sidebar -->
 <div class="sidebar">
-    <h2>Court AI</h2>
-    <a href="#case-intake" class="active">Case Intake</a>
-    <a href="#ai-analysis">AI Analysis</a>
-    <a href="#laws">Precedents & Laws</a>
-    <a href="#chatbot-section">Chatbot</a>
-    <a href="#pdf-export">PDF Export</a>
+<h2>Court AI</h2>
+<a href="#case-intake" class="active">Case Intake</a>
+<a href="#ai-analysis">AI Analysis</a>
+<a href="#laws">Precedents & Laws</a>
+<a href="#chatbot-section">Chatbot</a>
+<a href="#pdf-export">PDF Export</a>
 </div>
 
 <div class="main">
 
-    <!-- Case Intake -->
-    <div class="card" id="case-intake">
-        <h1>Case Intake</h1>
-        <p>Describe your dispute in plain language:</p>
-        <textarea id="caseFacts" placeholder="My neighbour occupied my house while I was away..."></textarea>
-        <select id="caseType">
-            <option value="Tenancy">Tenancy Dispute</option>
-            <option value="Contract">Contract Dispute</option>
-            <option value="Consumer">Consumer Complaint</option>
-            <option value="Other">Other</option>
-        </select>
-        <button onclick="analyzeCase()">Analyze Case</button>
-    </div>
+<!-- Case Intake -->
+<div class="card" id="case-intake">
+<h1>Case Intake</h1>
+<p>Describe your dispute in plain language:</p>
+<textarea id="caseFacts" placeholder="My neighbour occupied my house while I was away..."></textarea>
+<select id="caseType">
+    <option value="Tenancy">Tenancy Dispute</option>
+    <option value="Contract">Contract Dispute</option>
+    <option value="Consumer">Consumer Complaint</option>
+    <option value="Other">Other</option>
+</select>
+<select id="jurisdiction">
+    <option value="India">India</option>
+    <option value="US">United States</option>
+    <option value="UK">United Kingdom</option>
+</select>
+<button onclick="analyzeCase()">Analyze Case</button>
+</div>
 
-    <!-- AI Analysis -->
-    <div class="card output" id="ai-analysis" style="display:none;">
-        <h1>AI Advisory Output</h1>
-        <div id="plaintiffOutput" style="margin-top:1rem;"></div>
-        <div id="defendantOutput" style="margin-top:1rem;"></div>
-        <div id="leaningOutput" style="margin-top:1rem;"></div>
-        <div id="weakPointsOutput" style="margin-top:1rem;"></div>
-        <div id="confidenceOutput" style="margin-top:1rem;"></div>
-    </div>
+<!-- AI Analysis -->
+<div class="card output" id="ai-analysis" style="display:none;">
+<h1>AI Advisory Output</h1>
+<div id="plaintiffOutput" style="margin-top:1rem;"></div>
+<div id="defendantOutput" style="margin-top:1rem;"></div>
+<div id="leaningOutput" style="margin-top:1rem;"></div>
+<div id="weakPointsOutput" style="margin-top:1rem;"></div>
+<div id="confidenceOutput" style="margin-top:1rem;"></div>
+</div>
 
-    <!-- Why We Built This -->
-    <div class="card">
-        <div class="collapsible">Why We Built This ⬇️</div>
-        <div class="content">
-            <p>In India and many common law nations, hearings often take months or years. Litigants spend huge sums on lawyers and court fees. Court AI helps users understand judicial reasoning, procedural gaps, and strengths/weaknesses — advisory only.</p>
-            <p>Example: The average civil case duration in India is ~3.5 years (National Judicial Data Grid 2025).</p>
-        </div>
-    </div>
+<!-- Why We Built This -->
+<div class="card">
+<div class="collapsible">Why We Built This ⬇️</div>
+<div class="content">
+<p>In India and many common law nations, hearings often take months or years. Litigants spend huge sums on lawyers and court fees. Court AI helps users understand judicial reasoning, procedural gaps, and strengths/weaknesses — advisory only.</p>
+<p>Example: The average civil case duration in India is ~3.5 years<sup>1</sup>.</p>
+</div>
+</div>
 
-    <!-- Laws by Jurisdiction -->
-    <div class="card laws-section" id="laws">
-        <h1>Applicable Laws Library</h1>
-        <h2>🇮🇳 India — Core Statutes</h2>
-        <a href="https://www.google.com/search?q=Constitution+of+India" target="_blank">Constitution of India</a>
-        <a href="https://www.google.com/search?q=Indian+Penal+Code+1860" target="_blank">Indian Penal Code, 1860</a>
-        <a href="https://www.google.com/search?q=Code+of+Civil+Procedure+1908" target="_blank">Code of Civil Procedure, 1908</a>
-        <a href="https://www.google.com/search?q=Transfer+of+Property+Act+1882" target="_blank">Transfer of Property Act, 1882</a>
+<!-- Laws -->
+<div class="card laws-section" id="laws">
+<h1>Applicable Laws Library</h1>
+<h2>🇮🇳 India — Core Statutes</h2>
+<a href="https://www.google.com/search?q=Constitution+of+India" target="_blank">Constitution of India</a>
+<a href="https://www.google.com/search?q=Indian+Penal+Code+1860" target="_blank">Indian Penal Code, 1860</a>
+<a href="https://www.google.com/search?q=Code+of+Civil+Procedure+1908" target="_blank">Code of Civil Procedure, 1908</a>
+<a href="https://www.google.com/search?q=Transfer+of+Property+Act+1882" target="_blank">Transfer of Property Act, 1882</a>
 
-        <h2>🇺🇸 United States — Federal Framework</h2>
-        <a href="https://www.google.com/search?q=US+Constitution" target="_blank">U.S. Constitution</a>
-        <a href="https://www.google.com/search?q=United+States+Code" target="_blank">United States Code (USC)</a>
-        <a href="https://www.google.com/search?q=Federal+Rules+of+Civil+Procedure" target="_blank">Federal Rules of Civil Procedure</a>
+<h2>🇺🇸 United States — Federal Framework</h2>
+<a href="https://www.google.com/search?q=US+Constitution" target="_blank">U.S. Constitution</a>
+<a href="https://www.google.com/search?q=United+States+Code" target="_blank">United States Code (USC)</a>
+<a href="https://www.google.com/search?q=Federal+Rules+of+Civil+Procedure" target="_blank">Federal Rules of Civil Procedure</a>
 
-        <h2>🇬🇧 United Kingdom — Parliamentary Acts</h2>
-        <a href="https://www.google.com/search?q=Law+of+Property+Act+1925+UK" target="_blank">Law of Property Act 1925</a>
-        <a href="https://www.google.com/search?q=Housing+Act+1988+UK" target="_blank">Housing Act 1988</a>
-        <a href="https://www.google.com/search?q=Consumer+Rights+Act+2015+UK" target="_blank">Consumer Rights Act 2015</a>
-    </div>
+<h2>🇬🇧 United Kingdom — Parliamentary Acts</h2>
+<a href="https://www.google.com/search?q=Law+of+Property+Act+1925+UK" target="_blank">Law of Property Act 1925</a>
+<a href="https://www.google.com/search?q=Housing+Act+1988+UK" target="_blank">Housing Act 1988</a>
+<a href="https://www.google.com/search?q=Consumer+Rights+Act+2015+UK" target="_blank">Consumer Rights Act 2015</a>
+</div>
 
-    <!-- Chatbot Section -->
-    <div class="card" id="chatbot-section">
-        <h1>Legal Chatbot</h1>
-        <div class="chatbot-messages" id="chatbotMessages" style="height:350px; overflow-y:auto; background:#f1f5f9; padding:1rem; border-radius:12px;"></div>
-        <div class="chatbot-input" style="margin-top:1rem;">
-            <input type="text" id="chatbotInput" placeholder="Ask a legal question...">
-            <button onclick="sendChat()">Send</button>
-        </div>
-    </div>
+<!-- Chatbot Section -->
+<div class="card" id="chatbot-section">
+<h1>Legal Chatbot</h1>
+<div class="chatbot-messages" id="chatbotMessages" style="height:350px; overflow-y:auto; background:#f1f5f9; padding:1rem; border-radius:12px;"></div>
+<div class="chatbot-input" style="margin-top:1rem;">
+<input type="text" id="chatbotInput" placeholder="Ask a legal question...">
+<button onclick="sendChat()">Send</button>
+</div>
+</div>
 
-    <!-- PDF Export -->
-    <div class="card" id="pdf-export">
-        <button onclick="exportPDF()">Export Court-Style PDF</button>
-    </div>
+<!-- PDF Export -->
+<div class="card" id="pdf-export">
+<button onclick="exportPDF()">Export Court-Style PDF</button>
+</div>
 
 </div>
 
-<!-- Floating Chatbot Icon -->
 <div class="chatbot-icon" onclick="toggleChatbot()">💬</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-/* ===== Collapsible Sections ===== */
-document.querySelectorAll(".collapsible").forEach(c => {
-    c.addEventListener("click", () => {
-        const content = c.nextElementSibling;
-        content.style.display = content.style.display === "block" ? "none" : "block";
-    });
-});
+/* Collapsible */
+document.querySelectorAll(".collapsible").forEach(c=>c.addEventListener("click",()=>{const content=c.nextElementSibling;content.style.display=content.style.display==="block"?"none":"block";}));
 
-/* ===== Analyze Case ===== */
-function analyzeCase() {
-    const facts = document.getElementById("caseFacts").value;
-    const caseType = document.getElementById("caseType").value;
-    const aiOutput = document.getElementById("ai-analysis");
-    aiOutput.style.display = "block";
-    document.getElementById("plaintiffOutput").innerHTML = "Loading...";
-
-    fetch("/api/analyze", {
-        method: "POST",
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({facts, caseType})
-    })
-    .then(res => res.json())
-    .then(data => {
-        document.getElementById("plaintiffOutput").innerHTML = `<span class="badge plaintiff">Plaintiff:</span> ${data.plaintiff.join(", ")}`;
-        document.getElementById("defendantOutput").innerHTML = `<span class="badge defendant">Defendant:</span> ${data.defendant.join(", ")}`;
-        document.getElementById("leaningOutput").innerHTML = `<span class="badge leaning">Court Leaning:</span> ${data.leaning}`;
-        document.getElementById("weakPointsOutput").innerHTML = `<span class="badge weak-point">Weak Points:</span> Plaintiff: ${data.weakPoints.plaintiff}, Defendant: ${data.weakPoints.defendant}`;
-        document.getElementById("confidenceOutput").innerHTML = `<span class="badge confidence">Confidence:</span> 85%`;
+/* Analyze Case */
+function analyzeCase(){
+    const facts=document.getElementById("caseFacts").value;
+    const caseType=document.getElementById("caseType").value;
+    const jurisdiction=document.getElementById("jurisdiction").value;
+    const aiOutput=document.getElementById("ai-analysis");
+    aiOutput.style.display="block";
+    document.getElementById("plaintiffOutput").innerHTML="Loading...";
+    fetch("/api/analyze",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({facts,caseType,jurisdiction})})
+    .then(res=>res.json())
+    .then(data=>{
+        document.getElementById("plaintiffOutput").innerHTML=`<span class="badge plaintiff">Plaintiff:</span> ${data.plaintiff.join(", ")}`;
+        document.getElementById("defendantOutput").innerHTML=`<span class="badge defendant">Defendant:</span> ${data.defendant.join(", ")}`;
+        document.getElementById("leaningOutput").innerHTML=`<span class="badge leaning">Court Leaning:</span> ${data.leaning}`;
+        document.getElementById("weakPointsOutput").innerHTML=`<span class="badge weak-point">Weak Points:</span> Plaintiff: ${data.weakPoints.plaintiff}, Defendant: ${data.weakPoints.defendant}`;
+        document.getElementById("confidenceOutput").innerHTML=`<span class="badge confidence">Confidence:</span> ${data.confidence || "N/A"}`;
     });
 }
 
-/* ===== Chatbot ===== */
-function toggleChatbot() {
-    alert("Use the dedicated chatbot section above.");
-}
-function sendChat() {
-    const input = document.getElementById("chatbotInput");
-    const message = input.value;
-    if(!message) return;
-    const messagesDiv = document.getElementById("chatbotMessages");
-    messagesDiv.innerHTML += `<div><b>You:</b> ${message}</div>`;
-    input.value = "";
-
-    fetch("/api/chat", {
-        method: "POST",
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({message})
-    })
-    .then(res => res.json())
-    .then(data => {
-        messagesDiv.innerHTML += `<div><b>AI:</b> ${data.reply}</div>`;
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    });
+/* Chatbot */
+function toggleChatbot(){alert("Use the dedicated chatbot section above.");}
+function sendChat(){
+    const input=document.getElementById("chatbotInput");
+    const message=input.value;if(!message)return;
+    const messagesDiv=document.getElementById("chatbotMessages");
+    messagesDiv.innerHTML+=`<div><b>You:</b> ${message}</div>`;input.value="";
+    fetch("/api/chat",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({message})})
+    .then(res=>res.json())
+    .then(data=>{messagesDiv.innerHTML+=`<div><b>AI:</b> ${data.reply}</div>`;messagesDiv.scrollTop=messagesDiv.scrollHeight;});
 }
 
-/* ===== PDF Export ===== */
-function exportPDF() {
+/* PDF Export */
+function exportPDF(){
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    const facts = document.getElementById("caseFacts").value;
-    doc.setFontSize(16);
-    doc.text("Court AI - Advisory Judgment", 10, 10);
-    doc.setFontSize(12);
-    doc.text(`Case Facts:\n${facts}`, 10, 20);
-    const plaintiff = document.getElementById("plaintiffOutput").innerText;
-    const defendant = document.getElementById("defendantOutput").innerText;
-    doc.text(plaintiff, 10, 60);
-    doc.text(defendant, 10, 70);
+    const facts=document.getElementById("caseFacts").value;
+    doc.setFontSize(16); doc.text("Court AI - Advisory Judgment",10,10);
+    doc.setFontSize(12); doc.text(`Case Facts:\n${facts}`,10,20);
+    const plaintiff=document.getElementById("plaintiffOutput").innerText;
+    const defendant=document.getElementById("defendantOutput").innerText;
+    doc.text(plaintiff,10,60); doc.text(defendant,10,70);
     doc.save("court_ai_judgment.pdf");
 }
 </script>
-
 </body>
 </html>
