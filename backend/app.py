@@ -1,89 +1,78 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import openai
 import os
+from dotenv import load_dotenv
 
-app = Flask(__name__)
-CORS(app)
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# ---- SYSTEM PROMPT (COURT-ALIGNED) ----
-SYSTEM_PROMPT = """
-You are Court AI, a legal reasoning assistant.
-You do NOT give legal advice.
-You simulate how courts analyze disputes.
+app = FastAPI(title="Court AI Backend")
 
-For every case:
-1. Identify legal issues
-2. Argue BOTH sides (Plaintiff vs Defendant)
-3. Identify weakest point of each side
-4. State likely court leaning (with reasoning)
-5. Cite applicable statutes (India / US / UK)
+# Allow CORS so frontend on GitHub Pages can call this
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-Tone: judicial, neutral, professional.
-Output structured sections.
+class AnalyzeRequest(BaseModel):
+    facts: str
+    caseType: str
+
+class ChatRequest(BaseModel):
+    message: str
+
+@app.post("/api/analyze")
+async def analyze_case(req: AnalyzeRequest):
+    """
+    Option A: Argue Both Sides
+    Returns plaintiff arguments, defendant arguments, court leaning, weakest points
+    """
+    prompt = f"""
+You are a legal reasoning AI. Analyze the following case (do NOT provide real legal advice, advisory only):
+Case Type: {req.caseType}
+Facts: {req.facts}
+
+Return JSON with keys:
+- plaintiff: list of arguments for plaintiff
+- defendant: list of arguments for defendant
+- leaning: likely court leaning ("Plaintiff", "Defendant", "Neutral")
+- weakPoints: object with 'plaintiff' and 'defendant' weakest points
+Return only JSON.
 """
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[{"role":"user","content":prompt}],
+            temperature=0.5
+        )
+        text = response['choices'][0]['message']['content']
+        # Attempt to parse JSON
+        import json
+        data = json.loads(text)
+        return data
+    except Exception as e:
+        return {"error": str(e)}
 
-@app.route("/analyze", methods=["POST"])
-def analyze():
-    data = request.json
-    facts = data.get("facts", "")
-    jurisdiction = data.get("jurisdiction", "India")
-
-    if not facts.strip():
-        return jsonify({"error": "No facts provided"}), 400
-
-    # ---- TEMP AI LOGIC (replace with OpenAI later) ----
-    # This is REAL logic flow, not static UI text
-
-    response = {
-        "issues": [
-            "Illegal possession of property",
-            "Absence of due process"
-        ],
-        "plaintiff_arguments": [
-            "Plaintiff is the lawful owner",
-            "No consent or legal transfer occurred",
-            "Forcible or unlawful possession is prohibited"
-        ],
-        "defendant_arguments": [
-            "Defendant may claim implied consent or adverse possession",
-            "Defendant may allege abandonment"
-        ],
-        "weak_points": {
-            "plaintiff": "Delay in asserting rights could weaken urgency",
-            "defendant": "No documentary proof of lawful possession"
-        },
-        "court_leaning": "Court is likely to favor the Plaintiff due to unlawful possession without due process.",
-        "applicable_laws": LAWS[jurisdiction],
-        "note": "This output is advisory, non-binding, and educational."
-    }
-
-    return jsonify(response)
-
-# ---- LAW DATABASE ----
-LAWS = {
-    "India": [
-        "Constitution of India",
-        "Transfer of Property Act, 1882",
-        "Specific Relief Act, 1963",
-        "Indian Penal Code, 1860",
-        "Code of Civil Procedure, 1908",
-        "Indian Evidence Act, 1872"
-    ],
-    "United States": [
-        "U.S. Constitution",
-        "Federal Rules of Civil Procedure",
-        "Uniform Commercial Code",
-        "Fair Housing Act",
-        "State Landlord–Tenant Acts"
-    ],
-    "United Kingdom": [
-        "Law of Property Act 1925",
-        "Housing Act 1988",
-        "Protection from Eviction Act 1977",
-        "Civil Procedure Rules",
-        "Human Rights Act 1998"
-    ]
-}
-
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.post("/api/chat")
+async def chat(req: ChatRequest):
+    """
+    General AI legal chatbot (advisory only)
+    """
+    prompt = f"""
+You are a helpful legal reasoning assistant. Respond clearly, neutrally, and only in advisory tone.
+User message: {req.message}
+"""
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[{"role":"user","content":prompt}],
+            temperature=0.6
+        )
+        text = response['choices'][0]['message']['content']
+        return {"reply": text}
+    except Exception as e:
+        return {"reply": f"Error: {str(e)}"}
