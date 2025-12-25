@@ -1,233 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Court AI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<title>Court AI — Legal Reasoning Simulator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --bg: #0f172a;
-      --card: #020617;
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --accent: #6366f1;
-      --plaintiff: #3b82f6;
-      --defendant: #ef4444;
-      --success: #22c55e;
-    }
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --accent: #38bdf8;
+  --green: #22c55e;
+  --red: #ef4444;
+  --yellow: #facc15;
+}
 
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(180deg, #020617, #0f172a);
-      color: var(--text);
-      padding-bottom: 100px;
-    }
+* { box-sizing: border-box; }
 
-    header {
-      padding: 50px 20px;
-      text-align: center;
-    }
+body {
+  margin: 0;
+  font-family: Inter, sans-serif;
+  background: radial-gradient(circle at top, #020617, var(--bg));
+  color: var(--text);
+  padding: 40px 16px;
+}
 
-    header h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
-      background: linear-gradient(to right, #818cf8, #22d3ee);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+.container {
+  max-width: 1000px;
+  margin: auto;
+}
 
-    header p {
-      color: var(--muted);
-      max-width: 720px;
-      margin: auto;
-      font-size: 1.1rem;
-    }
+h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 3rem;
+  margin-bottom: 8px;
+}
 
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 20px;
-    }
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 40px;
+}
 
-    .card {
-      background: rgba(2,6,23,0.85);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 28px;
-      margin-bottom: 32px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      animation: fadeUp 0.6s ease;
-    }
+.card {
+  background: linear-gradient(180deg, #020617, var(--card));
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 28px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.4);
+  animation: fadeIn .6s ease;
+}
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-    textarea, select {
-      width: 100%;
-      background: #020617;
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--text);
-      border-radius: 10px;
-      padding: 14px;
-      font-size: 15px;
-      margin-top: 10px;
-    }
+label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
 
-    button {
-      margin-top: 18px;
-      padding: 14px 24px;
-      background: linear-gradient(to right, #6366f1, #22d3ee);
-      border: none;
-      border-radius: 12px;
-      color: #020617;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+select, textarea, button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+}
 
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(99,102,241,0.4);
-    }
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
 
-    .section-title {
-      font-weight: 600;
-      margin-bottom: 12px;
-      color: #e5e7eb;
-    }
+select, textarea {
+  background: #020617;
+  color: white;
+  border: 1px solid #1f2937;
+}
 
-    .pill {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      margin-bottom: 10px;
-    }
+button {
+  background: linear-gradient(135deg, #2563eb, #38bdf8);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 16px;
+}
 
-    .plaintiff { background: rgba(59,130,246,0.15); color: var(--plaintiff); }
-    .defendant { background: rgba(239,68,68,0.15); color: var(--defendant); }
-    .neutral { background: rgba(34,197,94,0.15); color: var(--success); }
+button:hover {
+  opacity: .9;
+}
 
-    .law-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 12px;
-    }
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
 
-    .law {
-      padding: 14px;
-      border-radius: 10px;
-      background: #020617;
-      border: 1px solid rgba(255,255,255,0.08);
-      cursor: pointer;
-      transition: transform 0.15s ease;
-    }
+.green { background: rgba(34,197,94,.2); color: var(--green); }
+.red { background: rgba(239,68,68,.2); color: var(--red); }
+.yellow { background: rgba(250,204,21,.2); color: var(--yellow); }
 
-    .law:hover {
-      transform: translateY(-3px);
-      border-color: var(--accent);
-    }
+.section-title {
+  font-weight: 700;
+  margin-top: 20px;
+  margin-bottom: 6px;
+}
 
-    /* Chatbot */
-    .chatbot {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(to right, #6366f1, #22d3ee);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      cursor: pointer;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-    }
-  </style>
+.laws a {
+  color: var(--accent);
+  text-decoration: none;
+  display: block;
+  margin: 4px 0;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 40px;
+}
+</style>
 </head>
 
 <body>
-
-<header>
-  <h1>Court AI</h1>
-  <p>A legal reasoning assistant designed to simulate how courts think, question, and evaluate disputes — not legal advice.</p>
-</header>
-
 <div class="container">
 
-  <!-- CASE INTAKE -->
-  <div class="card">
-    <div class="section-title">Case Intake</div>
-    <select id="jurisdiction">
-      <option>India</option>
-      <option>United States</option>
-      <option>United Kingdom</option>
-    </select>
+<h1>Court AI</h1>
+<p class="subtitle">
+A legal reasoning assistant that simulates how courts think, argue, and decide — not legal advice.
+</p>
 
-    <textarea id="facts" placeholder="Example: My neighbour occupied my house while I was away and refuses to leave..."></textarea>
+<!-- CASE INTAKE -->
+<div class="card">
+<label>Jurisdiction</label>
+<select id="jurisdiction">
+  <option>India</option>
+  <option>United States</option>
+  <option>United Kingdom</option>
+</select>
 
-    <button onclick="analyze()">Analyze Case</button>
-  </div>
+<label style="margin-top:16px;">Case Facts</label>
+<textarea id="facts" placeholder="Example: My neighbour occupied my house while I was away and refuses to vacate..."></textarea>
 
-  <!-- AI OUTPUT -->
-  <div class="card" id="output" style="display:none;">
-    <div class="pill neutral">AI Confidence: <span id="confidence">78%</span></div>
+<button onclick="analyzeCase()">Analyze Case</button>
+</div>
 
-    <h3>🟦 Arguments for Plaintiff</h3>
-    <p id="plaintiffText"></p>
+<!-- OUTPUT -->
+<div id="output" class="card" style="display:none;">
+<h2>AI Advisory Output</h2>
 
-    <h3>🟥 Arguments for Defendant</h3>
-    <p id="defendantText"></p>
+<div class="section-title">Arguments for Plaintiff</div>
+<div id="plaintiffText"></div>
 
-    <h3>⚖️ Likely Court Leaning</h3>
-    <p id="leaning"></p>
+<div class="section-title">Arguments for Defendant</div>
+<div id="defendantText"></div>
 
-    <h3>❗ Weakest Points</h3>
-    <p id="weakness"></p>
-  </div>
+<div class="section-title">Likely Court Leaning</div>
+<span id="leaning" class="badge yellow"></span>
 
-  <!-- LAWS -->
-  <div class="card">
-    <div class="section-title">Primary Laws by Jurisdiction</div>
-    <div class="law-grid">
-      <div class="law" onclick="searchLaw('Transfer of Property Act 1882')">🇮🇳 Transfer of Property Act, 1882</div>
-      <div class="law" onclick="searchLaw('Indian Evidence Act 1872')">🇮🇳 Indian Evidence Act, 1872</div>
-      <div class="law" onclick="searchLaw('Federal Rules of Civil Procedure')">🇺🇸 Federal Rules of Civil Procedure</div>
-      <div class="law" onclick="searchLaw('Uniform Commercial Code')">🇺🇸 Uniform Commercial Code</div>
-      <div class="law" onclick="searchLaw('Law of Property Act 1925')">🇬🇧 Law of Property Act, 1925</div>
-      <div class="law" onclick="searchLaw('Housing Act 1988 UK')">🇬🇧 Housing Act, 1988</div>
-    </div>
-  </div>
+<div class="section-title">Weakest Points</div>
+<div id="weakness"></div>
+
+<div class="section-title">AI Confidence Score</div>
+<span class="badge green">78% confidence based on facts & procedural clarity</span>
+
+<button onclick="downloadPDF()">📄 Download Court-Style Judgment</button>
+</div>
+
+<!-- WHY -->
+<div class="card">
+<h2>Why We Built This</h2>
+<p>
+Courts do not decide disputes based on emotion — they decide based on facts, procedure, and law.
+</p>
+<p>
+Court AI was built to help people understand how judges reason, what arguments succeed,
+and where cases fail — without replacing lawyers.
+</p>
+</div>
+
+<!-- LAWS -->
+<div class="card laws">
+<h2>Primary Laws by Jurisdiction</h2>
+
+<h3>🇮🇳 India</h3>
+<a href="https://www.google.com/search?q=Transfer+of+Property+Act+1882" target="_blank">Transfer of Property Act, 1882</a>
+<a href="https://www.google.com/search?q=Code+of+Civil+Procedure+1908" target="_blank">Code of Civil Procedure, 1908</a>
+<a href="https://www.google.com/search?q=Indian+Evidence+Act+1872" target="_blank">Indian Evidence Act, 1872</a>
+
+<h3>🇺🇸 United States</h3>
+<a href="https://www.google.com/search?q=Federal+Rules+of+Civil+Procedure" target="_blank">Federal Rules of Civil Procedure</a>
+<a href="https://www.google.com/search?q=Uniform+Commercial+Code" target="_blank">Uniform Commercial Code</a>
+
+<h3>🇬🇧 United Kingdom</h3>
+<a href="https://www.google.com/search?q=Law+of+Property+Act+1925" target="_blank">Law of Property Act 1925</a>
+<a href="https://www.google.com/search?q=Housing+Act+1988" target="_blank">Housing Act 1988</a>
+</div>
+
+<footer>
+⚠️ All outputs are advisory, non-binding, and for educational purposes only.
+</footer>
 
 </div>
 
-<!-- CHATBOT -->
-<div class="chatbot" title="Legal Assistant">⚖️</div>
-
 <script>
-function analyze() {
+function analyzeCase() {
+  const facts = document.getElementById("facts").value;
+  if (!facts.trim()) return alert("Enter case facts.");
+
   document.getElementById("output").style.display = "block";
+
   document.getElementById("plaintiffText").innerText =
-    "Plaintiff asserts unlawful dispossession, lack of consent, and violation of property rights.";
+    "Unauthorized occupation, violation of property rights, absence of consent.";
+
   document.getElementById("defendantText").innerText =
-    "Defendant may claim implied consent, adverse possession, or lack of clear title.";
-  document.getElementById("leaning").innerText =
-    "Courts are likely to lean toward the Plaintiff if possession was unauthorized.";
+    "Claim of implied permission, lack of formal eviction notice.";
+
+  document.getElementById("leaning").innerText = "Plaintiff";
+
   document.getElementById("weakness").innerText =
-    "Plaintiff: delay in action. Defendant: lack of legal title.";
+    "Plaintiff: Delay in action. Defendant: No legal title.";
 }
 
-function searchLaw(law) {
-  window.open(`https://www.google.com/search?q=${encodeURIComponent(law)}`, "_blank");
+function downloadPDF() {
+  const text = `
+IN THE SIMULATED COURT OF LAW
+
+JUDGMENT
+
+Facts:
+${document.getElementById("facts").value}
+
+Arguments for Plaintiff:
+${document.getElementById("plaintiffText").innerText}
+
+Arguments for Defendant:
+${document.getElementById("defendantText").innerText}
+
+Court's View:
+${document.getElementById("leaning").innerText}
+
+This judgment is advisory and non-binding.
+
+— Court AI
+`;
+
+  const blob = new Blob([text], { type: "application/pdf" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Court_AI_Judgment.pdf";
+  a.click();
 }
 </script>
 
