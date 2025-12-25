@@ -2,106 +2,98 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Court AI — Judicial Outcome Simulator</title>
+<title>Court AI — Judicial Reasoning Simulator</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
 
 <style>
-body {
-  font-family: Inter, system-ui, sans-serif;
-  background: linear-gradient(180deg,#eef2ff,#f8fafc);
-  padding: 60px 20px;
+body{
+  font-family:Inter,system-ui,sans-serif;
+  background:linear-gradient(180deg,#eef2ff,#f8fafc);
+  padding:60px 24px;
   color:#0f172a;
 }
-
-.app {
-  max-width: 1200px;
+.app{
+  max-width:1300px;
   margin:auto;
   background:#fff;
-  border-radius:20px;
-  padding:50px;
-  box-shadow:0 50px 120px rgba(0,0,0,.1);
+  border-radius:24px;
+  padding:60px;
+  box-shadow:0 60px 140px rgba(0,0,0,.12);
 }
-
-header h1 {
+h1{
   font-family:"Libre Baskerville",serif;
-  font-size:36px;
+  font-size:42px;
 }
-
-header p {
+header p{
   color:#475569;
-  margin-top:6px;
+  margin-top:8px;
+  max-width:700px;
 }
-
-textarea {
+select,textarea{
   width:100%;
-  height:160px;
-  margin-top:30px;
   padding:18px;
+  margin-top:20px;
   border-radius:14px;
   border:1px solid #cbd5e1;
   font-size:15px;
-  line-height:1.6;
 }
-
-button {
-  margin-top:22px;
-  padding:16px 36px;
+textarea{height:180px;}
+button{
+  margin-top:24px;
+  padding:18px 42px;
   border:none;
-  border-radius:12px;
+  border-radius:14px;
   background:linear-gradient(135deg,#020617,#1e293b);
   color:white;
   font-weight:600;
+  font-size:16px;
   cursor:pointer;
 }
-
-.grid {
+.section{
+  margin-top:70px;
+}
+.grid{
   display:grid;
   grid-template-columns:2fr 1fr;
-  gap:36px;
-  margin-top:50px;
+  gap:40px;
 }
-
-.card {
+.card{
   background:#f8fafc;
-  border-radius:16px;
-  padding:28px;
-  margin-bottom:26px;
+  border-radius:18px;
+  padding:30px;
+  margin-bottom:30px;
 }
-
-.card h3 {
-  margin-top:0;
-  font-size:15px;
-  letter-spacing:.05em;
+.card h3{
+  font-size:14px;
+  letter-spacing:.08em;
   text-transform:uppercase;
   color:#334155;
 }
-
-.card p, .card li {
-  font-size:15px;
-  line-height:1.65;
-}
-
-.verdict {
-  background:linear-gradient(180deg,#ecfdf5,#f0fdf4);
-  border-left:6px solid #16a34a;
-}
-
-.badge {
+.badge{
   display:inline-block;
   padding:6px 14px;
   border-radius:999px;
   font-size:13px;
   font-weight:600;
 }
-
-.green { background:#dcfce7;color:#166534; }
-.red { background:#fee2e2;color:#991b1b; }
-
-footer {
-  text-align:center;
-  margin-top:50px;
+.green{background:#dcfce7;color:#166534;}
+.red{background:#fee2e2;color:#991b1b;}
+.blue{background:#dbeafe;color:#1e40af;}
+.meter{
+  height:10px;
+  border-radius:999px;
+  background:#e5e7eb;
+  overflow:hidden;
+  margin-top:10px;
+}
+.fill{
+  height:100%;
+  background:linear-gradient(90deg,#22c55e,#16a34a);
+}
+footer{
+  margin-top:80px;
   font-size:13px;
   color:#64748b;
 }
@@ -113,73 +105,107 @@ footer {
 
 <header>
   <h1>Court AI</h1>
-  <p>Judicial Outcome Simulator · Advisory · Non-Binding</p>
+  <p>
+  A judicial-reasoning simulator designed to mirror how courts assess disputes — focusing on
+  facts, procedure, and balance of equities. Advisory. Non-binding.
+  </p>
 </header>
 
-<textarea id="facts" placeholder="Describe what happened, clearly and honestly..."></textarea>
-<button onclick="decide()">Generate Court-Aligned Outcome</button>
+<select id="jurisdiction">
+  <option>India (Common Law)</option>
+  <option>United Kingdom</option>
+  <option>United States</option>
+</select>
+
+<textarea id="facts" placeholder="Describe the dispute factually, as if writing to a judge..."></textarea>
+<button onclick="analyze()">Generate Judicial Outcome</button>
 
 <div id="output"></div>
 
+<div class="section">
+  <div class="card">
+    <h3>Why We Built This</h3>
+    <p>
+    Access to legal reasoning is often limited by cost, complexity, and intimidation.
+    Court AI was built to <strong>demystify how courts actually think</strong> — not by giving
+    legal advice, but by simulating judicial logic.
+    </p>
+    <p>
+    Instead of telling users what to do, the system explains <em>why one side is stronger</em>,
+    how procedure matters, and where cases fail — empowering citizens, students,
+    and innovators to understand the law before stepping into a courtroom.
+    </p>
+  </div>
+</div>
+
 <footer>
-This system simulates judicial reasoning for educational purposes only. It does not constitute legal advice.
+Court AI is an educational simulation. Outputs are advisory and non-binding and do not constitute legal advice.
 </footer>
 
 </div>
 
 <script>
-function decide() {
-  const text = document.getElementById("facts").value.toLowerCase();
+function analyze(){
+  const text=document.getElementById("facts").value.toLowerCase();
   if(!text) return;
 
-  const ownership = text.includes("my house") || text.includes("my property");
-  const force = text.includes("took over") || text.includes("locked");
-  const tenant = text.includes("rent") || text.includes("tenant");
-  const delay = !text.includes("police") && !text.includes("complaint");
+  let p=0,d=0;
+  if(text.includes("my house")||text.includes("my property"))p+=2;
+  if(text.includes("took over")||text.includes("locked"))p+=2;
+  if(text.includes("tenant")||text.includes("rent"))d+=2;
+  if(!text.includes("complaint")&&!text.includes("police"))d+=1;
 
-  let plaintiffScore = 0;
-  let defendantScore = 0;
+  const winner=p>d?"Plaintiff":"Defendant";
+  const confidence=Math.min(90,Math.abs(p-d)*30+40);
 
-  if(ownership) plaintiffScore += 2;
-  if(force) plaintiffScore += 2;
-  if(tenant) defendantScore += 2;
-  if(delay) defendantScore += 1;
-
-  let winner = plaintiffScore > defendantScore ? "Plaintiff" : "Defendant";
-
-  document.getElementById("output").innerHTML = `
-  <div class="grid">
+  document.getElementById("output").innerHTML=`
+  <div class="section grid">
 
     <div>
       <div class="card">
-        <h3>Judicial Reasoning Summary</h3>
+        <h3>Judgment-Style Narrative</h3>
         <p>
-        Courts primarily assess <strong>lawful possession</strong>, <strong>consent</strong>,
-        and <strong>due process</strong>. Self-help methods are generally discouraged.
+        The facts, as presented, indicate a dispute concerning possession and the manner
+        in which control over the property was assumed. Courts generally disfavor
+        self-help measures and require disputes to be resolved through lawful process.
         </p>
       </div>
 
       <div class="card">
-        <h3>Key Determinative Factors</h3>
+        <h3>Arguments for Plaintiff</h3>
         <ul>
-          <li>Proof of ownership or prior possession</li>
-          <li>Manner in which possession changed</li>
-          <li>Existence of consent or tenancy</li>
-          <li>Promptness of legal action</li>
+          <li>Prior lawful possession or ownership</li>
+          <li>Alleged forcible or unauthorized takeover</li>
         </ul>
+        <h3>Arguments for Defendant</h3>
+        <ul>
+          <li>Possible tenancy or implied consent</li>
+          <li>Delay in asserting legal rights</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Appeal Survivability</h3>
+        <span class="badge ${confidence>65?"green":"red"}">
+          ${confidence>65?"Likely to withstand appeal":"Vulnerable on appeal"}
+        </span>
       </div>
     </div>
 
     <div>
-      <div class="card verdict">
+      <div class="card">
         <h3>Likely Judicial Outcome</h3>
         <p>
         On a prima facie assessment, the court is more likely to find in favour of the
         <strong>${winner}</strong>.
         </p>
         <span class="badge ${winner==="Plaintiff"?"green":"red"}">
-          ${winner} has stronger legal footing
+          Stronger legal footing
         </span>
+
+        <h3 style="margin-top:26px;">Confidence Level</h3>
+        <div class="meter"><div class="fill" style="width:${confidence}%"></div></div>
+        <p>${confidence}% confidence based on presented facts</p>
       </div>
     </div>
 
