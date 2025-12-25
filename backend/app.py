@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import openai
@@ -10,7 +10,6 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = FastAPI(title="Court AI Backend")
 
-# Allow CORS so frontend on GitHub Pages can call this
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -27,10 +26,6 @@ class ChatRequest(BaseModel):
 
 @app.post("/api/analyze")
 async def analyze_case(req: AnalyzeRequest):
-    """
-    Option A: Argue Both Sides
-    Returns plaintiff arguments, defendant arguments, court leaning, weakest points
-    """
     prompt = f"""
 You are a legal reasoning AI. Analyze the following case (do NOT provide real legal advice, advisory only):
 Case Type: {req.caseType}
@@ -49,9 +44,8 @@ Return only JSON.
             messages=[{"role":"user","content":prompt}],
             temperature=0.5
         )
-        text = response['choices'][0]['message']['content']
-        # Attempt to parse JSON
         import json
+        text = response['choices'][0]['message']['content']
         data = json.loads(text)
         return data
     except Exception as e:
@@ -59,9 +53,6 @@ Return only JSON.
 
 @app.post("/api/chat")
 async def chat(req: ChatRequest):
-    """
-    General AI legal chatbot (advisory only)
-    """
     prompt = f"""
 You are a helpful legal reasoning assistant. Respond clearly, neutrally, and only in advisory tone.
 User message: {req.message}
