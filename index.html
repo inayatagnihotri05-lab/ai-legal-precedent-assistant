@@ -1,202 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Court AI Legal Assistant</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Court AI — Legal Reasoning Assistant</title>
+
 <style>
-body { font-family: 'Inter', sans-serif; margin:0; background:#f0f4f8; display:flex; scroll-behavior:smooth;}
-a {text-decoration:none;color:#2563eb;}
-h1,h2,h3{margin:0.5rem 0;}
-button{cursor:pointer;transition: all 0.3s ease;}
-button:hover{opacity:0.9; transform:scale(1.03);}
+:root{
+  --bg:#0f1115;
+  --card:#171a21;
+  --accent:#c9a24d;
+  --text:#e6e6e6;
+  --muted:#9aa0aa;
+}
+
+*{box-sizing:border-box;font-family:Inter,system-ui,Arial}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  scroll-behavior:smooth;
+}
 
 /* Sidebar */
-.sidebar {width:260px;background:#1e293b;color:white;height:100vh;position:fixed;padding:2rem 1rem;overflow-y:auto;}
-.sidebar h2{font-size:1.8rem;margin-bottom:2rem;}
-.sidebar a{display:block;padding:0.75rem 0;color:white;margin-bottom:0.2rem;border-radius:5px;}
-.sidebar a:hover, .sidebar a.active{background:#334155;}
+aside{
+  position:fixed;
+  left:0;top:0;bottom:0;
+  width:220px;
+  background:#0c0e13;
+  padding:30px 20px;
+  z-index:100;
+}
+aside h2{
+  color:var(--accent);
+  font-size:20px;
+  margin-bottom:30px;
+}
+aside a{
+  display:block;
+  color:var(--muted);
+  text-decoration:none;
+  margin:16px 0;
+}
+aside a:hover{color:var(--text)}
 
 /* Main */
-.main{margin-left:280px;padding:2rem;flex:1;}
+main{margin-left:220px}
+
+/* Sections */
+section{
+  min-height:100vh;
+  padding:80px 8vw;
+}
+.section-title{
+  font-size:42px;
+  margin-bottom:10px;
+}
+.section-sub{
+  color:var(--muted);
+  max-width:700px;
+}
 
 /* Cards */
-.card{background:white;border-radius:16px;padding:3rem;margin-bottom:3rem;box-shadow:0 12px 30px rgba(0,0,0,0.08);transition: transform 0.3s ease, box-shadow 0.3s ease;}
-.card:hover{transform:translateY(-5px);box-shadow:0 15px 35px rgba(0,0,0,0.12);}
+.card{
+  background:var(--card);
+  padding:30px;
+  border-radius:14px;
+  margin-top:30px;
+  animation:fadeUp .8s ease forwards;
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:none}
+}
 
-/* Inputs */
-textarea{width:100%;height:160px;padding:1.2rem;border-radius:12px;border:1px solid #ccc;font-size:1rem;margin-top:1rem;}
-select, button{margin-top:1rem;padding:1rem 1.5rem;font-size:1rem;border-radius:12px;border:none;}
+textarea,select,input{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:none;
+  background:#0f1219;
+  color:white;
+  margin-top:10px;
+}
 
-/* Badges */
-.badge{display:inline-block;padding:0.5rem 1rem;border-radius:8px;font-weight:600;margin-right:0.5rem;font-size:0.95rem;}
-.plaintiff{background:#3b82f6;color:white;}
-.defendant{background:#ef4444;color:white;}
-.leaning{background:#facc15;color:black;}
-.weak-point{background:#a1a1aa;color:white;}
-.confidence{background:#10b981;color:white;}
+button{
+  margin-top:20px;
+  padding:14px 22px;
+  border-radius:10px;
+  border:none;
+  background:var(--accent);
+  color:black;
+  font-weight:600;
+  cursor:pointer;
+}
+button:hover{opacity:.9}
 
-/* Collapsible */
-.collapsible{cursor:pointer;padding:1rem;border-radius:12px;background:#e2e8f0;margin-bottom:1rem;font-weight:600;font-size:1.1rem;}
-.content{display:none;padding:1.5rem;background:#f8fafc;border-radius:0 0 12px 12px;animation:fadeIn 0.5s ease forwards;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);}}
+/* Laws */
+.law{
+  display:block;
+  margin:10px 0;
+  color:#cdd6f4;
+  cursor:pointer;
+}
+.law:hover{text-decoration:underline}
+
+/* Confidence */
+.bar{
+  background:#222;
+  height:10px;
+  border-radius:10px;
+  overflow:hidden;
+}
+.bar span{
+  display:block;
+  height:100%;
+  width:72%;
+  background:var(--accent);
+}
+
+/* Accordion */
+details{
+  background:var(--card);
+  padding:20px;
+  border-radius:14px;
+  margin-top:30px;
+}
+details summary{
+  cursor:pointer;
+  font-size:20px;
+}
 
 /* Chatbot */
-.chatbot-icon{position:fixed;bottom:2rem;right:2rem;width:70px;height:70px;border-radius:50%;background:#2563eb;color:white;display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,0.3);z-index:1000;}
-.chatbot-window{position:fixed;bottom:5rem;right:2rem;width:400px;max-height:600px;background:white;border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,0.25);display:none;flex-direction:column;overflow:hidden;z-index:1000;}
-.chatbot-header{background:#2563eb;color:white;padding:1rem;font-weight:700;font-size:1.2rem;}
-.chatbot-messages{padding:1rem;flex-grow:1;overflow-y:auto;background:#f1f5f9;}
-.chatbot-input{display:flex;border-top:1px solid #ccc;}
-.chatbot-input input{flex:1;padding:1rem;border:none;font-size:1rem;}
-.chatbot-input button{background:#2563eb;color:white;border:none;padding:0 1.2rem;cursor:pointer;}
-
-/* Output */
-.output{margin-top:2rem;padding:2rem;background:#f1f5f9;border-radius:12px;font-size:1rem;}
-
-/* Laws Section */
-.laws-section a{display:block;margin-bottom:0.5rem;font-size:1rem;}
+#chatbot{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+}
+#chatbox{
+  display:none;
+  width:300px;
+  background:var(--card);
+  padding:20px;
+  border-radius:14px;
+}
+#chatbot button{
+  border-radius:50%;
+  width:56px;height:56px;
+}
 </style>
 </head>
+
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar">
-<h2>Court AI</h2>
-<a href="#case-intake" class="active">Case Intake</a>
-<a href="#ai-analysis">AI Analysis</a>
-<a href="#laws">Precedents & Laws</a>
-<a href="#chatbot-section">Chatbot</a>
-<a href="#pdf-export">PDF Export</a>
+<aside>
+  <h2>Court AI</h2>
+  <a href="#case">Case Intake</a>
+  <a href="#analysis">AI Analysis</a>
+  <a href="#laws">Precedents & Laws</a>
+  <a href="#why">Why This Exists</a>
+  <a href="#pdf">Judgment PDF</a>
+</aside>
+
+<main>
+
+<!-- CASE INTAKE -->
+<section id="case">
+  <h1 class="section-title">Case Intake</h1>
+  <p class="section-sub">File your dispute as courts would receive it.</p>
+
+  <div class="card">
+    <textarea rows="5" placeholder="Describe your dispute in plain language..."></textarea>
+
+    <select>
+      <option>Tenancy</option>
+      <option>Contract</option>
+      <option>Consumer</option>
+      <option>Other</option>
+    </select>
+
+    <select>
+      <option>India</option>
+      <option>United States</option>
+      <option>United Kingdom</option>
+    </select>
+
+    <button>Analyze Case</button>
+  </div>
+</section>
+
+<!-- ANALYSIS -->
+<section id="analysis">
+  <h1 class="section-title">AI Judicial Reasoning</h1>
+  <p class="section-sub">Simulated court-style evaluation of arguments.</p>
+
+  <div class="card">
+    <h3>Court Leaning: Plaintiff</h3>
+    <p>Confidence Level: 72%</p>
+    <div class="bar"><span></span></div>
+
+    <h4>Plaintiff Arguments</h4>
+    <ul>
+      <li>Possession without consent</li>
+      <li>No valid tenancy agreement</li>
+    </ul>
+
+    <h4>Defendant Arguments</h4>
+    <ul>
+      <li>Implied permission</li>
+    </ul>
+  </div>
+</section>
+
+<!-- LAWS -->
+<section id="laws">
+  <h1 class="section-title">Applicable Laws Library</h1>
+  <p class="section-sub">Primary statutes commonly applied by courts.</p>
+
+  <div class="card">
+    <h3>🇮🇳 India</h3>
+    <span class="law" onclick="searchLaw('Transfer of Property Act 1882')">Transfer of Property Act, 1882</span>
+    <span class="law" onclick="searchLaw('Code of Civil Procedure 1908')">Code of Civil Procedure, 1908</span>
+    <span class="law" onclick="searchLaw('Indian Contract Act 1872')">Indian Contract Act, 1872</span>
+
+    <h3>🇺🇸 United States</h3>
+    <span class="law" onclick="searchLaw('Federal Rules of Civil Procedure')">Federal Rules of Civil Procedure</span>
+    <span class="law" onclick="searchLaw('Uniform Commercial Code')">Uniform Commercial Code</span>
+
+    <h3>🇬🇧 United Kingdom</h3>
+    <span class="law" onclick="searchLaw('Law of Property Act 1925')">Law of Property Act 1925</span>
+    <span class="law" onclick="searchLaw('Housing Act 1988')">Housing Act 1988</span>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <h1 class="section-title">Why We Built This</h1>
+
+  <details>
+    <summary>Read More</summary>
+    <p>
+      In India and many common-law jurisdictions, civil disputes often take
+      <b>5–10 years</b> to resolve. Litigants spend enormous time and money navigating
+      repeated hearings and procedural delays.
+      <br><br>
+      Court AI exists to reduce uncertainty by helping users understand how judges
+      reason, what questions courts ask, and where disputes succeed or fail —
+      before years are lost.
+      <br><br>
+      <small>Source: National Judicial Data Grid (India)</small>
+    </p>
+  </details>
+</section>
+
+<!-- PDF -->
+<section id="pdf">
+  <h1 class="section-title">Court-Style Judgment</h1>
+  <p class="section-sub">Export AI reasoning as a structured judgment-style PDF.</p>
+
+  <div class="card">
+    <button>Export PDF</button>
+  </div>
+</section>
+
+</main>
+
+<!-- CHATBOT -->
+<div id="chatbot">
+  <button onclick="toggleChat()">💬</button>
+  <div id="chatbox">
+    <p><b>Legal Clerk (AI)</b></p>
+    <input placeholder="Ask a legal question..." />
+  </div>
 </div>
 
-<div class="main">
-
-<!-- Case Intake -->
-<div class="card" id="case-intake">
-<h1>Case Intake</h1>
-<p>Describe your dispute in plain language:</p>
-<textarea id="caseFacts" placeholder="My neighbour occupied my house while I was away..."></textarea>
-<select id="caseType">
-    <option value="Tenancy">Tenancy Dispute</option>
-    <option value="Contract">Contract Dispute</option>
-    <option value="Consumer">Consumer Complaint</option>
-    <option value="Other">Other</option>
-</select>
-<select id="jurisdiction">
-    <option value="India">India</option>
-    <option value="US">United States</option>
-    <option value="UK">United Kingdom</option>
-</select>
-<button onclick="analyzeCase()">Analyze Case</button>
-</div>
-
-<!-- AI Analysis -->
-<div class="card output" id="ai-analysis" style="display:none;">
-<h1>AI Advisory Output</h1>
-<div id="plaintiffOutput" style="margin-top:1rem;"></div>
-<div id="defendantOutput" style="margin-top:1rem;"></div>
-<div id="leaningOutput" style="margin-top:1rem;"></div>
-<div id="weakPointsOutput" style="margin-top:1rem;"></div>
-<div id="confidenceOutput" style="margin-top:1rem;"></div>
-</div>
-
-<!-- Why We Built This -->
-<div class="card">
-<div class="collapsible">Why We Built This ⬇️</div>
-<div class="content">
-<p>In India and many common law nations, hearings often take months or years. Litigants spend huge sums on lawyers and court fees. Court AI helps users understand judicial reasoning, procedural gaps, and strengths/weaknesses — advisory only.</p>
-<p>Example: The average civil case duration in India is ~3.5 years<sup>1</sup>.</p>
-</div>
-</div>
-
-<!-- Laws -->
-<div class="card laws-section" id="laws">
-<h1>Applicable Laws Library</h1>
-<h2>🇮🇳 India — Core Statutes</h2>
-<a href="https://www.google.com/search?q=Constitution+of+India" target="_blank">Constitution of India</a>
-<a href="https://www.google.com/search?q=Indian+Penal+Code+1860" target="_blank">Indian Penal Code, 1860</a>
-<a href="https://www.google.com/search?q=Code+of+Civil+Procedure+1908" target="_blank">Code of Civil Procedure, 1908</a>
-<a href="https://www.google.com/search?q=Transfer+of+Property+Act+1882" target="_blank">Transfer of Property Act, 1882</a>
-
-<h2>🇺🇸 United States — Federal Framework</h2>
-<a href="https://www.google.com/search?q=US+Constitution" target="_blank">U.S. Constitution</a>
-<a href="https://www.google.com/search?q=United+States+Code" target="_blank">United States Code (USC)</a>
-<a href="https://www.google.com/search?q=Federal+Rules+of+Civil+Procedure" target="_blank">Federal Rules of Civil Procedure</a>
-
-<h2>🇬🇧 United Kingdom — Parliamentary Acts</h2>
-<a href="https://www.google.com/search?q=Law+of+Property+Act+1925+UK" target="_blank">Law of Property Act 1925</a>
-<a href="https://www.google.com/search?q=Housing+Act+1988+UK" target="_blank">Housing Act 1988</a>
-<a href="https://www.google.com/search?q=Consumer+Rights+Act+2015+UK" target="_blank">Consumer Rights Act 2015</a>
-</div>
-
-<!-- Chatbot Section -->
-<div class="card" id="chatbot-section">
-<h1>Legal Chatbot</h1>
-<div class="chatbot-messages" id="chatbotMessages" style="height:350px; overflow-y:auto; background:#f1f5f9; padding:1rem; border-radius:12px;"></div>
-<div class="chatbot-input" style="margin-top:1rem;">
-<input type="text" id="chatbotInput" placeholder="Ask a legal question...">
-<button onclick="sendChat()">Send</button>
-</div>
-</div>
-
-<!-- PDF Export -->
-<div class="card" id="pdf-export">
-<button onclick="exportPDF()">Export Court-Style PDF</button>
-</div>
-
-</div>
-
-<div class="chatbot-icon" onclick="toggleChatbot()">💬</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-/* Collapsible */
-document.querySelectorAll(".collapsible").forEach(c=>c.addEventListener("click",()=>{const content=c.nextElementSibling;content.style.display=content.style.display==="block"?"none":"block";}));
-
-/* Analyze Case */
-function analyzeCase(){
-    const facts=document.getElementById("caseFacts").value;
-    const caseType=document.getElementById("caseType").value;
-    const jurisdiction=document.getElementById("jurisdiction").value;
-    const aiOutput=document.getElementById("ai-analysis");
-    aiOutput.style.display="block";
-    document.getElementById("plaintiffOutput").innerHTML="Loading...";
-    fetch("/api/analyze",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({facts,caseType,jurisdiction})})
-    .then(res=>res.json())
-    .then(data=>{
-        document.getElementById("plaintiffOutput").innerHTML=`<span class="badge plaintiff">Plaintiff:</span> ${data.plaintiff.join(", ")}`;
-        document.getElementById("defendantOutput").innerHTML=`<span class="badge defendant">Defendant:</span> ${data.defendant.join(", ")}`;
-        document.getElementById("leaningOutput").innerHTML=`<span class="badge leaning">Court Leaning:</span> ${data.leaning}`;
-        document.getElementById("weakPointsOutput").innerHTML=`<span class="badge weak-point">Weak Points:</span> Plaintiff: ${data.weakPoints.plaintiff}, Defendant: ${data.weakPoints.defendant}`;
-        document.getElementById("confidenceOutput").innerHTML=`<span class="badge confidence">Confidence:</span> ${data.confidence || "N/A"}`;
-    });
+function toggleChat(){
+  const c=document.getElementById('chatbox');
+  c.style.display=c.style.display==='block'?'none':'block';
 }
-
-/* Chatbot */
-function toggleChatbot(){alert("Use the dedicated chatbot section above.");}
-function sendChat(){
-    const input=document.getElementById("chatbotInput");
-    const message=input.value;if(!message)return;
-    const messagesDiv=document.getElementById("chatbotMessages");
-    messagesDiv.innerHTML+=`<div><b>You:</b> ${message}</div>`;input.value="";
-    fetch("/api/chat",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({message})})
-    .then(res=>res.json())
-    .then(data=>{messagesDiv.innerHTML+=`<div><b>AI:</b> ${data.reply}</div>`;messagesDiv.scrollTop=messagesDiv.scrollHeight;});
-}
-
-/* PDF Export */
-function exportPDF(){
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const facts=document.getElementById("caseFacts").value;
-    doc.setFontSize(16); doc.text("Court AI - Advisory Judgment",10,10);
-    doc.setFontSize(12); doc.text(`Case Facts:\n${facts}`,10,20);
-    const plaintiff=document.getElementById("plaintiffOutput").innerText;
-    const defendant=document.getElementById("defendantOutput").innerText;
-    doc.text(plaintiff,10,60); doc.text(defendant,10,70);
-    doc.save("court_ai_judgment.pdf");
+function searchLaw(law){
+  window.open(`https://www.google.com/search?q=${encodeURIComponent(law)}`);
 }
 </script>
+
 </body>
 </html>
