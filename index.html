@@ -2,287 +2,342 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Court AI — Legal Reasoning Assistant</title>
+<title>Court AI — Legal Reasoning Simulator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --bg:#0f1115;
-  --card:#171a21;
-  --accent:#c9a24d;
-  --text:#e6e6e6;
-  --muted:#9aa0aa;
+:root {
+  --bg: #0b1020;
+  --card: #121a33;
+  --accent: #4f7cff;
+  --accent-soft: rgba(79,124,255,0.15);
+  --text: #e6ebff;
+  --muted: #a8b0d6;
+  --success: #2ecc71;
+  --danger: #ff6b6b;
 }
 
-*{box-sizing:border-box;font-family:Inter,system-ui,Arial}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  scroll-behavior:smooth;
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: radial-gradient(1200px 600px at top, #121a33, #060a16);
+  color: var(--text);
 }
 
-/* Sidebar */
-aside{
-  position:fixed;
-  left:0;top:0;bottom:0;
-  width:220px;
-  background:#0c0e13;
-  padding:30px 20px;
-  z-index:100;
+/* Layout */
+.container {
+  max-width: 1300px;
+  margin: auto;
+  padding: 48px 24px 120px;
 }
-aside h2{
-  color:var(--accent);
-  font-size:20px;
-  margin-bottom:30px;
-}
-aside a{
-  display:block;
-  color:var(--muted);
-  text-decoration:none;
-  margin:16px 0;
-}
-aside a:hover{color:var(--text)}
 
-/* Main */
-main{margin-left:220px}
+header {
+  margin-bottom: 48px;
+}
 
-/* Sections */
-section{
-  min-height:100vh;
-  padding:80px 8vw;
+header h1 {
+  font-size: 42px;
+  margin: 0;
+  letter-spacing: -0.03em;
 }
-.section-title{
-  font-size:42px;
-  margin-bottom:10px;
-}
-.section-sub{
-  color:var(--muted);
-  max-width:700px;
+
+header p {
+  color: var(--muted);
+  max-width: 720px;
+  font-size: 16px;
 }
 
 /* Cards */
-.card{
-  background:var(--card);
-  padding:30px;
-  border-radius:14px;
-  margin-top:30px;
-  animation:fadeUp .8s ease forwards;
-}
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:none}
+.card {
+  background: linear-gradient(180deg, #141c3d, #0f1530);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 36px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+  animation: fadeUp 0.7s ease;
 }
 
-textarea,select,input{
-  width:100%;
-  padding:14px;
-  border-radius:10px;
-  border:none;
-  background:#0f1219;
-  color:white;
-  margin-top:10px;
+.card h2 {
+  margin-top: 0;
+  font-size: 26px;
 }
 
-button{
-  margin-top:20px;
-  padding:14px 22px;
-  border-radius:10px;
-  border:none;
-  background:var(--accent);
-  color:black;
-  font-weight:600;
-  cursor:pointer;
+.card h3 {
+  margin-bottom: 8px;
+  margin-top: 28px;
 }
-button:hover{opacity:.9}
+
+/* Inputs */
+textarea, select {
+  width: 100%;
+  padding: 16px;
+  background: #0b1025;
+  border: 1px solid #1f2a55;
+  border-radius: 14px;
+  color: var(--text);
+  font-size: 15px;
+}
+
+textarea {
+  min-height: 140px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 14px 26px;
+  background: linear-gradient(135deg, var(--accent), #6fa1ff);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 20px 40px rgba(79,124,255,0.35);
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+/* Grid sections */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+  gap: 24px;
+}
+
+/* Pills */
+.pill {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 13px;
+}
 
 /* Laws */
-.law{
-  display:block;
-  margin:10px 0;
-  color:#cdd6f4;
-  cursor:pointer;
-}
-.law:hover{text-decoration:underline}
-
-/* Confidence */
-.bar{
-  background:#222;
-  height:10px;
-  border-radius:10px;
-  overflow:hidden;
-}
-.bar span{
-  display:block;
-  height:100%;
-  width:72%;
-  background:var(--accent);
+.laws a {
+  display: block;
+  padding: 8px 0;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px dashed #25306a;
 }
 
-/* Accordion */
-details{
-  background:var(--card);
-  padding:20px;
-  border-radius:14px;
-  margin-top:30px;
+.laws a:hover {
+  color: var(--accent);
 }
-details summary{
-  cursor:pointer;
-  font-size:20px;
+
+/* Collapsible */
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+details p {
+  color: var(--muted);
+  margin-top: 12px;
 }
 
 /* Chatbot */
-#chatbot{
-  position:fixed;
-  bottom:20px;
-  right:20px;
+.chatbot {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 340px;
+  background: var(--card);
+  border-radius: 18px;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+  overflow: hidden;
 }
-#chatbox{
-  display:none;
-  width:300px;
-  background:var(--card);
-  padding:20px;
-  border-radius:14px;
+
+.chatbot header {
+  background: linear-gradient(135deg, var(--accent), #6fa1ff);
+  padding: 14px;
+  font-weight: 600;
 }
-#chatbot button{
-  border-radius:50%;
-  width:56px;height:56px;
+
+.chatbot .body {
+  padding: 14px;
+  height: 240px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.chatbot input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  outline: none;
+  background: #0b1025;
+  color: white;
+}
+
+/* Footer note */
+footer {
+  margin-top: 60px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
 
 <body>
 
-<aside>
-  <h2>Court AI</h2>
-  <a href="#case">Case Intake</a>
-  <a href="#analysis">AI Analysis</a>
-  <a href="#laws">Precedents & Laws</a>
-  <a href="#why">Why This Exists</a>
-  <a href="#pdf">Judgment PDF</a>
-</aside>
+<div class="container">
 
-<main>
+<header>
+  <h1>Court AI</h1>
+  <p>
+    A legal reasoning assistant designed to simulate how courts think, question,
+    and evaluate disputes — not legal advice.
+  </p>
+</header>
 
 <!-- CASE INTAKE -->
-<section id="case">
-  <h1 class="section-title">Case Intake</h1>
-  <p class="section-sub">File your dispute as courts would receive it.</p>
+<section class="card" id="case-intake">
+  <h2>Case Intake</h2>
 
-  <div class="card">
-    <textarea rows="5" placeholder="Describe your dispute in plain language..."></textarea>
+  <label>Describe the facts of your dispute</label>
+  <textarea placeholder="Example: My neighbour occupied my house while I was away and refuses to vacate..."></textarea>
 
-    <select>
-      <option>Tenancy</option>
-      <option>Contract</option>
-      <option>Consumer</option>
-      <option>Other</option>
-    </select>
+  <div class="grid">
+    <div>
+      <label>Case Type</label>
+      <select>
+        <option>Tenancy / Property</option>
+        <option>Contract</option>
+        <option>Consumer</option>
+        <option>Employment</option>
+        <option>Other Civil Dispute</option>
+      </select>
+    </div>
 
-    <select>
-      <option>India</option>
-      <option>United States</option>
-      <option>United Kingdom</option>
-    </select>
-
-    <button>Analyze Case</button>
+    <div>
+      <label>Jurisdiction</label>
+      <select>
+        <option>India</option>
+        <option>United States</option>
+        <option>United Kingdom</option>
+      </select>
+    </div>
   </div>
+
+  <button>Analyze Case</button>
 </section>
 
-<!-- ANALYSIS -->
-<section id="analysis">
-  <h1 class="section-title">AI Judicial Reasoning</h1>
-  <p class="section-sub">Simulated court-style evaluation of arguments.</p>
+<!-- AI ANALYSIS -->
+<section class="card">
+  <h2>AI Legal Analysis</h2>
 
-  <div class="card">
-    <h3>Court Leaning: Plaintiff</h3>
-    <p>Confidence Level: 72%</p>
-    <div class="bar"><span></span></div>
+  <span class="pill">Option: Argue Both Sides</span>
 
-    <h4>Plaintiff Arguments</h4>
-    <ul>
-      <li>Possession without consent</li>
-      <li>No valid tenancy agreement</li>
-    </ul>
-
-    <h4>Defendant Arguments</h4>
-    <ul>
-      <li>Implied permission</li>
-    </ul>
+  <div class="grid">
+    <div>
+      <h3>🟦 Plaintiff Arguments</h3>
+      <p>Unauthorized possession violates property rights and lawful ownership.</p>
+    </div>
+    <div>
+      <h3>🟥 Defendant Arguments</h3>
+      <p>Possession may be permissive or based on an implied understanding.</p>
+    </div>
   </div>
+
+  <h3>⚖️ Likely Court Leaning</h3>
+  <p><strong>Plaintiff</strong> — stronger documentary title and lack of lawful authority.</p>
+
+  <h3>❓ Judicial Questions Likely Asked</h3>
+  <ul>
+    <li>Is ownership documented?</li>
+    <li>When did possession begin?</li>
+    <li>Was consent ever granted?</li>
+    <li>Why was there delay in action?</li>
+  </ul>
+
+  <h3>📊 Outcome Probability</h3>
+  <p>Full Relief: 55% · Partial Relief: 25% · Dismissal: 20%</p>
 </section>
 
-<!-- LAWS -->
-<section id="laws">
-  <h1 class="section-title">Applicable Laws Library</h1>
-  <p class="section-sub">Primary statutes commonly applied by courts.</p>
-
-  <div class="card">
-    <h3>🇮🇳 India</h3>
-    <span class="law" onclick="searchLaw('Transfer of Property Act 1882')">Transfer of Property Act, 1882</span>
-    <span class="law" onclick="searchLaw('Code of Civil Procedure 1908')">Code of Civil Procedure, 1908</span>
-    <span class="law" onclick="searchLaw('Indian Contract Act 1872')">Indian Contract Act, 1872</span>
-
-    <h3>🇺🇸 United States</h3>
-    <span class="law" onclick="searchLaw('Federal Rules of Civil Procedure')">Federal Rules of Civil Procedure</span>
-    <span class="law" onclick="searchLaw('Uniform Commercial Code')">Uniform Commercial Code</span>
-
-    <h3>🇬🇧 United Kingdom</h3>
-    <span class="law" onclick="searchLaw('Law of Property Act 1925')">Law of Property Act 1925</span>
-    <span class="law" onclick="searchLaw('Housing Act 1988')">Housing Act 1988</span>
-  </div>
-</section>
-
-<!-- WHY -->
-<section id="why">
-  <h1 class="section-title">Why We Built This</h1>
-
+<!-- WHY BUILT -->
+<section class="card">
   <details>
-    <summary>Read More</summary>
+    <summary>Why We Built This</summary>
     <p>
-      In India and many common-law jurisdictions, civil disputes often take
-      <b>5–10 years</b> to resolve. Litigants spend enormous time and money navigating
-      repeated hearings and procedural delays.
-      <br><br>
-      Court AI exists to reduce uncertainty by helping users understand how judges
-      reason, what questions courts ask, and where disputes succeed or fail —
-      before years are lost.
-      <br><br>
-      <small>Source: National Judicial Data Grid (India)</small>
+      In India and many common-law jurisdictions, civil cases often take
+      <strong>5–10 years</strong> to conclude. Litigants spend enormous sums on
+      legal fees, adjournments, and procedural delays.
+    </p>
+    <p>
+      Court AI was built to help people understand judicial reasoning early —
+      before entering expensive, slow litigation — by showing how courts
+      evaluate facts, law, and evidence.
+    </p>
+    <p>
+      <em>Source:</em> National Judicial Data Grid (India) reports average civil
+      case pendency exceeding 1,700 days.
     </p>
   </details>
 </section>
 
-<!-- PDF -->
-<section id="pdf">
-  <h1 class="section-title">Court-Style Judgment</h1>
-  <p class="section-sub">Export AI reasoning as a structured judgment-style PDF.</p>
+<!-- LAWS -->
+<section class="card">
+  <h2>Primary Statutes Commonly Applied by Courts</h2>
 
-  <div class="card">
-    <button>Export PDF</button>
+  <div class="grid laws">
+
+    <div>
+      <h3>🇮🇳 India</h3>
+      <a href="https://www.google.com/search?q=Transfer+of+Property+Act+1882" target="_blank">Transfer of Property Act, 1882</a>
+      <a href="https://www.google.com/search?q=Code+of+Civil+Procedure+1908" target="_blank">Code of Civil Procedure, 1908</a>
+      <a href="https://www.google.com/search?q=Indian+Contract+Act+1872" target="_blank">Indian Contract Act, 1872</a>
+      <a href="https://www.google.com/search?q=Specific+Relief+Act+1963" target="_blank">Specific Relief Act, 1963</a>
+      <a href="https://www.google.com/search?q=Consumer+Protection+Act+2019" target="_blank">Consumer Protection Act, 2019</a>
+    </div>
+
+    <div>
+      <h3>🇺🇸 United States</h3>
+      <a href="https://www.google.com/search?q=U.S.+Constitution" target="_blank">U.S. Constitution</a>
+      <a href="https://www.google.com/search?q=Federal+Rules+of+Civil+Procedure" target="_blank">Federal Rules of Civil Procedure</a>
+      <a href="https://www.google.com/search?q=Uniform+Commercial+Code" target="_blank">Uniform Commercial Code</a>
+      <a href="https://www.google.com/search?q=Fair+Housing+Act" target="_blank">Fair Housing Act</a>
+    </div>
+
+    <div>
+      <h3>🇬🇧 United Kingdom</h3>
+      <a href="https://www.google.com/search?q=Law+of+Property+Act+1925" target="_blank">Law of Property Act, 1925</a>
+      <a href="https://www.google.com/search?q=Housing+Act+1988" target="_blank">Housing Act, 1988</a>
+      <a href="https://www.google.com/search?q=Consumer+Rights+Act+2015" target="_blank">Consumer Rights Act, 2015</a>
+      <a href="https://www.google.com/search?q=Human+Rights+Act+1998" target="_blank">Human Rights Act, 1998</a>
+    </div>
+
   </div>
 </section>
 
-</main>
-
-<!-- CHATBOT -->
-<div id="chatbot">
-  <button onclick="toggleChat()">💬</button>
-  <div id="chatbox">
-    <p><b>Legal Clerk (AI)</b></p>
-    <input placeholder="Ask a legal question..." />
-  </div>
 </div>
 
-<script>
-function toggleChat(){
-  const c=document.getElementById('chatbox');
-  c.style.display=c.style.display==='block'?'none':'block';
-}
-function searchLaw(law){
-  window.open(`https://www.google.com/search?q=${encodeURIComponent(law)}`);
-}
-</script>
+<!-- CHATBOT -->
+<div class="chatbot">
+  <header>⚖️ Court AI Assistant</header>
+  <div class="body">
+    Ask a legal question to understand how courts reason.
+  </div>
+  <input placeholder="Type your question…" />
+</div>
+
+<footer>
+⚠️ All outputs are advisory, non-binding, and for educational purposes only.
+</footer>
 
 </body>
 </html>
