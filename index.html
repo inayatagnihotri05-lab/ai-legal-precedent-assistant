@@ -1,56 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Court AI — Judicial Reasoning Simulator</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<style>
-:root{
-  --bg:#020617;--bg2:#000;--card:#020617cc;--stroke:#1e293b;--ink:#e5e7eb;--muted:#94a3b8;--brand:#38bdf8;--accent:#22c55e;--warn:#f59e0b;--danger:#ef4444;
-}
-*{box-sizing:border-box}
-html,body{margin:0;font-family:Inter,system-ui,sans-serif;background:radial-gradient(circle at top,var(--bg),var(--bg2));color:var(--ink)}
-header{position:sticky;top:0;z-index:50;background:rgba(2,6,23,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--stroke)}
-.header-inner{max-width:1400px;margin:auto;padding:22px 28px;display:flex;align-items:center;gap:24px}
-.brand{font-weight:700;font-size:22px;color:var(--brand)}
-nav{display:flex;gap:16px;flex-wrap:wrap}
-nav a{color:var(--muted);text-decoration:none;font-size:14px}
-nav a:hover{color:var(--brand)}
-main{max-width:1400px;margin:auto;padding:40px 28px}
-.section{padding:70px 0;border-bottom:1px solid var(--stroke)}
-.section h2{font-size:36px;margin:0 0 8px}
-.desc{color:var(--muted);max-width:900px}
-.grid{display:grid;gap:24px}
-.grid-2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
-.grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.card{background:linear-gradient(180deg,var(--bg),var(--card));border:1px solid var(--stroke);border-radius:18px;padding:26px;box-shadow:0 0 40px rgba(56,189,248,.06);transition:.25s}
-.card:hover{transform:translateY(-4px);box-shadow:0 0 60px rgba(56,189,248,.14)}
-.big{padding:34px}
-label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-input,select,textarea,button{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--stroke);background:#020617;color:var(--ink);font-family:Inter}
-textarea{min-height:120px;resize:vertical}
-button{cursor:pointer;font-weight:600}
-.primary{background:linear-gradient(90deg,#38bdf8,#22c55e);border:none;color:#020617}
-.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--stroke);border-radius:999px;padding:8px 14px;color:var(--muted)}
-.sidebar{position:fixed;right:22px;bottom:22px;z-index:60}
-.chat-fab{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#38bdf8,#22c55e);display:grid;place-items:center;color:#020617;font-size:22px;box-shadow:0 10px 30px rgba(56,189,248,.35)}
-.chatbox{position:fixed;right:22px;bottom:90px;width:360px;max-height:520px;background:var(--bg);border:1px solid var(--stroke);border-radius:18px;display:none;flex-direction:column}
-.chatbox header{position:static;background:transparent;border:none}
-.chatlog{padding:14px;overflow:auto;flex:1}
-.msg{margin-bottom:10px;font-size:14px}
-.ai{color:#a7f3d0}
-.user{color:#e5e7eb}
-.stat-list a{display:block;color:var(--ink);text-decoration:none;padding:6px 0}
-.stat-list a:hover{color:var(--brand)}
-.accordion summary{cursor:pointer;font-weight:600}
-footer{padding:40px;text-align:center;color:#64748b}
-</style>
+  <meta charset="UTF-8" />
+  <title>Court AI — Judicial Reasoning Simulator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: #020617;
+      --card: #0f172a;
+      --border: #1e293b;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56,189,248,0.15);
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --danger: #f87171;
+      --success: #4ade80;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(180deg, #020617, #020617);
+      color: var(--text);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(2,6,23,0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: auto;
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      font-size: 20px;
+      color: var(--accent);
+    }
+
+    nav a {
+      color: var(--muted);
+      margin-left: 18px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 60px 24px 120px;
+    }
+
+    section {
+      margin-bottom: 100px;
+    }
+
+    h1 {
+      font-size: 44px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    p.lead {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 720px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      margin-top: 24px;
+    }
+
+    textarea, select {
+      width: 100%;
+      background: #020617;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 14px;
+      font-family: inherit;
+    }
+
+    button {
+      margin-top: 18px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      border: none;
+      background: var(--accent);
+      color: #020617;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover { box-shadow: 0 0 0 4px var(--accent-soft); }
+
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 28px;
+    }
+
+    .analysis-card {
+      background: linear-gradient(180deg, #020617, #0f172a);
+      border: 1px solid var(--border);
+      padding: 22px;
+      border-radius: 16px;
+    }
+
+    .analysis-card h3 {
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .analysis-card ul { padding-left: 18px; }
+
+    .analysis-card li { margin-bottom: 8px; }
+
+    details summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .laws-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .law-list a {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      margin: 6px 0;
+      font-size: 14px;
+    }
+
+    .law-list a:hover { color: var(--accent); }
+
+    .chatbot {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent);
+      color: #020617;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 40px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
 </head>
 <body>
+
 <header>
-  <div class="header-inner">
+  <div class="nav">
     <div class="brand">Court AI</div>
     <nav>
       <a href="#intake">Case Intake</a>
@@ -64,120 +208,140 @@ footer{padding:40px;text-align:center;color:#64748b}
 
 <main>
 
-<section id="intake" class="section">
-  <h2>Case Intake</h2>
-  <p class="desc">Describe your dispute. Court AI converts facts into structured judicial reasoning.</p>
-  <div class="grid grid-2">
-    <div class="card big">
-      <label>Case Facts</label>
-      <textarea id="facts" placeholder="My neighbour occupied my house while I was away..."></textarea>
-      <div class="grid grid-2" style="margin-top:14px">
-        <div>
-          <label>Case Type</label>
-          <select id="caseType">
-            <option>Tenancy</option><option>Contract</option><option>Consumer</option><option>Property</option><option>Other</option>
-          </select>
-        </div>
-        <div>
-          <label>Jurisdiction</label>
-          <select id="jurisdiction">
-            <option>India</option><option>United States</option><option>United Kingdom</option>
-          </select>
-        </div>
-      </div>
-      <button class="primary" style="margin-top:16px" onclick="analyze()">Analyze Case</button>
+<section id="intake">
+  <h1>Judicial Reasoning Simulator</h1>
+  <p class="lead">A court-aligned AI system that evaluates disputes the way judges do — structured, neutral, and non-binding.</p>
+
+  <div class="card">
+    <h2>Case Intake</h2>
+    <textarea placeholder="Describe your dispute in plain language..."></textarea>
+    <select>
+      <option>Tenancy / Property</option>
+      <option>Contract</option>
+      <option>Consumer</option>
+      <option>Employment</option>
+      <option>Family / Personal</option>
+      <option>Other</option>
+    </select>
+    <select>
+      <option>India</option>
+      <option>United States</option>
+      <option>United Kingdom</option>
+    </select>
+    <button>Analyze Case</button>
+  </div>
+</section>
+
+<section id="analysis">
+  <h2>AI Judicial Analysis</h2>
+  <p class="lead">Simulated reasoning based on procedure, precedent patterns, and statutory interpretation.</p>
+
+  <p class="ai-status">AI Reasoning Engine: <strong>Judicial Simulation Mode</strong></p>
+
+  <div class="analysis-grid">
+    <div class="analysis-card">
+      <h3>🧾 Case Summary</h3>
+      <p>Neutral restatement of facts as a court may frame them.</p>
     </div>
-    <div class="card big">
-      <div class="pill">AI Mode: Judicial Simulation (Advisory)</div>
-      <p class="desc" style="margin-top:14px">Outputs mirror how courts frame issues, weigh evidence, and assess risk. Not legal advice.</p>
+    <div class="analysis-card">
+      <h3>⚖️ Issues Framed</h3>
+      <ul>
+        <li>Lawful possession</li>
+        <li>Nature of occupation</li>
+        <li>Available remedies</li>
+      </ul>
+    </div>
+    <div class="analysis-card">
+      <h3>🟦 Plaintiff Arguments</h3>
+      <ul>
+        <li>Illegal dispossession</li>
+        <li>Lack of authority</li>
+      </ul>
+    </div>
+    <div class="analysis-card">
+      <h3>🟥 Defendant Arguments</h3>
+      <ul>
+        <li>Implied consent</li>
+        <li>Absence of title proof</li>
+      </ul>
+    </div>
+    <div class="analysis-card">
+      <h3>⚖️ Likely Court Leaning</h3>
+      <p>Preliminary inclination based on facts and law.</p>
+    </div>
+    <div class="analysis-card">
+      <h3>📉 Procedural Risks</h3>
+      <ul>
+        <li>Jurisdiction</li>
+        <li>Delay / limitation</li>
+        <li>Evidence gaps</li>
+      </ul>
     </div>
   </div>
 </section>
 
-<section id="analysis" class="section">
-  <h2>AI Legal Analysis</h2>
-  <p class="desc">Court-style breakdown with confidence indicators.</p>
-  <div id="analysisGrid" class="grid grid-3"></div>
-</section>
+<section id="laws">
+  <h2>Applicable Laws Library</h2>
 
-<section id="laws" class="section">
-  <h2>Primary Statutes Commonly Applied by Courts</h2>
-  <div class="grid grid-3">
-    <div class="card"><h3>🇮🇳 India</h3><div class="stat-list">
-      <a href="https://www.google.com/search?q=Constitution+of+India" target="_blank">Constitution of India</a>
-      <a href="https://www.google.com/search?q=Indian+Penal+Code+1860" target="_blank">Indian Penal Code, 1860</a>
-      <a href="https://www.google.com/search?q=Code+of+Civil+Procedure+1908" target="_blank">Code of Civil Procedure, 1908</a>
-      <a href="https://www.google.com/search?q=Code+of+Criminal+Procedure+1973" target="_blank">Code of Criminal Procedure, 1973</a>
-      <a href="https://www.google.com/search?q=Indian+Evidence+Act+1872" target="_blank">Indian Evidence Act, 1872</a>
-      <a href="https://www.google.com/search?q=Indian+Contract+Act+1872" target="_blank">Indian Contract Act, 1872</a>
-      <a href="https://www.google.com/search?q=Transfer+of+Property+Act+1882" target="_blank">Transfer of Property Act, 1882</a>
-      <a href="https://www.google.com/search?q=Specific+Relief+Act+1963" target="_blank">Specific Relief Act, 1963</a>
-      <a href="https://www.google.com/search?q=Consumer+Protection+Act+2019" target="_blank">Consumer Protection Act, 2019</a>
-    </div></div>
-    <div class="card"><h3>🇺🇸 United States</h3><div class="stat-list">
-      <a href="https://www.google.com/search?q=U.S.+Constitution" target="_blank">U.S. Constitution</a>
-      <a href="https://www.google.com/search?q=United+States+Code" target="_blank">United States Code (USC)</a>
-      <a href="https://www.google.com/search?q=Federal+Rules+of+Civil+Procedure" target="_blank">Federal Rules of Civil Procedure</a>
-      <a href="https://www.google.com/search?q=Federal+Rules+of+Criminal+Procedure" target="_blank">Federal Rules of Criminal Procedure</a>
-      <a href="https://www.google.com/search?q=Uniform+Commercial+Code" target="_blank">Uniform Commercial Code (UCC)</a>
-      <a href="https://www.google.com/search?q=Civil+Rights+Act+1964" target="_blank">Civil Rights Act, 1964</a>
-    </div></div>
-    <div class="card"><h3>🇬🇧 United Kingdom</h3><div class="stat-list">
-      <a href="https://www.google.com/search?q=Law+of+Property+Act+1925" target="_blank">Law of Property Act 1925</a>
-      <a href="https://www.google.com/search?q=Housing+Act+1988" target="_blank">Housing Act 1988</a>
-      <a href="https://www.google.com/search?q=Consumer+Rights+Act+2015" target="_blank">Consumer Rights Act 2015</a>
-      <a href="https://www.google.com/search?q=Human+Rights+Act+1998" target="_blank">Human Rights Act 1998</a>
-      <a href="https://www.google.com/search?q=Civil+Procedure+Rules+UK" target="_blank">Civil Procedure Rules (CPR)</a>
-    </div></div>
+  <div class="laws-grid">
+    <div class="card law-list">
+      <h3>🇮🇳 India — Core Statutes</h3>
+      <a target="_blank" href="https://www.google.com/search?q=Constitution+of+India">Constitution of India</a>
+      <a target="_blank" href="https://www.google.com/search?q=Indian+Penal+Code+1860">Indian Penal Code, 1860</a>
+      <a target="_blank" href="https://www.google.com/search?q=Code+of+Civil+Procedure+1908">Code of Civil Procedure, 1908</a>
+      <a target="_blank" href="https://www.google.com/search?q=Code+of+Criminal+Procedure+1973">Code of Criminal Procedure, 1973</a>
+      <a target="_blank" href="https://www.google.com/search?q=Indian+Evidence+Act+1872">Indian Evidence Act, 1872</a>
+      <a target="_blank" href="https://www.google.com/search?q=Transfer+of+Property+Act+1882">Transfer of Property Act, 1882</a>
+      <a target="_blank" href="https://www.google.com/search?q=Specific+Relief+Act+1963">Specific Relief Act, 1963</a>
+      <a target="_blank" href="https://www.google.com/search?q=Consumer+Protection+Act+2019">Consumer Protection Act, 2019</a>
+      <a target="_blank" href="https://www.google.com/search?q=Arbitration+and+Conciliation+Act+1996">Arbitration & Conciliation Act, 1996</a>
+      <a target="_blank" href="https://www.google.com/search?q=Information+Technology+Act+2000">Information Technology Act, 2000</a>
+    </div>
+
+    <div class="card law-list">
+      <h3>🇺🇸 United States</h3>
+      <a target="_blank" href="https://www.google.com/search?q=U.S.+Constitution">U.S. Constitution</a>
+      <a target="_blank" href="https://www.google.com/search?q=United+States+Code">United States Code (USC)</a>
+      <a target="_blank" href="https://www.google.com/search?q=Federal+Rules+of+Civil+Procedure">Federal Rules of Civil Procedure</a>
+      <a target="_blank" href="https://www.google.com/search?q=Federal+Rules+of+Criminal+Procedure">Federal Rules of Criminal Procedure</a>
+      <a target="_blank" href="https://www.google.com/search?q=Uniform+Commercial+Code">Uniform Commercial Code</a>
+      <a target="_blank" href="https://www.google.com/search?q=Civil+Rights+Act+1964">Civil Rights Act, 1964</a>
+      <a target="_blank" href="https://www.google.com/search?q=Fair+Housing+Act">Fair Housing Act</a>
+      <a target="_blank" href="https://www.google.com/search?q=Administrative+Procedure+Act">Administrative Procedure Act</a>
+    </div>
+
+    <div class="card law-list">
+      <h3>🇬🇧 United Kingdom</h3>
+      <a target="_blank" href="https://www.google.com/search?q=Law+of+Property+Act+1925">Law of Property Act 1925</a>
+      <a target="_blank" href="https://www.google.com/search?q=Housing+Act+1988">Housing Act 1988</a>
+      <a target="_blank" href="https://www.google.com/search?q=Protection+from+Eviction+Act+1977">Protection from Eviction Act 1977</a>
+      <a target="_blank" href="https://www.google.com/search?q=Consumer+Rights+Act+2015">Consumer Rights Act 2015</a>
+      <a target="_blank" href="https://www.google.com/search?q=Human+Rights+Act+1998">Human Rights Act 1998</a>
+      <a target="_blank" href="https://www.google.com/search?q=Civil+Procedure+Rules+UK">Civil Procedure Rules (CPR)</a>
+    </div>
   </div>
 </section>
 
-<section id="why" class="section">
-  <h2>Why We Built This</h2>
-  <details class="accordion card big">
-    <summary>Justice takes time — and money</summary>
-    <p class="desc">In India and many common-law systems, civil cases can take several years due to adjournments, backlog, and procedural delays. Litigants spend heavily on counsel, travel, and filings. Court AI lowers the entry barrier by clarifying issues early and helping users prepare.</p>
-    <small class="desc">Footnote: National Judicial Data Grid reports millions of pending cases across Indian courts.</small>
+<section id="why">
+  <details open>
+    <summary>Why We Built This</summary>
+    <p class="lead">In India and many common-law jurisdictions, litigation can take years and cost enormous sums. Courts face massive backlogs, and litigants often enter disputes without understanding how judges actually reason.</p>
+    <p class="lead">Court AI exists to simulate that reasoning — highlighting issues, risks, and likely outcomes early, improving legal literacy and preparedness.</p>
   </details>
 </section>
 
-<section id="pdf" class="section">
-  <h2>Export Court‑Style Judgment</h2>
-  <button class="primary" onclick="exportPDF()">Download PDF</button>
+<section id="pdf">
+  <h2>Export Court-Style Judgment</h2>
+  <button>Generate PDF</button>
 </section>
+
+<footer>
+  <p>⚠️ All outputs are advisory, non-binding, and for educational purposes only. This system does not replace a licensed lawyer.</p>
+</footer>
 
 </main>
 
-<div class="sidebar">
-  <div class="chat-fab" onclick="toggleChat()">💬</div>
-</div>
+<div class="chatbot">💬</div>
 
-<div class="chatbox" id="chatbox">
-  <header class="header-inner"><strong>Legal Chatbot</strong></header>
-  <div class="chatlog" id="chatlog"></div>
-  <div style="padding:12px">
-    <input id="chatInput" placeholder="Ask a legal question..." onkeydown="if(event.key==='Enter')sendChat()" />
-  </div>
-</div>
-
-<footer>⚠️ Advisory only • Not legal advice</footer>
-
-<script>
-function analyze(){
-  const grid=document.getElementById('analysisGrid');
-  grid.innerHTML='';
-  const cards=[
-    ['Case Summary','Unauthorized occupation alleged; possession and consent disputed.'],
-    ['Issues Framed','Lawful possession, relief type, urgency.'],
-    ['Court Leaning','Neutral — evidence dependent.'],
-    ['Risks','Proof gaps, limitation, jurisdiction.'],
-    ['Confidence Score','0.62'],
-  ];
-  cards.forEach(c=>{const d=document.createElement('div');d.className='card';d.innerHTML=`<h3>${c[0]}</h3><p>${c[1]}</p>`;grid.appendChild(d);});
-}
-function toggleChat(){const b=document.getElementById('chatbox');b.style.display=b.style.display==='flex'?'none':'flex'}
-function sendChat(){const i=document.getElementById('chatInput');const l=document.getElementById('chatlog');l.innerHTML+=`<div class='msg user'>${i.value}</div><div class='msg ai'>This is advisory guidance only.</div>`;i.value='';l.scrollTop=l.scrollHeight}
-function exportPDF(){const {jsPDF}=window.jspdf;const doc=new jsPDF();doc.text('Court AI — Court‑Style Summary',10,10);doc.save('court-ai.pdf')}
-</script>
 </body>
 </html>
