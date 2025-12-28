@@ -144,6 +144,7 @@
       border-top: 1px solid rgba(255,255,255,0.08);
     }
 
+    /* Chatbot */
     #chatbot {
       position: fixed;
       bottom: 24px;
@@ -160,6 +161,16 @@
       cursor: pointer;
       box-shadow: 0 15px 35px rgba(0,0,0,0.6);
     }
+
+    .response-box {
+      background: #1a2040;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 12px;
+      min-height: 80px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+    }
   </style>
 </head>
 <body>
@@ -172,9 +183,9 @@
 <nav>
   <a href="#intake">Case Intake</a>
   <a href="#analysis">AI Analysis</a>
-  <a href="#summaries">Case Summaries</a>
-  <a href="#concepts">Legal Concepts</a>
   <a href="#laws">Precedents & Laws</a>
+  <a href="#summaries">Case Summaries</a>
+  <a href="#explainer">Legal Concepts</a>
   <a href="#why">Why We Built This</a>
 </nav>
 
@@ -211,99 +222,92 @@
   </div>
 </section>
 
-<section id="summaries">
-  <h2>Case Summaries (How Courts Actually Ruled)</h2>
-  <p style="color: var(--muted); max-width: 820px;">
-    Real cases. Real reasoning. Zero legal jargon overload.
-  </p>
-
-  <div class="law-grid">
-    <div class="law-item">
-      <h3>📁 Landlord vs Tenant (India)</h3>
-      <p><strong>Issue:</strong> Eviction without notice</p>
-      <p><strong>Held:</strong> Eviction illegal</p>
-      <p style="color: var(--muted);">Procedure beats intention.</p>
-    </div>
-
-    <div class="law-item">
-      <h3>📁 Consumer Refund Dispute</h3>
-      <p><strong>Issue:</strong> Company policy vs statute</p>
-      <p><strong>Held:</strong> Consumer wins</p>
-      <p style="color: var(--muted);">Policies don’t override law.</p>
-    </div>
-
-    <div class="law-item">
-      <h3>📁 Verbal Contract (US)</h3>
-      <p><strong>Issue:</strong> No documentary proof</p>
-      <p><strong>Held:</strong> Claim dismissed</p>
-      <p style="color: var(--muted);">Evidence > intent.</p>
-    </div>
-  </div>
-</section>
-
-<section id="concepts">
-  <h2>Legal Concepts — Explained Simply</h2>
-  <p style="color: var(--muted); max-width: 820px;">
-    Because courts don’t explain — we do.
-  </p>
-
-  <div class="law-grid">
-    <div class="law-item">
-      <h3>⚖️ Burden of Proof</h3>
-      <p>If you claim something, you must prove it. Courts don’t investigate for you.</p>
-    </div>
-
-    <div class="law-item">
-      <h3>📜 Natural Justice</h3>
-      <p>Everyone gets a fair hearing. No decision behind your back.</p>
-    </div>
-
-    <div class="law-item">
-      <h3>⏳ Limitation Period</h3>
-      <p>Miss the deadline, lose the right — even if your case is strong.</p>
-    </div>
-  </div>
-</section>
-
 <section id="laws">
   <h2>Primary Statutes Commonly Applied by Courts</h2>
 
   <h3>🇮🇳 India</h3>
   <div class="law-grid">
-    <div class="law-item">Transfer of Property Act, 1882</div>
-    <div class="law-item">Code of Civil Procedure, 1908</div>
-    <div class="law-item">Indian Evidence Act, 1872</div>
-    <div class="law-item">Specific Relief Act, 1963</div>
+    <div class="law-item" onclick="window.open('https://www.google.com/search?q=Transfer+of+Property+Act+1882')">Transfer of Property Act, 1882</div>
+    <div class="law-item" onclick="window.open('https://www.google.com/search?q=Code+of+Civil+Procedure+1908')">Code of Civil Procedure, 1908</div>
+    <div class="law-item" onclick="window.open('https://www.google.com/search?q=Indian+Evidence+Act+1872')">Indian Evidence Act, 1872</div>
+    <div class="law-item" onclick="window.open('https://www.google.com/search?q=Specific+Relief+Act+1963')">Specific Relief Act, 1963</div>
   </div>
 
   <h3>🇺🇸 United States</h3>
   <div class="law-grid">
-    <div class="law-item">Federal Rules of Civil Procedure</div>
-    <div class="law-item">Uniform Commercial Code</div>
+    <div class="law-item" onclick="window.open('https://www.google.com/search?q=Federal+Rules+of+Civil+Procedure')">Federal Rules of Civil Procedure</div>
+    <div class="law-item" onclick="window.open('https://www.google.com/search?q=Uniform+Commercial+Code')">Uniform Commercial Code</div>
   </div>
 
   <h3>🇬🇧 United Kingdom</h3>
   <div class="law-grid">
-    <div class="law-item">Law of Property Act 1925</div>
-    <div class="law-item">Consumer Rights Act 2015</div>
+    <div class="law-item" onclick="window.open('https://www.google.com/search?q=Law+of+Property+Act+1925')">Law of Property Act 1925</div>
+    <div class="law-item" onclick="window.open('https://www.google.com/search?q=Consumer+Rights+Act+2015')">Consumer Rights Act 2015</div>
+  </div>
+</section>
+
+<!-- New Section: Case Summaries -->
+<section id="summaries">
+  <h2>Case Summaries</h2>
+  <div class="card">
+    <textarea id="caseInput" rows="5" placeholder="Paste your case text here..."></textarea>
+    <button onclick="fetchSummary()">Get Summary</button>
+    <div id="caseSummary" class="response-box"></div>
+  </div>
+</section>
+
+<!-- New Section: Legal Concept Explainer -->
+<section id="explainer">
+  <h2>Legal Concept Explainer</h2>
+  <div class="card">
+    <input id="conceptInput" type="text" placeholder="Enter legal concept (e.g., stare decisis)">
+    <button onclick="fetchExplanation()">Explain Concept</button>
+    <div id="conceptExplanation" class="response-box"></div>
   </div>
 </section>
 
 <section id="why">
   <h2>Why We Built This</h2>
   <div class="card">
-    <p>Litigation takes years. Confusion costs money. Court AI exists to expose judicial reasoning before you ever enter a courtroom.</p>
-    <p>This is not legal advice. It’s legal clarity.</p>
+    <p>In India and many common law nations, civil litigation routinely takes <strong>5–7 years</strong>, often involving dozens of hearings, repeated adjournments, and legal costs running into lakhs.</p>
+    <p>Court AI exists to reduce informational asymmetry — helping litigants understand how courts actually reason before stepping into a courtroom.</p>
+    <p>This system does not replace lawyers. It mirrors judicial logic to improve preparedness, clarity, and legal literacy.</p>
   </div>
 </section>
 
-<div id="chatbot">
+<div id="chatbot" title="Legal Assistant">
   <i class="fas fa-scale-balanced"></i>
 </div>
 
 <footer>
-  ⚠️ Advisory only · Educational use · Not legal advice
+  ⚠️ Advisory only · Non‑binding · Educational use · Not legal advice
 </footer>
+
+<script>
+const BACKEND_URL = "https://your-backend-url"; // <-- Replace with your hosted backend
+
+async function fetchSummary() {
+  const caseText = document.getElementById("caseInput").value;
+  const res = await fetch(`${BACKEND_URL}/summary`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ case: caseText })
+  });
+  const data = await res.json();
+  document.getElementById("caseSummary").innerText = data.summary || "No summary available.";
+}
+
+async function fetchExplanation() {
+  const concept = document.getElementById("conceptInput").value;
+  const res = await fetch(`${BACKEND_URL}/explain`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ concept })
+  });
+  const data = await res.json();
+  document.getElementById("conceptExplanation").innerText = data.explanation || "No explanation available.";
+}
+</script>
 
 </body>
 </html>
